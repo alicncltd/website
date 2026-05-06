@@ -1,0 +1,48 @@
+.navbar {
+  position: fixed; top: 0; left: 0; width: 100%; z-index: 1000;
+  padding: 1.5rem 2rem; transition: var(--transition-smooth);
+}
+.navbar.scrolled {
+  padding: 1rem 2rem; background: var(--glass-bg);
+  backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+  border-bottom: 1px solid var(--glass-border); box-shadow: var(--glass-shadow);
+}
+.nav-content { max-width: 1200px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; }
+
+.logo { display: flex; align-items: center; gap: 0.75rem; }
+.logo-img-wrapper {
+  display: flex; align-items: center; justify-content: center;
+  width: 45px; height: 45px; border-radius: 8px;
+  background: var(--glass-bg); padding: 5px;
+  border: 1px solid var(--glass-border);
+}
+.logo-svg { color: var(--text-primary); }
+.logo-text { font-size: 1.5rem; font-weight: 800; letter-spacing: -0.5px; }
+
+.nav-links { display: flex; align-items: center; gap: 2rem; }
+.nav-links a:not(.nav-btn) { font-weight: 500; position: relative; }
+.nav-links a:not(.nav-btn)::after {
+  content: ''; position: absolute; bottom: -4px; left: 0; width: 0; height: 2px;
+  background: var(--accent-gradient); transition: var(--transition-smooth);
+}
+.nav-links a:not(.nav-btn):hover::after { width: 100%; }
+
+.theme-toggle {
+  background: none; border: none; color: var(--text-primary);
+  cursor: pointer; display: flex; align-items: center; justify-content: center;
+  padding: 8px; border-radius: 50%; transition: var(--transition-smooth);
+}
+.theme-toggle:hover { background: var(--glass-bg); transform: rotate(15deg); }
+
+.mobile-menu-btn { display: none; background: none; border: none; color: var(--text-primary); cursor: pointer; }
+
+@media (max-width: 768px) {
+  .mobile-menu-btn { display: block; }
+  .nav-links {
+    position: absolute; top: 100%; left: 0; width: 100%; background: var(--bg-color);
+    backdrop-filter: blur(12px); flex-direction: column; padding: 2rem; gap: 2rem;
+    transform: translateY(-20px); opacity: 0; visibility: hidden; transition: var(--transition-smooth);
+    border-bottom: 1px solid var(--glass-border);
+  }
+  .nav-links.open { transform: translateY(0); opacity: 1; visibility: visible; }
+}
