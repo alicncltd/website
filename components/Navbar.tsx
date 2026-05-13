@@ -26,15 +26,15 @@ export default function Navbar() {
         <Link href="/" className="logo">
           {/* Using the vectorized logo */}
           <div className="logo-img-wrapper">
-            <Image src="/logo.svg" alt="Ali CNC Logo" width={40} height={40} className="logo-svg" />
+            <Image src="/logo_final.png" alt="Ali CNC Logo" width={80} height={44} priority className="logo-img" style={{ width: 'auto', height: '100%' }} />
           </div>
           <span className="logo-text">Ali<span className="gradient-text">CNC</span></span>
         </Link>
         
         <div className={`nav-links ${menuOpen ? "open" : ""}`}>
-          <a href="#services" onClick={() => setMenuOpen(false)}>Services</a>
-          <a href="#projects" onClick={() => setMenuOpen(false)}>Projects</a>
-          <a href="#experience" onClick={() => setMenuOpen(false)}>Experience</a>
+          <a href="/#services" onClick={() => setMenuOpen(false)}>Services</a>
+          <a href="/#projects" onClick={() => setMenuOpen(false)}>Projects</a>
+          <a href="/#experience" onClick={() => setMenuOpen(false)}>Experience</a>
           
           {mounted && (
             <button 
@@ -46,7 +46,9 @@ export default function Navbar() {
             </button>
           )}
 
-          <a href="#contact" className="btn-outline nav-btn" onClick={() => setMenuOpen(false)}>Get a Quote</a>
+          <Link href="/contact" className="btn-primary nav-btn" onClick={() => setMenuOpen(false)}>
+            Contact
+          </Link>
         </div>
 
         <button className="mobile-menu-btn" onClick={() => setMenuOpen(!menuOpen)}>

@@ -9,19 +9,13 @@ export default function Home() {
       <Navbar />
       
       <main>
-        {/* WhatsApp Floating Button */}
-        <a href="https://wa.me/923440708494" className="whatsapp-float" target="_blank" rel="noopener noreferrer" aria-label="Contact on WhatsApp">
-          <svg viewBox="0 0 32 32" width="35" height="35" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-            <path d="M16.002 2.016c-7.72 0-13.984 6.264-13.984 13.984 0 2.456.632 4.84 1.832 6.952L2.01 29.984l7.184-1.888c2.048 1.104 4.344 1.688 6.808 1.688 7.72 0 13.984-6.264 13.984-13.984S23.722 2.016 16.002 2.016zm0 25.6c-2.32 0-4.544-.608-6.472-1.664l-.464-.272-4.8 1.264 1.288-4.704-.312-.496c-1.184-1.888-1.808-4.08-1.808-6.336 0-6.536 5.328-11.856 11.856-11.856 6.528 0 11.856 5.32 11.856 11.856 0 6.528-5.328 11.856-11.856 11.856zm6.288-8.896c-.344-.176-2.04-1.008-2.36-1.12-.32-.112-.552-.168-.784.168-.232.336-.896 1.12-.1096 1.352.232.232.784.288 1.176.464.4.176 1.968 1.008 2.408 1.2.44.2.72.288.904-.16.176-.456.232-1.224-.088-1.904z" />
-          </svg>
-        </a>
 
         {/* Hero Section */}
         <AnimatedSection className="hero-section" id="home">
           <img src="/hero_bg.png" alt="" className="hero-bg-image" />
           <div className="hero-content">
             <div style={{ marginBottom: '2rem' }}>
-              <Image src="/logo.png" alt="Ali CNC Logo" width={120} height={120} style={{ margin: '0 auto', filter: 'drop-shadow(0 0 20px rgba(212, 175, 55, 0.3))' }} />
+              <Image src="/logo_final.png" alt="Ali CNC Logo" width={220} height={120} priority style={{ margin: '0 auto', objectFit: 'contain', height: 'auto' }} />
             </div>
             <h2 className="hero-greeting">Hi, I&apos;m Muhammad Ali</h2>
             <h1 className="hero-title">
@@ -32,10 +26,8 @@ export default function Home() {
               Based in Rawalpindi, Pakistan. Expert in CAD Design, Design for Manufacturing, and CNC Programming. Turning complex ideas into flawless physical products with precision engineering.
             </p>
             <div className="hero-actions">
-              <a href="#projects" className="btn-primary">View My Work</a>
-              <a href="https://www.cadcrowd.com/profile/212733-thealidev" target="_blank" rel="noreferrer" className="btn-outline">
-                Hire Me on CAD Crowd
-              </a>
+              <a href="/contact" className="btn-primary">Start a Project</a>
+              <a href="#projects" className="btn-outline">View My Work</a>
             </div>
           </div>
         </AnimatedSection>
@@ -68,7 +60,7 @@ export default function Home() {
           <div className="grid-2">
             <AnimatedCard className="glass-panel project-card" delay={0.1}>
               <div className="project-image-wrapper">
-                <Image src="/projects_bg.png" alt="Project Network" width={400} height={250} style={{ width: '100%', height: '100%', objectFit: 'cover', opacity: 0.5 }} />
+                <Image src="/projects_bg.png" alt="Project Network" width={400} height={250} style={{ width: '100%', height: 'auto', objectFit: 'cover', opacity: 0.5 }} />
                 <div className="project-image-placeholder" style={{ position: 'relative', background: 'transparent' }}>
                   <span>Center-Weighted Shaker Whisk</span>
                 </div>
@@ -83,7 +75,7 @@ export default function Home() {
             </AnimatedCard>
             <AnimatedCard className="glass-panel project-card" delay={0.2}>
               <div className="project-image-wrapper">
-                <Image src="/services_bg.png" alt="Project Blueprint" width={400} height={250} style={{ width: '100%', height: '100%', objectFit: 'cover', opacity: 0.5 }} />
+                <Image src="/services_bg.png" alt="Project Blueprint" width={400} height={250} style={{ width: '100%', height: 'auto', objectFit: 'cover', opacity: 0.5 }} />
                 <div className="project-image-placeholder alt" style={{ position: 'relative', background: 'transparent' }}>
                   <span>Halora Object System</span>
                 </div>
@@ -135,14 +127,14 @@ export default function Home() {
         {/* Contact/Footer */}
         <footer id="contact" className="footer">
           <div className="footer-content">
+            <div style={{ marginBottom: '1.5rem' }}>
+              <Image src="/logo_final.png" alt="Ali CNC Logo" width={146} height={80} loading="lazy" style={{ margin: '0 auto', opacity: 0.8, objectFit: 'contain', height: 'auto' }} />
+            </div>
             <h2 className="footer-title">Let&apos;s Build Something Amazing</h2>
             <p>Ready to turn your ideas into high-precision reality? Get in touch today.</p>
             <div style={{ display: 'flex', gap: '1rem', justifyContent: 'center', marginTop: '1rem' }}>
-              <a href="https://www.cadcrowd.com/profile/212733-thealidev" target="_blank" rel="noreferrer" className="btn-primary">
-                Contact Me on CAD Crowd
-              </a>
-              <a href="https://wa.me/923440708494" target="_blank" rel="noreferrer" className="btn-outline">
-                WhatsApp Me
+              <a href="/contact" className="btn-primary">
+                Contact Me
               </a>
             </div>
           </div>
