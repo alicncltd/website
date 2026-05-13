@@ -27,7 +27,7 @@ export default function ContactPage() {
                   <div className="method-info">
                     <h3>WhatsApp</h3>
                     <p>Instant messaging for quick queries</p>
-                    <a href="https://wa.me/9234407084904" target="_blank" rel="noreferrer" className="btn-primary full-width">
+                    <a href="https://wa.me/923440708494?text=Hi%20,%20I%20am%20coming%20from%20your%20website%20,%20Can%20i%20get%20more%20info%20about%20your%20business%20?" target="_blank" rel="noreferrer" className="btn-primary full-width">
                       Message on WhatsApp
                     </a>
                   </div>
