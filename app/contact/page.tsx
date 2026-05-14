@@ -58,6 +58,32 @@ export default function ContactPage() {
                     </a>
                   </div>
                 </AnimatedCard>
+
+                <AnimatedCard className="glass-panel contact-method-card" delay={0.5}>
+                  <div className="method-icon-wrapper kakaotalk" style={{ background: '#FEE500', color: '#3C1E1E' }}>
+                    <Phone size={24} />
+                  </div>
+                  <div className="method-info">
+                    <h3>KakaoTalk</h3>
+                    <p>Connect on Korea's top messenger</p>
+                    <a href="https://open.kakao.com/o/s2H3YJqi" target="_blank" rel="noreferrer" className="btn-outline full-width">
+                      Open KakaoTalk
+                    </a>
+                  </div>
+                </AnimatedCard>
+
+                <AnimatedCard className="glass-panel contact-method-card" delay={0.6}>
+                  <div className="method-icon-wrapper line" style={{ background: '#06C755', color: 'white' }}>
+                    <Phone size={24} />
+                  </div>
+                  <div className="method-info">
+                    <h3>Line</h3>
+                    <p>Messaging for global collaboration</p>
+                    <a href="https://line.me/ti/p/J2-p6bC9h8" target="_blank" rel="noreferrer" className="btn-outline full-width">
+                      Add on Line
+                    </a>
+                  </div>
+                </AnimatedCard>
               </div>
 
               {/* Contact Form */}
