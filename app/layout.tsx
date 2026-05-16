@@ -10,13 +10,16 @@ const inter = Inter({
 
 export const metadata: Metadata = {
   title: {
-    default: "Ali CNC Pakistan | High-Precision 3D Modeling & CNC Specialist",
+    default: "Ali CNC Pakistan | High-Precision 3D Modeling & CNC",
     template: "%s | Ali CNC Pakistan"
   },
-  description: "Expert High-Precision 3D Modeling, CNC Fabrication, and CAD Design services by Ali CNC Pakistan in Rawalpindi. Specialized in DFM and CNC Programming.",
+  description: "Expert 3D Modeling & CNC Fabrication by Ali CNC Pakistan. Specialized in CAD Design, DFM, and CNC Programming in Rawalpindi.",
   keywords: ["CNC Pakistan", "3D Modeling", "CAD Design", "CNC Fabrication", "Rawalpindi CNC", "Precision Engineering"],
   authors: [{ name: "Ali CNC Pakistan" }],
   creator: "Ali CNC Pakistan",
+  alternates: {
+    canonical: "https://www.alicnc.online",
+  },
   icons: {
     icon: "/logo_final.png",
     apple: "/logo_final.png",
@@ -24,11 +27,67 @@ export const metadata: Metadata = {
   openGraph: {
     type: "website",
     locale: "en_PK",
-    url: "https://alicncpk.com",
-    title: "Ali CNC Pakistan | High-Precision 3D Modeling & CNC Specialist",
+    url: "https://www.alicnc.online",
+    title: "Ali CNC Pakistan | High-Precision 3D Modeling & CNC",
     description: "Expert CNC Fabrication and 3D Modeling services in Rawalpindi, Pakistan.",
     siteName: "Ali CNC Pakistan",
-  }
+    images: [
+      {
+        url: "/logo_final.png",
+        width: 1200,
+        height: 630,
+        alt: "Ali CNC Pakistan Logo",
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Ali CNC Pakistan | High-Precision 3D Modeling & CNC",
+    description: "Expert CNC Fabrication and 3D Modeling services in Rawalpindi, Pakistan.",
+    images: ["/logo_final.png"],
+  },
+};
+
+// JSON-LD Structured Data
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@type": "ProfessionalService",
+  "name": "Ali CNC Pakistan",
+  "image": "https://www.alicnc.online/logo_final.png",
+  "url": "https://www.alicnc.online",
+  "telephone": "+923440708494",
+  "address": {
+    "@type": "PostalAddress",
+    "addressLocality": "Rawalpindi",
+    "addressRegion": "Punjab",
+    "addressCountry": "PK"
+  },
+  "geo": {
+    "@type": "GeoCoordinates",
+    "latitude": 33.6007,
+    "longitude": 73.0679
+  },
+  "founder": {
+    "@type": "Person",
+    "name": "Raja Muhammad Ali Asghar"
+  },
+  "openingHoursSpecification": {
+    "@type": "OpeningHoursSpecification",
+    "dayOfWeek": [
+      "Monday",
+      "Tuesday",
+      "Wednesday",
+      "Thursday",
+      "Friday",
+      "Saturday"
+    ],
+    "opens": "09:00",
+    "closes": "18:00"
+  },
+  "sameAs": [
+    "https://www.cadcrowd.com/profile/212733-thealidev",
+    "https://www.crunchbase.com/organization/ali-cnc-pakistan"
+  ]
 };
 
 export default function RootLayout({
@@ -51,6 +110,13 @@ export default function RootLayout({
         />
         {/* End Google Tag Manager */}
         <link rel="icon" href="/logo_final.png" />
+        
+        {/* JSON-LD Structured Data */}
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+        />
+
         <script
           dangerouslySetInnerHTML={{
             __html: `

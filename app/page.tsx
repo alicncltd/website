@@ -12,12 +12,12 @@ export default function Home() {
 
         {/* Hero Section */}
         <AnimatedSection className="hero-section" id="home">
-          <img src="/hero_bg.png" alt="" className="hero-bg-image" />
+          <Image src="/hero_bg.png" alt="High-Precision CNC Workshop Background" fill priority className="hero-bg-image" style={{ objectFit: 'cover', opacity: 0.1 }} />
           <div className="hero-content">
             <div style={{ marginBottom: '2rem' }}>
               <Image src="/logo_final.png" alt="Ali CNC Logo" width={220} height={120} priority style={{ margin: '0 auto', objectFit: 'contain', height: 'auto' }} />
             </div>
-            <h2 className="hero-greeting">Welcome to Ali CNC Pakistan</h2>
+            <span className="hero-greeting" style={{ display: 'block', marginBottom: '1rem', fontWeight: 600, color: 'var(--accent-color)', letterSpacing: '0.05em', textTransform: 'uppercase' }}>Welcome to Ali CNC Pakistan</span>
             <h1 className="hero-title">
               High-Precision <span className="gradient-text">3D Modeling</span> &amp; <br />
               CNC Fabrication Firm
@@ -49,6 +49,49 @@ export default function Home() {
               <HardHat className="service-icon" size={40} />
               <h3>Design for Manufacturing</h3>
               <p>Optimizing designs early in the process to reduce costs, improve quality, and speed up production.</p>
+            </AnimatedCard>
+          </div>
+        </AnimatedSection>
+
+        {/* Why Choose Us Section */}
+        <AnimatedSection className="section" id="why-choose-us">
+          <h2 className="section-title">Why <span className="gradient-text">Ali CNC?</span></h2>
+          <div className="grid-3">
+            <AnimatedCard className="glass-panel service-card" delay={0.1}>
+              <PenTool className="service-icon" size={40} />
+              <h3>Precision First</h3>
+              <p>Every toolpath is double-checked for accuracy. We specialize in high-detail relief carving where every fraction of a millimeter counts.</p>
+            </AnimatedCard>
+            <AnimatedCard className="glass-panel service-card" delay={0.2}>
+              <h3>Material Efficiency</h3>
+              <p>Our G-Code optimization ensures minimal material waste, saving you costs on expensive hardwoods and industrial materials.</p>
+            </AnimatedCard>
+            <AnimatedCard className="glass-panel service-card" delay={0.3}>
+              <h3>Hands-on Expertise</h3>
+              <p>Led by CEO Raja Muhammad Ali Asghar, who personally operates the machinery to ensure designs translate perfectly to the physical world.</p>
+            </AnimatedCard>
+          </div>
+        </AnimatedSection>
+
+        {/* FAQ Section */}
+        <AnimatedSection className="section" id="faq">
+          <h2 className="section-title">Frequently Asked <span className="gradient-text">Questions</span></h2>
+          <div className="grid-2">
+            <AnimatedCard className="glass-panel service-card" delay={0.1}>
+              <h3>What file formats do you provide?</h3>
+              <p>We provide CNC-ready files in various formats including .CRV, .DXF, .SVG, .STEP, and optimized G-Code tailored to your specific machine controller.</p>
+            </AnimatedCard>
+            <AnimatedCard className="glass-panel service-card" delay={0.2}>
+              <h3>What is your typical turnaround time?</h3>
+              <p>Turnaround time varies by project complexity. Standard 2D toolpaths often take 24-48 hours, while complex 3D relief models may take 3-5 business days.</p>
+            </AnimatedCard>
+            <AnimatedCard className="glass-panel service-card" delay={0.3}>
+              <h3>Do you offer design for manufacturing (DFM)?</h3>
+              <p>Yes, we optimize every design for manufacturing to reduce material waste, minimize machine time, and ensure zero on-machine errors.</p>
+            </AnimatedCard>
+            <AnimatedCard className="glass-panel service-card" delay={0.4}>
+              <h3>Which software do you specialize in?</h3>
+              <p>We are experts in Vectric Aspire for wood fabrication and Onshape for advanced mechanical 3D modeling and CAD design.</p>
             </AnimatedCard>
           </div>
         </AnimatedSection>
@@ -103,14 +146,14 @@ export default function Home() {
             </div>
             <h2 className="footer-title">Let&apos;s Build Something Amazing</h2>
             <p>Ready to turn your ideas into high-precision reality? Get in touch today.</p>
-            <div style={{ display: 'flex', gap: '1rem', justifyContent: 'center', marginTop: '1rem' }}>
-              <a href="/contact" className="btn-primary">
-                Contact Us
-              </a>
+            <div style={{ display: 'flex', gap: '1.5rem', justifyContent: 'center', marginTop: '1.5rem', flexWrap: 'wrap' }}>
+              <a href="/contact" className="btn-primary">Contact Us</a>
+              <a href="https://www.cadcrowd.com/profile/212733-thealidev" target="_blank" rel="noreferrer" className="btn-outline" style={{ padding: '0.8rem 1.5rem' }}>CadCrowd</a>
+              <a href="https://www.crunchbase.com/organization/ali-cnc-pakistan" target="_blank" rel="noreferrer" className="btn-outline" style={{ padding: '0.8rem 1.5rem' }}>Crunchbase</a>
             </div>
           </div>
           <div className="footer-bottom">
-            <p>&copy; {new Date().getFullYear()} Ali CNC Pakistan. All rights reserved.</p>
+            <p>&copy; {new Date().getFullYear()} Ali CNC Pakistan. Based in Rawalpindi, Punjab. High-Precision Engineering & CAD Design.</p>
           </div>
         </footer>
       </main>
