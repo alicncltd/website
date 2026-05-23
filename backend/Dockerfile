@@ -1,0 +1,26 @@
+FROM ghcr.io/puppeteer/puppeteer:21.5.0
+
+# Switch to root to configure permissions
+USER root
+
+WORKDIR /app
+
+# Copy package files
+COPY package*.json ./
+
+# Install packages
+RUN npm ci --only=production
+
+# Copy application files
+COPY . .
+
+# Adjust permissions for Puppeteer's default running user
+RUN chown -R pptruser:pptruser /app
+
+# Switch back to Puppeteer user for secure execution
+USER pptruser
+
+ENV PORT=8080
+EXPOSE 8080
+
+CMD ["node", "server.js"]

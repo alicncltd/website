@@ -5,6 +5,8 @@ import { Menu, X, Sun, Moon } from "lucide-react";
 import Link from "next/link";
 import Image from "next/image";
 import { useTheme } from "next-themes";
+import { useTranslation } from "./TranslationContext";
+import LanguageSelector from "./LanguageSelector";
 import "./Navbar.css";
 
 export default function Navbar() {
@@ -12,6 +14,7 @@ export default function Navbar() {
   const [menuOpen, setMenuOpen] = useState(false);
   const { theme, setTheme } = useTheme();
   const [mounted, setMounted] = useState(false);
+  const { t } = useTranslation();
 
   useEffect(() => {
     setMounted(true);
@@ -32,23 +35,27 @@ export default function Navbar() {
         </Link>
         
         <div className={`nav-links ${menuOpen ? "open" : ""}`}>
-          <a href="/#services" onClick={() => setMenuOpen(false)}>Services</a>
-          <a href="/#why-choose-us" onClick={() => setMenuOpen(false)}>Process</a>
-          <a href="/#experience" onClick={() => setMenuOpen(false)}>Experience</a>
-          <a href="/#faq" onClick={() => setMenuOpen(false)}>FAQ</a>
+          <a href="/#services" onClick={() => setMenuOpen(false)}>{t("nav.services")}</a>
+          <a href="/#why-choose-us" onClick={() => setMenuOpen(false)}>{t("nav.process")}</a>
+          <a href="/#experience" onClick={() => setMenuOpen(false)}>{t("nav.experience")}</a>
+          <a href="/#faq" onClick={() => setMenuOpen(false)}>{t("nav.faq")}</a>
           
-          {mounted && (
-            <button 
-              className="theme-toggle" 
-              onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
-              aria-label="Toggle Theme"
-            >
-              {theme === 'dark' ? <Sun size={20} /> : <Moon size={20} />}
-            </button>
-          )}
+          <div className="nav-actions">
+            {mounted && (
+              <button 
+                className="theme-toggle" 
+                onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
+                aria-label="Toggle Theme"
+              >
+                {theme === 'dark' ? <Sun size={20} /> : <Moon size={20} />}
+              </button>
+            )}
+            
+            <LanguageSelector />
+          </div>
 
           <Link href="/contact" className="btn-primary nav-btn" onClick={() => setMenuOpen(false)}>
-            Contact
+            {t("nav.contact")}
           </Link>
         </div>
 
@@ -59,3 +66,4 @@ export default function Navbar() {
     </nav>
   );
 }
+

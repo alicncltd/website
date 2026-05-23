@@ -1,0 +1,103 @@
+{
+  "nav": {
+    "services": "服务",
+    "process": "流程",
+    "experience": "经验",
+    "faq": "常见问题",
+    "contact": "联系方式"
+  },
+  "hero": {
+    "welcome": "欢迎来到 Ali CNC Pakistan",
+    "title_part1": "高精度",
+    "title_part2": "3D建模",
+    "title_part3": "与数控加工公司",
+    "description": "弥合数字CAD建模与实体工业制造之间的鸿沟。由 Raja Muhammad Ali Asghar 创立，Ali CNC Pakistan 专注于2D/2.5D矢量创建、3D浮雕建模和高精度数控制造。",
+    "action": "开始项目"
+  },
+  "services": {
+    "title_part1": "我们的",
+    "title_part2": "专长",
+    "cad_title": "3D建模与CAD设计",
+    "cad_desc": "利用Onshape和Vectric等尖端工具进行技术3D建模和数控就绪产品设计。",
+    "cnc_title": "数控编程",
+    "cnc_desc": "为精密数控加工提供专业编程，确保您的设计完美制造。",
+    "dfm_title": "可制造性设计",
+    "dfm_desc": "在流程早期优化设计，以降低成本、提高质量并加快生产速度。"
+  },
+  "why_choose": {
+    "title_part1": "为何选择",
+    "title_part2": "Ali CNC?",
+    "precision_title": "精度至上",
+    "precision_desc": "每个刀路都经过双重检查以确保精确度。我们专注于高细节浮雕雕刻，每一毫米都至关重要。",
+    "efficiency_title": "材料效率",
+    "efficiency_desc": "我们的G代码优化确保材料浪费最少，为您节省昂贵硬木和工业材料的成本。",
+    "expertise_title": "实践经验",
+    "expertise_desc": "由首席执行官 Raja Muhammad Ali Asghar 亲自操作机械，确保设计完美转化为实物。"
+  },
+  "faq": {
+    "title_part1": "常见",
+    "title_part2": "问题",
+    "q1_title": "您提供哪些文件格式？",
+    "q1_desc": "我们提供多种数控就绪文件格式，包括.CRV、.DXF、.SVG、.STEP，以及根据您的特定机床控制器定制的优化G代码。",
+    "q2_title": "您的典型周转时间是多久？",
+    "q2_desc": "周转时间因项目复杂性而异。标准2D刀路通常需要24-48小时，而复杂的3D浮雕模型可能需要3-5个工作日。",
+    "q3_title": "您提供可制造性设计（DFM）服务吗？",
+    "q3_desc": "是的，我们对每个设计进行可制造性优化，以减少材料浪费，缩短机器加工时间，并确保零机床错误。",
+    "q4_title": "您擅长哪些软件？",
+    "q4_desc": "我们精通Vectric Aspire用于木材加工，以及Onshape用于高级机械3D建模和CAD设计。"
+  },
+  "experience": {
+    "title_part1": "经验与",
+    "title_part2": "认证",
+    "role1_title": "首席执行官兼创始人",
+    "role1_subtitle": "Ali CNC Pakistan",
+    "role1_date": "2026年5月 – 至今",
+    "role1_desc": "由 Raja Muhammad Ali Asghar 领导，专注于弥合数字设计与实体工业制造之间的鸿沟。",
+    "role2_title": "Umer CNC 实习生",
+    "role2_subtitle": "Umer CNC",
+    "role2_date": "2025年9月 – 2026年5月",
+    "role3_title": "CAD - TITAN-3M & 2M 证书",
+    "role3_subtitle": "TITANS of CNC: Academy",
+    "role3_date": "2026年4月 – 至今",
+    "role4_title": "自由职业者注册",
+    "role4_subtitle": "巴基斯坦软件出口委员会 (PSEB)",
+    "role4_date": "2026年4月 – 至今"
+  },
+  "footer": {
+    "title": "让我们共创非凡",
+    "description": "准备好将您的想法变为高精度现实了吗？立即联系我们。",
+    "contact_btn": "联系我们",
+    "cadcrowd_btn": "CadCrowd",
+    "crunchbase_btn": "Crunchbase",
+    "copyright": "Ali CNC Pakistan。总部位于 Rawalpindi, Punjab。高精度工程与CAD设计。"
+  },
+  "contact": {
+    "title_part1": "保持",
+    "title_part2": "联系",
+    "description": "有一个项目构想？无论是高精度3D模型还是完整的数控生产运行，Ali CNC Pakistan 都随时准备助您实现。",
+    "whatsapp_title": "WhatsApp",
+    "whatsapp_desc": "即时消息，快速查询",
+    "whatsapp_action": "在WhatsApp上发送消息",
+    "email_title": "电子邮件",
+    "email_desc": "发送详细的项目提案",
+    "cadcrowd_title": "CadCrowd",
+    "cadcrowd_desc": "官方作品集与招聘平台",
+    "cadcrowd_action": "访问个人资料",
+    "kakaotalk_title": "KakaoTalk",
+    "kakaotalk_desc": "在韩国顶级通讯工具上联系",
+    "kakaotalk_action": "打开KakaoTalk",
+    "line_title": "Line",
+    "line_desc": "用于全球协作的通讯工具",
+    "line_action": "添加Line好友",
+    "form_title": "发送消息",
+    "form_name": "姓名",
+    "form_name_placeholder": "您的姓名",
+    "form_email": "电子邮件",
+    "form_email_placeholder": "your@email.com",
+    "form_subject": "主题",
+    "form_subject_placeholder": "项目意向",
+    "form_message": "消息",
+    "form_message_placeholder": "告诉我们您的项目...",
+    "form_submit": "发送消息"
+  }
+}

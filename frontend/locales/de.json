@@ -1,0 +1,103 @@
+{
+  "nav": {
+    "services": "Dienstleistungen",
+    "process": "Prozess",
+    "experience": "Erfahrung",
+    "faq": "FAQ",
+    "contact": "Kontakt"
+  },
+  "hero": {
+    "welcome": "Willkommen bei Ali CNC Pakistan",
+    "title_part1": "Hochpräzise",
+    "title_part2": "3D-Modellierung",
+    "title_part3": "& CNC-Fertigungsfirma",
+    "description": "Überbrückt die Lücke zwischen digitaler CAD-Modellierung und physischer industrieller Fertigung. Gegründet von Raja Muhammad Ali Asghar, spezialisiert sich Ali CNC Pakistan auf 2D/2.5D-Vektorerstellung, 3D-Reliefmodellierung und hochpräzise CNC-Fertigung.",
+    "action": "Ein Projekt starten"
+  },
+  "services": {
+    "title_part1": "Unsere",
+    "title_part2": "Expertise",
+    "cad_title": "3D-Modellierung & CAD-Design",
+    "cad_desc": "Technische 3D-Modellierung und CNC-fertige Produktentwicklung mithilfe modernster Tools wie Onshape und Vectric.",
+    "cnc_title": "CNC-Programmierung",
+    "cnc_desc": "Kompetente Programmierung für präzise CNC-Fertigung, die sicherstellt, dass Ihre Designs perfekt gefertigt werden.",
+    "dfm_title": "Design für Fertigung",
+    "dfm_desc": "Optimierung von Designs frühzeitig im Prozess, um Kosten zu senken, die Qualität zu verbessern und die Produktion zu beschleunigen."
+  },
+  "why_choose": {
+    "title_part1": "Warum",
+    "title_part2": "Ali CNC?",
+    "precision_title": "Präzision an erster Stelle",
+    "precision_desc": "Jeder Werkzeugpfad wird auf Genauigkeit überprüft. Wir spezialisieren uns auf detailreiche Reliefschnitzereien, bei denen jeder Bruchteil eines Millimeters zählt.",
+    "efficiency_title": "Materialeffizienz",
+    "efficiency_desc": "Unsere G-Code-Optimierung gewährleistet minimalen Materialverschnitt und spart Ihnen Kosten bei teuren Harthölzern und Industriematerialien.",
+    "expertise_title": "Praktische Expertise",
+    "expertise_desc": "Geleitet von CEO Raja Muhammad Ali Asghar, der die Maschinen persönlich bedient, um sicherzustellen, dass Designs perfekt in die physische Welt übertragen werden."
+  },
+  "faq": {
+    "title_part1": "Häufig gestellte",
+    "title_part2": "Fragen",
+    "q1_title": "Welche Dateiformate stellen Sie zur Verfügung?",
+    "q1_desc": "Wir liefern CNC-fertige Dateien in verschiedenen Formaten, darunter .CRV, .DXF, .SVG, .STEP und optimierten G-Code, zugeschnitten auf Ihre spezifische Maschinensteuerung.",
+    "q2_title": "Wie ist Ihre typische Bearbeitungszeit?",
+    "q2_desc": "Die Bearbeitungszeit variiert je nach Projektkomplexität. Standard-2D-Werkzeugpfade dauern oft 24-48 Stunden, während komplexe 3D-Reliefmodelle 3-5 Werktage in Anspruch nehmen können.",
+    "q3_title": "Bieten Sie Design für Fertigung (DFM) an?",
+    "q3_desc": "Ja, wir optimieren jedes Design für die Fertigung, um Materialverschnitt zu reduzieren, die Maschinenzeit zu minimieren und fehlerfreie Prozesse an der Maschine zu gewährleisten.",
+    "q4_title": "Auf welche Software sind Sie spezialisiert?",
+    "q4_desc": "Wir sind Experten in Vectric Aspire für die Holzbearbeitung und Onshape für fortschrittliche mechanische 3D-Modellierung und CAD-Design."
+  },
+  "experience": {
+    "title_part1": "Erfahrung &",
+    "title_part2": "Zertifizierungen",
+    "role1_title": "CEO & Gründer",
+    "role1_subtitle": "Ali CNC Pakistan",
+    "role1_date": "Mai 2026 – Heute",
+    "role1_desc": "Geleitet von Raja Muhammad Ali Asghar, spezialisiert auf die Verbindung von digitalem Design mit physischer industrieller Fertigung.",
+    "role2_title": "Umer CNC Praktikant",
+    "role2_subtitle": "Umer CNC",
+    "role2_date": "Sep 2025 – Mai 2026",
+    "role3_title": "CAD - TITAN-3M & 2M Zertifikate",
+    "role3_subtitle": "TITANS of CNC: Academy",
+    "role3_date": "Apr 2026 – Heute",
+    "role4_title": "Freelancer-Registrierung",
+    "role4_subtitle": "Pakistan Software Export Board (PSEB)",
+    "role4_date": "Apr 2026 – Heute"
+  },
+  "footer": {
+    "title": "Lassen Sie uns etwas Großartiges schaffen",
+    "description": "Bereit, Ihre Ideen in hochpräzise Realität umzusetzen? Kontaktieren Sie uns noch heute.",
+    "contact_btn": "Kontaktieren Sie uns",
+    "cadcrowd_btn": "CadCrowd",
+    "crunchbase_btn": "Crunchbase",
+    "copyright": "Ali CNC Pakistan. Ansässig in Rawalpindi, Punjab. Hochpräzise Ingenieurkunst & CAD-Design."
+  },
+  "contact": {
+    "title_part1": "Nehmen Sie",
+    "title_part2": "Kontakt auf",
+    "description": "Haben Sie ein Projekt im Sinn? Ob es sich um ein hochpräzises 3D-Modell oder eine vollständige CNC-Produktionsserie handelt, Ali CNC Pakistan ist bereit, Ihnen bei der Umsetzung zu helfen.",
+    "whatsapp_title": "WhatsApp",
+    "whatsapp_desc": "Sofortnachrichten für schnelle Anfragen",
+    "whatsapp_action": "Nachricht auf WhatsApp senden",
+    "email_title": "E-Mail",
+    "email_desc": "Senden Sie einen detaillierten Projektvorschlag",
+    "cadcrowd_title": "CadCrowd",
+    "cadcrowd_desc": "Offizielles Portfolio & Plattform zur Beauftragung",
+    "cadcrowd_action": "Profil besuchen",
+    "kakaotalk_title": "KakaoTalk",
+    "kakaotalk_desc": "Verbinden Sie sich auf Koreas Top-Messenger",
+    "kakaotalk_action": "KakaoTalk öffnen",
+    "line_title": "Line",
+    "line_desc": "Messaging für globale Zusammenarbeit",
+    "line_action": "Auf Line hinzufügen",
+    "form_title": "Nachricht senden",
+    "form_name": "Name",
+    "form_name_placeholder": "Ihr Name",
+    "form_email": "E-Mail",
+    "form_email_placeholder": "ihre@email.com",
+    "form_subject": "Betreff",
+    "form_subject_placeholder": "Projektinteresse",
+    "form_message": "Nachricht",
+    "form_message_placeholder": "Erzählen Sie uns von Ihrem Projekt...",
+    "form_submit": "Nachricht senden"
+  }
+}

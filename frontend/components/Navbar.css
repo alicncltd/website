@@ -39,6 +39,12 @@
 }
 .theme-toggle:hover { background: rgba(14, 165, 233, 0.1); }
 
+.nav-actions {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
 .mobile-menu-btn { display: none; background: none; border: none; color: var(--text-primary); cursor: pointer; padding: 8px; }
 
 @media (max-width: 850px) {

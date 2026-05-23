@@ -1,0 +1,103 @@
+{
+  "nav": {
+    "services": "서비스",
+    "process": "공정",
+    "experience": "경험",
+    "faq": "자주 묻는 질문",
+    "contact": "문의"
+  },
+  "hero": {
+    "welcome": "Ali CNC Pakistan에 오신 것을 환영합니다",
+    "title_part1": "고정밀",
+    "title_part2": "3D 모델링",
+    "title_part3": "및 CNC 가공 전문 기업",
+    "description": "디지털 CAD 모델링과 물리적 산업 가공 간의 격차를 해소합니다. Raja Muhammad Ali Asghar가 설립한 Ali CNC Pakistan은 2D/2.5D 벡터 생성, 3D 릴리프 모델링, 그리고 고정밀 CNC 제조를 전문으로 합니다.",
+    "action": "프로젝트 시작"
+  },
+  "services": {
+    "title_part1": "우리의",
+    "title_part2": "전문성",
+    "cad_title": "3D 모델링 및 CAD 설계",
+    "cad_desc": "Onshape 및 Vectric과 같은 최첨단 도구를 활용한 기술 3D 모델링 및 CNC 가공 준비 설계.",
+    "cnc_title": "CNC 프로그래밍",
+    "cnc_desc": "정밀 CNC 가공을 위한 전문 프로그래밍으로 고객의 디자인이 완벽하게 제작되도록 보장합니다.",
+    "dfm_title": "제조를 위한 설계 (DFM)",
+    "dfm_desc": "초기 공정에서 설계를 최적화하여 비용 절감, 품질 향상 및 생산 속도 향상을 이끌어냅니다."
+  },
+  "why_choose": {
+    "title_part1": "왜",
+    "title_part2": "Ali CNC인가?",
+    "precision_title": "정밀도 최우선",
+    "precision_desc": "모든 툴패스는 정확성을 위해 이중으로 확인됩니다. 우리는 밀리미터의 미세한 부분까지 중요한 고정밀 릴리프 조각을 전문으로 합니다.",
+    "efficiency_title": "재료 효율성",
+    "efficiency_desc": "우리의 G-코드 최적화는 재료 낭비를 최소화하여 고가의 경목 및 산업용 재료 비용을 절감합니다.",
+    "expertise_title": "현장 전문 지식",
+    "expertise_desc": "CEO인 Raja Muhammad Ali Asghar가 직접 기계를 운영하여 디자인이 물리적 세계로 완벽하게 구현되도록 보장합니다."
+  },
+  "faq": {
+    "title_part1": "자주 묻는",
+    "title_part2": "질문",
+    "q1_title": "어떤 파일 형식을 제공합니까?",
+    "q1_desc": "저희는 .CRV, .DXF, .SVG, .STEP을 포함한 다양한 CNC 가공 준비 파일 형식과 고객의 특정 기계 컨트롤러에 맞춰 최적화된 G-코드를 제공합니다.",
+    "q2_title": "일반적인 작업 소요 시간은 어떻게 됩니까?",
+    "q2_desc": "작업 소요 시간은 프로젝트 복잡성에 따라 다릅니다. 표준 2D 툴패스는 보통 24-48시간이 소요되며, 복잡한 3D 릴리프 모델은 3-5영업일이 소요될 수 있습니다.",
+    "q3_title": "제조를 위한 설계(DFM) 서비스를 제공합니까?",
+    "q3_desc": "예, 재료 낭비를 줄이고, 기계 작업 시간을 최소화하며, 기계상 오류를 없애기 위해 모든 설계를 제조에 최적화합니다.",
+    "q4_title": "어떤 소프트웨어에 전문성이 있습니까?",
+    "q4_desc": "저희는 목재 가공을 위한 Vectric Aspire와 고급 기계 3D 모델링 및 CAD 설계를 위한 Onshape 전문가입니다."
+  },
+  "experience": {
+    "title_part1": "경험 및",
+    "title_part2": "인증",
+    "role1_title": "CEO 겸 설립자",
+    "role1_subtitle": "Ali CNC Pakistan",
+    "role1_date": "2026년 5월 – 현재",
+    "role1_desc": "Raja Muhammad Ali Asghar가 이끌며, 디지털 설계와 물리적 산업 가공의 연결을 전문으로 합니다.",
+    "role2_title": "Umer CNC 인턴",
+    "role2_subtitle": "Umer CNC",
+    "role2_date": "2025년 9월 – 2026년 5월",
+    "role3_title": "CAD - TITAN-3M & 2M 인증서",
+    "role3_subtitle": "TITANS of CNC: Academy",
+    "role3_date": "2026년 4월 – 현재",
+    "role4_title": "프리랜서 등록",
+    "role4_subtitle": "Pakistan Software Export Board (PSEB)",
+    "role4_date": "2026년 4월 – 현재"
+  },
+  "footer": {
+    "title": "놀라운 것을 함께 만들어 보세요",
+    "description": "귀하의 아이디어를 고정밀 현실로 만들 준비가 되셨습니까? 지금 바로 연락하세요.",
+    "contact_btn": "문의하기",
+    "cadcrowd_btn": "CadCrowd",
+    "crunchbase_btn": "Crunchbase",
+    "copyright": "Ali CNC Pakistan. Rawalpindi, Punjab에 기반을 둔 고정밀 엔지니어링 및 CAD 설계 전문 기업."
+  },
+  "contact": {
+    "title_part1": "문의",
+    "title_part2": "하세요",
+    "description": "마음에 둔 프로젝트가 있으신가요? 고정밀 3D 모델이든, 완전한 CNC 생산 실행이든, Ali CNC Pakistan이 고객님의 아이디어를 현실로 만드는 데 도움을 드릴 준비가 되어 있습니다.",
+    "whatsapp_title": "WhatsApp",
+    "whatsapp_desc": "빠른 문의를 위한 즉시 메시지",
+    "whatsapp_action": "WhatsApp으로 메시지 보내기",
+    "email_title": "이메일",
+    "email_desc": "자세한 프로젝트 제안서 보내기",
+    "cadcrowd_title": "CadCrowd",
+    "cadcrowd_desc": "공식 포트폴리오 및 고용 플랫폼",
+    "cadcrowd_action": "프로필 방문",
+    "kakaotalk_title": "KakaoTalk",
+    "kakaotalk_desc": "한국 최고의 메신저로 연결",
+    "kakaotalk_action": "카카오톡 열기",
+    "line_title": "Line",
+    "line_desc": "글로벌 협업을 위한 메시징",
+    "line_action": "Line에 추가",
+    "form_title": "메시지 보내기",
+    "form_name": "이름",
+    "form_name_placeholder": "귀하의 이름",
+    "form_email": "이메일",
+    "form_email_placeholder": "your@email.com",
+    "form_subject": "제목",
+    "form_subject_placeholder": "프로젝트 관심사",
+    "form_message": "메시지",
+    "form_message_placeholder": "귀하의 프로젝트에 대해 알려주세요...",
+    "form_submit": "메시지 보내기"
+  }
+}
