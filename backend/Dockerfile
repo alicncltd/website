@@ -1,4 +1,5 @@
-FROM ghcr.io/puppeteer/puppeteer:21.5.0
+# Upgrade the base image to a version that ships with Node 22+ natively
+FROM ghcr.io/puppeteer/puppeteer:23.10.1
 
 # Switch to root to configure permissions
 USER root
