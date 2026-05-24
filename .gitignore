@@ -42,3 +42,7 @@ tsconfig.tsbuildinfo
 # local credentials & documentation containing secrets
 api_instructions.txt
 DEPLOYMENT_INSTRUCTIONS.txt
+
+# WhatsApp session state & zip backups
+.wwebjs_auth/
+session.zip
