@@ -525,5 +525,83 @@ body {
   }
 }
 
+/* 📱 EXTREME MOBILE FRIENDLINESS OVERRIDES (Resolves layout overflows, overlapping text, and offsets) */
+@media (max-width: 768px) {
+  /* Increase Hero Section Top Padding to clear fixed Topbar + Navbar */
+  .hero-section {
+    padding-top: clamp(9.5rem, 15vh, 12rem) !important;
+    min-height: auto !important;
+  }
+  
+  /* Shrink Project Card Paddings to prevent text cramping */
+  .project-card {
+    padding: 1.75rem 1.25rem !important;
+  }
+  
+  /* Prevent Contact Method Card button & padding overflow */
+  .contact-method-card {
+    flex-direction: column !important;
+    align-items: flex-start !important;
+    padding: 1.25rem !important;
+    gap: 1rem !important;
+  }
+  
+  .contact-method-card .method-icon-wrapper {
+    width: 50px !important;
+    height: 50px !important;
+  }
+  
+  .contact-method-card .method-info {
+    width: 100% !important;
+  }
+  
+  .contact-method-card .btn-primary,
+  .contact-method-card .btn-outline {
+    padding: 0.6rem 1rem !important;
+    font-size: 0.85rem !important;
+    width: 100% !important;
+    box-sizing: border-box !important;
+  }
+
+  /* Compact the panic emergency modal for mobile viewports */
+  .panic-modal-content {
+    padding: 1.5rem !important;
+    width: 95% !important;
+    border-radius: 16px !important;
+  }
+
+  .panic-step-item {
+    font-size: 0.85rem !important;
+    gap: 8px !important;
+  }
+
+  .panic-step-num {
+    min-width: 24px !important;
+    padding: 1px 6px !important;
+  }
+}
+
+@media (max-width: 480px) {
+  /* Scale down massive headings on small phones to prevent word break wrapping */
+  .hero-title {
+    font-size: 1.85rem !important;
+    line-height: 1.2 !important;
+  }
+  
+  .section-title {
+    font-size: 1.6rem !important;
+    line-height: 1.2 !important;
+  }
+
+  /* Make footer action buttons scale correctly */
+  .footer .btn-primary,
+  .footer .btn-outline {
+    width: 100% !important;
+    padding: 0.6rem 1rem !important;
+    box-sizing: border-box !important;
+  }
+}
+
+
 
 
