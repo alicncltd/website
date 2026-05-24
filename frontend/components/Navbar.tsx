@@ -54,9 +54,9 @@ export default function Navbar() {
             <LanguageSelector />
           </div>
 
-          <Link href="/contact" className="btn-primary nav-btn" onClick={() => setMenuOpen(false)}>
+          <a href="/#contact" className="btn-primary nav-btn" onClick={() => setMenuOpen(false)}>
             {t("nav.contact")}
-          </Link>
+          </a>
         </div>
 
         <button className="mobile-menu-btn" onClick={() => setMenuOpen(!menuOpen)}>
