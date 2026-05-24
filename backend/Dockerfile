@@ -12,11 +12,14 @@ ENV PUPPETEER_CACHE_DIR=/app/.cache
 # Copy package files
 COPY package*.json ./
 
-# Install packages
-RUN npm ci --only=production
+# Install packages (ignoring scripts during dependency download to keep cache clean)
+RUN npm ci --only=production --ignore-scripts
 
 # Copy application files
 COPY . .
+
+# Run the patch script now that all files are copied
+RUN node patch_wweb.js
 
 # Adjust permissions for Puppeteer's default running user
 RUN chown -R pptruser:pptruser /app
