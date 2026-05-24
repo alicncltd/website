@@ -1,6 +1,6 @@
 {
   "name": "ali-cnc-pakistan-backend",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "Render-compatible backend server for WhatsApp client integration, Cloudinary catalog sync, and Gemini health checkers",
   "main": "server.js",
   "type": "module",
@@ -17,7 +17,7 @@
     "node-cron": "^3.0.3",
     "pdfkit": "^0.15.0",
     "resend": "^3.2.0",
-    "whatsapp-web.js": "^1.23.0",
+    "whatsapp-web.js": "^1.34.7",
     "ws": "^8.18.0"
   }
 }
