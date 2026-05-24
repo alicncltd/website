@@ -4,7 +4,8 @@
     "process": "ベクトル錬金術",
     "experience": "アリの業績",
     "faq": "よくある質問",
-    "contact": "今すぐこのボタンをクリック"
+    "contact": "今すぐこのボタンをクリック",
+    "projects": "コンテストの業績"
   },
   "hero": {
     "welcome": "Ali CNCへようこそ（私たちは計算を設計し、貴方が切削を行います。）",
@@ -102,5 +103,31 @@
     "form_message": "メッセージ本文",
     "form_message_placeholder": "あなたのプロジェクトやユニークな木材彫刻のアイデアについて教えてください...",
     "form_submit": "送信"
+  },
+  "projects": {
+    "title_part1": "Aliの宇宙的",
+    "title_part2": "ノミネートされた傑作群",
+    "subtitle": "ラジャ・ムハンマド・アリ・アスガルはGコードの作成があまりにも簡単すぎると判断し、Tech Briefs主催の「Create the Future」2026デザインコンテストの5つの異なる部門に自らを推薦しました。実物の木屑が一切出ない、数学的およびデジタル的優位性の証明がここにあります。",
+    "proj1_title": "The Legend-Alpha: ニコチン標的型がん細胞逆転プラットフォーム",
+    "proj1_category": "医療部門ノミネート",
+    "proj1_desc": "がん細胞と戦うのではなく、単に再プログラミングしてみては？がん細胞が愛好するニコチン受容体を標的とする合成ニコチン誘導体で包まれたCRISPR「修復コード」を使用し、末期がんを治療する噴霧式分子工学プラットフォーム。リモネンとピネン風味の2.5ミクロン医療用ミストを提供。純粋に脳のみで設計されました。",
+    "proj1_url": "https://contest.techbriefs.com/2026/entries/medical/13990-0508-232739-the-legend-alpha-nicotinic-targeted-universal-oncology-reversion",
+    "proj2_title": "The Molecular Bond Breaker: プラズマ水 propulsion システム",
+    "proj2_category": "エネルギー、動力および推進部門ノミネート",
+    "proj2_desc": "微細パルスプラズマリアクターで水ミストをリアルタイムで高エネルギー水素酸素ラジカル（HHO）に変換し、従来の燃料制約を完全に回避。N52ネオジム磁石で水分子を整列させ、1mmの紫色のプラズマアークで瞬時に破砕してクリーンな機械的トルクを取り出します。",
+    "proj2_url": "https://contest.techbriefs.com/2026/entries/energy-power-and-propulsion/13988-0508-154308-the-molecular-bond-breaker-high-frequency-plasma-water-injection-system",
+    "proj3_title": "Cursor of CAD: 自律型CNC幾何学CADエンジン",
+    "proj3_category": "ロボット工学および自動化部門ノミネート",
+    "proj3_desc": "精神を消耗させる手動のベクトル変換のボトルネックに終止符を打ちましょう。手動のノード編集を自然言語による対話型ワークフローに置き換えるAIネイティブ幾何CAMエンジン。言葉の指示から直接、Gコード計算に適した数学的に完璧な1mm標準ベクトルを出力します。",
+    "proj3_url": "https://contest.techbriefs.com/2026/entries/robotics-and-automation/13987-0508-095442-cursor-of-cad-an-ai-native-agentic-engine-for-cnc-geometry",
+    "proj4_title": "VectorVision: 無限解像度コーデック",
+    "proj4_category": "電子機器部門ノミネート",
+    "proj4_desc": "従来の画素（ピクセル）を数学的なベクトルDNAで置き換える画像および動画コーデック（.svgcおよび.svgv）です。画質低下やブロックノイズが全く発生しない無限ズームを可能にし、全フレームの再描画ではなく座標変換を追跡することで、最大85%の帯域削減を達成します。",
+    "proj4_url": "https://contest.techbriefs.com/2026/entries/electronics/13985-0507-214516-vectorvision-a-geometric-protocol-for-infinite-resolution-digital-media",
+    "proj5_title": "Bio-Inspired Flight: パラメトリック多羽式翼システム",
+    "proj5_category": "宇宙航空および防衛部門ノミネート",
+    "proj5_desc": "人間規模の個人飛行のために、Onshapeにて1mmの精度でモデリングされた生体模倣翼システムです。変数スタジオ機能を利用したリアルタイム調整可能アスペクト比と耐久性に優れた航空骨格設計により、膨大な揚力を安全にサポートします。",
+    "proj5_url": "https://contest.techbriefs.com/2026/entries/aerospace-and-defense/13983-0507-104856-bio-inspired-human-flight-parametric-multi-feather-wing-system",
+    "vote_action": "エントリーを見て投票する"
   }
 }

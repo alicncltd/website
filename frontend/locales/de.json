@@ -4,7 +4,8 @@
     "process": "Vektor-Alchemie",
     "experience": "Alis Meisterleistungen",
     "faq": "Häufige Fragen",
-    "contact": "JETZT HIER KLICKEN"
+    "contact": "JETZT HIER KLICKEN",
+    "projects": "Wettbewerbs-Erfolge"
   },
   "hero": {
     "welcome": "Willkommen bei Ali CNC (Wir entwerfen die Mathematik. Sie drehen die Spindel.)",
@@ -102,5 +103,31 @@
     "form_message": "Das Manifest",
     "form_message_placeholder": "Erzählen Sie uns von Ihrem Projekt oder Ihren ausgefallenen Holzschnitzideen...",
     "form_submit": "Ins All schicken"
+  },
+  "projects": {
+    "title_part1": "Alis Kosmische",
+    "title_part2": "Nominierte Meisterwerke",
+    "subtitle": "Raja Muhammad Ali Asghar fand G-Code-Schreiben viel zu einfach. Deshalb hat er sich beim Tech Briefs 'Create the Future' Design-Wettbewerb 2026 gleich in FÜNF verschiedenen Kategorien nominiert. Hier ist der mathematische, sägemehlfreie Beweis seiner digitalen Vormachtstellung.",
+    "proj1_title": "The Legend-Alpha: Nikotin-gesteuerte Krebszellenreversion",
+    "proj1_category": "Nominiert in der Kategorie Medizin",
+    "proj1_desc": "Warum Krebs bekämpfen, wenn man ihn einfach umprogrammieren kann? Eine aerosolierte molekulare Plattform, die späte Metastasen mit CRISPR 'Restoration Code' behandelt, verpackt in ein synthetisches Nikotinanalogon (da Krebszellen Nikotinrezeptoren lieben). Erzeugt einen 2,5-Mikrometer-Nebel mit Limonen- und Pinenduft. Ausschließlich mit dem Gehirn entwickelt.",
+    "proj1_url": "https://contest.techbriefs.com/2026/entries/medical/13990-0508-232739-the-legend-alpha-nicotinic-targeted-universal-oncology-reversion",
+    "proj2_title": "The Molecular Bond Breaker: Plasma-Wasser-Antrieb",
+    "proj2_category": "Nominiert in Energie, Kraft & Antrieb",
+    "proj2_desc": "Umgehen Sie klassische Kraftstoffgrenzen mit einem mikropulsierenden Plasmareaktor, der Wassernebel in Echtzeit in hochenergetische Wasserstoff-Sauerstoff-Radikale (HHO) spaltet. Richtet Wassermoleküle mit N52-Magneten aus und zerschlägt sie mit einem 1-mm-Plasmabogen für sauberes Drehmoment.",
+    "proj2_url": "https://contest.techbriefs.com/2026/entries/energy-power-and-propulsion/13988-0508-154308-the-molecular-bond-breaker-high-frequency-plasma-water-injection-system",
+    "proj3_title": "Cursor of CAD: Autonomer CNC-Vektormotor",
+    "proj3_category": "Nominiert in Robotik & Automatisierung",
+    "proj3_desc": "Schluss mit dem quälenden manuellen Nachzeichnen von Vektoren. Diese KI-native CAM-Engine ersetzt die manuelle Bearbeitung durch einen sprachgesteuerten Arbeitsablauf. Gibt mathematisch perfekte 1-mm-Vektoren für G-Code-Berechnungen direkt aus gesprochenen Befehlen aus.",
+    "proj3_url": "https://contest.techbriefs.com/2026/entries/robotics-and-automation/13987-0508-095442-cursor-of-cad-an-ai-native-agentic-engine-for-cnc-geometry",
+    "proj4_title": "VectorVision: Infinite-Resolution-Codec",
+    "proj4_category": "Nominiert in der Kategorie Elektronik",
+    "proj4_desc": "Ein Bild-/Videocodec (.svgc & .svgv), der klassische Pixel durch mathematische Vektor-DNA ersetzt. Ermöglicht unendliches Zoomen ohne Pixelierung und spart bis zu 85% H.264-Bandbreite, indem Koordinatentransformationen verfolgt statt Bilder neu gezeichnet werden.",
+    "proj4_url": "https://contest.techbriefs.com/2026/entries/electronics/13985-0507-214516-vectorvision-a-geometric-protocol-for-infinite-resolution-digital-media",
+    "proj5_title": "Bio-Inspired Flight: Parametrisches Federflügelsystem",
+    "proj5_category": "Luftfahrt & Verteidigung",
+    "proj5_desc": "Ein biomimetisches Flügelsystem für bemannte Flüge, in Onshape mit 1-mm-Präzision modelliert. Ermöglicht Echtzeit-Flügelanpassung über variable Studios und strukturell optimierte Flügelknochen für maximale Tragkraft.",
+    "proj5_url": "https://contest.techbriefs.com/2026/entries/aerospace-and-defense/13983-0507-104856-bio-inspired-human-flight-parametric-multi-feather-wing-system",
+    "vote_action": "Beitrag ansehen & abstimmen"
   }
 }

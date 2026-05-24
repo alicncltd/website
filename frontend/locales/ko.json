@@ -4,7 +4,8 @@
     "process": "벡터 연금술",
     "experience": "Ali의 자랑",
     "faq": "자주 묻는 질문",
-    "contact": "지금 이 버튼을 클릭하세요"
+    "contact": "지금 이 버튼을 클릭하세요",
+    "projects": "대회 출품작"
   },
   "hero": {
     "welcome": "Ali CNC에 오신 것을 환영합니다 (우리는 수학을 설계하고, 당신은 회전을 담당합니다.)",
@@ -102,5 +103,31 @@
     "form_message": "상세 내용",
     "form_message_placeholder": "프로젝트 또는 독특한 목재 조각 아이디어에 대해 알려주세요...",
     "form_submit": "메시지 발사"
+  },
+  "projects": {
+    "title_part1": "Ali의 우주적",
+    "title_part2": "지명된 걸작들",
+    "subtitle": "Raja Muhammad Ali Asghar는 G-Code 작성이 너무 쉽다고 느껴, Tech Briefs 'Create the Future' 2026 디자인 공모전의 5개 부문에 자신을 지명했습니다. 여기 물리적 톱밥이 전혀 없는 수학적 및 디지털 우월함의 증거가 있습니다.",
+    "proj1_title": "The Legend-Alpha: 니코틴 표적 암 세포 역전",
+    "proj1_category": "의료 부문 후보작",
+    "proj1_desc": "암 세포와 싸울 필요 없이 재프로그래밍해 보세요. CRISPR '복구 코드'를 암 세포가 좋아하는 니코틴 수용체를 표적하기 위해 합성 니코틴 유사체로 포장하여 분무식 분자 공학으로 치료하는 의료 플랫폼입니다. 리모넨과 피넨 향의 2.5미크론 의료 미스트를 제공합니다. 순수하게 뇌를 사용하여 설계됨.",
+    "proj1_url": "https://contest.techbriefs.com/2026/entries/medical/13990-0508-232739-the-legend-alpha-nicotinic-targeted-universal-oncology-reversion",
+    "proj2_title": "The Molecular Bond Breaker: 플라즈마-물 추진",
+    "proj2_category": "에너지, 동력 및 추진 후보작",
+    "proj2_desc": "물 미스트를 실시간으로 고에너지 수소-산소 라디칼(HHO)로 변환하는 미세 펄스 플라즈마 반응기를 통해 전통적인 연료 제약을 우회합니다. N52 자석으로 물 분자를 배열하고, 1mm 보라색 플라즈마 아크로 분열시켜 청정 기계식 토크를 생성합니다.",
+    "proj2_url": "https://contest.techbriefs.com/2026/entries/energy-power-and-propulsion/13988-0508-154308-the-molecular-bond-breaker-high-frequency-plasma-water-injection-system",
+    "proj3_title": "Cursor of CAD: 에이전트 기반 CNC 벡터 엔진",
+    "proj3_category": "로봇공학 및 자동화 후보작",
+    "proj3_desc": "정신을 좀먹는 수동 벡터 트레이싱의 병목을 끝내세요. 수동 노드 편집을 자연어 대화형 워크플로우로 완전히 대체하는 인공지능 기반 기하 CAM 엔진입니다. 말 한마디로 직접 G-code 툴패스 생성이 가능한 수학적으로 완벽한 1mm 표준 벡터를 출력합니다.",
+    "proj3_url": "https://contest.techbriefs.com/2026/entries/robotics-and-automation/13987-0508-095442-cursor-of-cad-an-ai-native-agentic-engine-for-cnc-geometry",
+    "proj4_title": "VectorVision: 무한 해상도 코덱",
+    "proj4_category": "전자 제품 부문 후보작",
+    "proj4_desc": "전통적인 픽셀을 수학적인 벡터 DNA로 대체하는 이미지/비디오 코덱(.svgc & .svgv)입니다. 해상도 저하거나 깨짐이 전혀 없는 무한 줌을 가능하게 하고, 매 프레임을 다시 그리는 대신 좌표 변환만 추적하여 최대 85%의 H.264 데이터 압축을 달성합니다.",
+    "proj4_url": "https://contest.techbriefs.com/2026/entries/electronics/13985-0507-214516-vectorvision-a-geometric-protocol-for-infinite-resolution-digital-media",
+    "proj5_title": "Bio-Inspired Flight: 파라메트릭 깃털 날개",
+    "proj5_category": "항공 우주 및 국방 후보작",
+    "proj5_desc": "인간 크기의 개인용 비행을 위해 Onshape에서 1mm 정밀도로 모델링된 생체 모방 날개 시스템입니다. 가변 스튜디오를 활용한 실시간 조절식 화면 비율과 내구성이 검증된 날개 골격 설계를 통해 엄청난 양력을 안정적으로 지탱합니다.",
+    "proj5_url": "https://contest.techbriefs.com/2026/entries/aerospace-and-defense/13983-0507-104856-bio-inspired-human-flight-parametric-multi-feather-wing-system",
+    "vote_action": "작품 보기 및 투표하기"
   }
 }

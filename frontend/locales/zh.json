@@ -4,7 +4,8 @@
     "process": "矢量炼金术",
     "experience": "Ali 的实力展现",
     "faq": "常见疑问",
-    "contact": "立即点击此按钮"
+    "contact": "立即点击此按钮",
+    "projects": "大赛杰作"
   },
   "hero": {
     "welcome": "欢迎来到 Ali CNC (我们设计数学，您操作主轴。)",
@@ -102,5 +103,31 @@
     "form_message": "您的宣言",
     "form_message_placeholder": "告诉我们您的项目或奇特的木雕创意...",
     "form_submit": "发射到太空"
+  },
+  "projects": {
+    "title_part1": "Ali的宇宙级",
+    "title_part2": "提名杰作",
+    "subtitle": "Raja Muhammad Ali Asghar 觉得编写 G代码实在太简单了，因此他在 2026 年 Tech Briefs“创造未来”设计大赛中，自荐提名了五个不同类别的项目。这是数学和数字霸权的纯净无物理粉尘的绝对证明。",
+    "proj1_title": "The Legend-Alpha: 尼古丁靶向肿瘤逆转平台",
+    "proj1_category": "医疗类别提名项目",
+    "proj1_desc": "为什么要对抗癌症，而不是直接重编程它？这是一种基于气雾化分子工程的晚期癌症逆转治疗平台，采用包裹在合成尼古丁类似物（因为癌细胞极度喜爱尼古丁受体）中的 CRISPR“修复代码”。输送柠檬烯和蒎烯气味的 2.5微米医疗级薄雾。纯脑力研发设计。",
+    "proj1_url": "https://contest.techbriefs.com/2026/entries/medical/13990-0508-232739-the-legend-alpha-nicotinic-targeted-universal-oncology-reversion",
+    "proj2_title": "The Molecular Bond Breaker: 等离子体水动力系统",
+    "proj2_category": "能源、动力与推进提名项目",
+    "proj2_desc": "通过微脉冲等离子体反应器将 water mist 实时转化为高能氢氧自由基（HHO）催化剂，从而绕过传统燃料限制。利用 N52 钕磁铁整列水分子，然后用 1毫米紫色等离子弧瞬间击碎分子键以释放清洁的机械扭矩。",
+    "proj2_url": "https://contest.techbriefs.com/2026/entries/energy-power-and-propulsion/13988-0508-154308-the-molecular-bond-breaker-high-frequency-plasma-water-injection-system",
+    "proj3_title": "Cursor of CAD: 自适应CNC几何矢量引擎",
+    "proj3_category": "机器人与自动化提名项目",
+    "proj3_desc": "告别令人崩溃的传统手动矢量描摹瓶颈。这款 AI 原生几何 CAM 引擎用自适应的自然语言对话取代了繁琐的手动节点编辑，直接通过口头提示输出用于 G代码生成的数学上完美的 1毫米标准矢量。",
+    "proj3_url": "https://contest.techbriefs.com/2026/entries/robotics-and-automation/13987-0508-095442-cursor-of-cad-an-ai-native-agentic-engine-for-cnc-geometry",
+    "proj4_title": "VectorVision: 无限分辨率编解码器",
+    "proj4_category": "电子类别提名项目",
+    "proj4_desc": "一种用数学矢量 DNA 代替传统网格像素的图像/视频编解码器（.svgc & .svgv）。实现完全没有模糊和噪点的无级无损放大，并且仅通过追踪坐标变换而非重新绘制逐帧画面即可降低高达 85% 的数据传输带宽需求。",
+    "proj4_url": "https://contest.techbriefs.com/2026/entries/electronics/13985-0507-214516-vectorvision-a-geometric-protocol-for-infinite-resolution-digital-media",
+    "proj5_title": "Bio-Inspired Flight: 参数化多羽翼系统",
+    "proj5_category": "航空航天与国防提名项目",
+    "proj5_desc": "在 Onshape 中以 1毫米高精度建模的仿生人尺度飞行机翼系统。利用变量工作室功能进行实时可调的展弦比和羽毛俯仰角调整，并在结构上进行了 von Mises 应力测试以完美承受强力垂直升力负载。",
+    "proj5_url": "https://contest.techbriefs.com/2026/entries/aerospace-and-defense/13983-0507-104856-bio-inspired-human-flight-parametric-multi-feather-wing-system",
+    "vote_action": "查看条目并投票"
   }
 }

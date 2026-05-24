@@ -4,7 +4,8 @@
     "process": "Alquimia Vectorial",
     "experience": "Los Logros de Ali",
     "faq": "Preguntas Frecuentes",
-    "contact": "HAGA CLIC EN ESTE BOTÓN AHORA"
+    "contact": "HAGA CLIC EN ESTE BOTÓN AHORA",
+    "projects": "Logros del Concurso"
   },
   "hero": {
     "welcome": "Bienvenido a Ali CNC (Diseñamos la matemática. Usted opera el husillo.)",
@@ -102,5 +103,31 @@
     "form_message": "El Manifiesto",
     "form_message_placeholder": "Cuéntenos sobre su proyecto o ideas creativas de tallado en madera...",
     "form_submit": "Enviar"
+  },
+  "projects": {
+    "title_part1": "Las Obras",
+    "title_part2": "Maestras Nominadas de Ali",
+    "subtitle": "Raja Muhammad Ali Asghar decidió que escribir G-Code era demasiado fácil, por lo que se nominó a sí mismo para el Concurso de Diseño Tech Briefs 'Create the Future' 2026 en CINCO categorías diferentes. Aquí está la prueba matemática y digital de supremacía libre de aserrín físico.",
+    "proj1_title": "The Legend-Alpha: Reversión Oncológica Dirigida por Nicotina",
+    "proj1_category": "Nominado en la Categoría Médica",
+    "proj1_desc": "¿Por qué luchar contra el cáncer cuando puedes reprogramarlo? Plataforma de ingeniería molecular en aerosol diseñada para tratar el cáncer metastásico en etapa avanzada utilizando CRISPR 'Restoration Code' envuelto en un análogo de nicotina sintético (porque a las células tumorales les encantan los receptores nicotínicos). Produce una niebla médica de 2.5 micras saborizada con limoneno y pineno. Diseñado puramente con: Cerebro.",
+    "proj1_url": "https://contest.techbriefs.com/2026/entries/medical/13990-0508-232739-the-legend-alpha-nicotinic-targeted-universal-oncology-reversion",
+    "proj2_title": "The Molecular Bond Breaker: Propulsión de Plasma y Agua",
+    "proj2_category": "Nominado en Energía, Potencia y Propulsión",
+    "proj2_desc": "Evite las limitaciones tradicionales de combustible ejecutando un reactor de plasma micropulsado que fragmenta la niebla de agua en radicales de hidrógeno y oxígeno (HHO) en tiempo real. Alinea moléculas de agua con imanes N52, luego las rompe con un arco de plasma de 1 mm para obtener un par mecánico limpio.",
+    "proj2_url": "https://contest.techbriefs.com/2026/entries/energy-power-and-propulsion/13988-0508-154308-the-molecular-bond-breaker-high-frequency-plasma-water-injection-system",
+    "proj3_title": "Cursor of CAD: Motor Vectorial de CNC Autónomo",
+    "proj3_category": "Nominado en Robótica y Automatización",
+    "proj3_desc": "Diga adiós al doloroso cuello de botella del trazado de vectores manual. Este motor CAM geométrico nativo de IA reemplaza la edición de nodos manual con un flujo de trabajo autónomo de lenguaje natural. Produce vectores perfectos estándar de 1 mm listos para G-code a partir de comandos de voz.",
+    "proj3_url": "https://contest.techbriefs.com/2026/entries/robotics-and-automation/13987-0508-095442-cursor-of-cad-an-ai-native-agentic-engine-for-cnc-geometry",
+    "proj4_title": "VectorVision: Códec de Resolución Infinita",
+    "proj4_category": "Nominado en la Categoría de Electrónica",
+    "proj4_desc": "Un códec de imagen y video (.svgc y .svgv) que reemplaza los píxeles tradicionales con ADN vectorial matemático. Permite un zoom infinito sin pixelación y reduce el ancho de banda necesario hasta en un 85% al rastrear transformaciones de coordenadas en lugar de volver a dibujar fotogramas.",
+    "proj4_url": "https://contest.techbriefs.com/2026/entries/electronics/13985-0507-214516-vectorvision-a-geometric-protocol-for-infinite-resolution-digital-media",
+    "proj5_title": "Bio-Inspired Flight: Alas de Plumas Paramétricas",
+    "proj5_category": "Nominado en Aeroespacial y Defensa",
+    "proj5_desc": "Un sistema de alas biomiméticas para vuelo humano, modelado con precisión de 1 mm en Onshape. Utiliza estudios de variables paramétricas para ajustar la relación de aspecto de las plumas y un diseño óseo probado contra fatiga estructural.",
+    "proj5_url": "https://contest.techbriefs.com/2026/entries/aerospace-and-defense/13983-0507-104856-bio-inspired-human-flight-parametric-multi-feather-wing-system",
+    "vote_action": "Ver entrada y votar"
   }
 }

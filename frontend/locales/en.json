@@ -2,6 +2,7 @@
   "nav": {
     "services": "Digital Magic",
     "process": "Vector Alchemy",
+    "projects": "Contest Flexes",
     "experience": "Ali's Flexes",
     "faq": "Dumb Questions",
     "contact": "CLICK THIS BUTTON NOW"
@@ -33,6 +34,32 @@
     "efficiency_desc": "Our vector nesting algorithms are so tight that your machine operator will think it is dark magic. We squeeze every single square millimeter out of your sheets to save your wallet.",
     "expertise_title": "We Actually Escaped the Shop",
     "expertise_desc": "Unlike desk-bound virtual designers who think CNC stands for 'Click-n-Copy', our CEO Raja Muhammad Ali Asghar actually ran real machines, breathed real sawdust, and got his hands dirty in real workshops before escaping to the virtual freelance world. He knows exactly what works on a real machine!"
+  },
+  "projects": {
+    "title_part1": "Ali's Cosmic",
+    "title_part2": "Nominated Masterpieces",
+    "subtitle": "Raja Muhammad Ali Asghar decided that writing G-Code was far too easy, so he nominated himself for the Tech Briefs 'Create the Future' 2026 Design Contest across FIVE different categories. Here is the physical-dust-free proof of mathematical and digital supremacy.",
+    "proj1_title": "The Legend-Alpha: Nicotinic Oncology Reversion",
+    "proj1_category": "Medical Category Nominee",
+    "proj1_desc": "Why fight cancer when you can just reprogram it? An aerosolized molecular engineering platform designed to treat late-stage cancer using CRISPR 'Restoration Code' wrapped in a synthetic nicotine analog (because cancer cells love nicotine receptors). Delivers a 2.5-micron medical mist flavored with Limonene and Pinene. Designed using purely: Brain.",
+    "proj1_url": "https://contest.techbriefs.com/2026/entries/medical/13990-0508-232739-the-legend-alpha-nicotinic-targeted-universal-oncology-reversion",
+    "proj2_title": "The Molecular Bond Breaker: Plasma-Water Propulsion",
+    "proj2_category": "Energy, Power & Propulsion Nominee",
+    "proj2_desc": "Bypass traditional fuel constraints by running a Micro-Pulsed Plasma Reactor that shatters magnetically-aligned water clusters into high-energy hydrogen-oxygen radicals (HHO) in real-time. Stresses water molecules with N52 magnets, then shatters them with a 1mm purple plasma arc to unlock clean mechanical torque.",
+    "proj2_url": "https://contest.techbriefs.com/2026/entries/energy-power-and-propulsion/13988-0508-154308-the-molecular-bond-breaker-high-frequency-plasma-water-injection-system",
+    "proj3_title": "Cursor of CAD: Agentic CNC Vector Engine",
+    "proj3_category": "Robotics & Automation Nominee",
+    "proj3_desc": "Say goodbye to the soul-crushing 'click-and-drag' vector tracing bottleneck. This AI-native geometric CAM engine replaces manual node editing with an agentic, natural-language workflow. Outputs mathematically perfect, 1mm-standard vectors ready for G-code toolpathing directly from verbal prompts.",
+    "proj3_url": "https://contest.techbriefs.com/2026/entries/robotics-and-automation/13987-0508-095442-cursor-of-cad-an-ai-native-agentic-engine-for-cnc-geometry",
+    "proj4_title": "VectorVision: Infinite-Resolution Codec",
+    "proj4_category": "Electronics Category Nominee",
+    "proj4_desc": "An image/video codec (.svgc & .svgv) that replaces traditional pixels with mathematical vector DNA. Renders infinite-zoom clarity at zero pixelation while achieving up to 85% H.264 data compression by tracking coordinate transformations instead of redrawing frames.",
+    "proj4_url": "https://contest.techbriefs.com/2026/entries/electronics/13985-0507-214516-vectorvision-a-geometric-protocol-for-infinite-resolution-digital-media",
+    "proj5_title": "Bio-Inspired Flight: Parametric Feather Wings",
+    "proj5_category": "Aerospace & Defense Nominee",
+    "proj5_desc": "A bio-mimetic wing system modeled with 1mm precision in Onshape for human-scale personal aviation. Leverages variable studios for real-time adjustable aspect ratios and von Mises stress-tested wing bones to handle massive vertical lift loads without fatigue.",
+    "proj5_url": "https://contest.techbriefs.com/2026/entries/aerospace-and-defense/13983-0507-104856-bio-inspired-human-flight-parametric-multi-feather-wing-system",
+    "vote_action": "View & Vote for This Entry"
   },
   "faq": {
     "title_part1": "Frequently Asked",

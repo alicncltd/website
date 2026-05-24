@@ -3,7 +3,7 @@
 import React, { useState } from "react";
 import Navbar from "../components/Navbar";
 import { AnimatedSection, AnimatedCard } from "../components/AnimatedSection";
-import { PenTool, Cpu, Layers, HardHat, Award, ExternalLink, Flame, ShieldAlert, X, Mail, Phone, Send } from "lucide-react";
+import { PenTool, Cpu, Layers, HardHat, Award, ExternalLink, Flame, ShieldAlert, X, Mail, Phone, Send, Activity, Zap, Binary, Eye, Wind } from "lucide-react";
 import Image from "next/image";
 import { useTranslation } from "../components/TranslationContext";
 
@@ -101,6 +101,108 @@ export default function Home() {
             <AnimatedCard className="glass-panel service-card" delay={0.4}>
               <h3>{t("faq.q4_title")}</h3>
               <p>{t("faq.q4_desc")}</p>
+            </AnimatedCard>
+          </div>
+        </AnimatedSection>
+
+        {/* Nominated Masterpieces Showcase */}
+        <AnimatedSection className="section" id="projects">
+          <h2 className="section-title">
+            {t("projects.title_part1")} <span className="gradient-text">{t("projects.title_part2")}</span>
+          </h2>
+          <p className="hero-description" style={{ textAlign: "center", marginBottom: "4rem" }}>
+            {t("projects.subtitle")}
+          </p>
+
+          <div className="projects-grid">
+            <AnimatedCard className="glass-panel project-card" delay={0.1}>
+              <div className="badge-nominee">
+                {t("projects.proj1_category")}
+              </div>
+              <Activity className="service-icon" style={{ color: "var(--accent-color)", marginBottom: "1.5rem" }} size={32} />
+              <h3>{t("projects.proj1_title")}</h3>
+              <p>{t("projects.proj1_desc")}</p>
+              <a 
+                href={t("projects.proj1_url")} 
+                target="_blank" 
+                rel="noreferrer" 
+                className="btn-primary project-vote-btn"
+              >
+                <ExternalLink size={16} style={{ marginRight: "6px" }} />
+                {t("projects.vote_action")}
+              </a>
+            </AnimatedCard>
+
+            <AnimatedCard className="glass-panel project-card" delay={0.2}>
+              <div className="badge-nominee">
+                {t("projects.proj2_category")}
+              </div>
+              <Zap className="service-icon" style={{ color: "var(--accent-color)", marginBottom: "1.5rem" }} size={32} />
+              <h3>{t("projects.proj2_title")}</h3>
+              <p>{t("projects.proj2_desc")}</p>
+              <a 
+                href={t("projects.proj2_url")} 
+                target="_blank" 
+                rel="noreferrer" 
+                className="btn-primary project-vote-btn"
+              >
+                <ExternalLink size={16} style={{ marginRight: "6px" }} />
+                {t("projects.vote_action")}
+              </a>
+            </AnimatedCard>
+
+            <AnimatedCard className="glass-panel project-card" delay={0.3}>
+              <div className="badge-nominee">
+                {t("projects.proj3_category")}
+              </div>
+              <Binary className="service-icon" style={{ color: "var(--accent-color)", marginBottom: "1.5rem" }} size={32} />
+              <h3>{t("projects.proj3_title")}</h3>
+              <p>{t("projects.proj3_desc")}</p>
+              <a 
+                href={t("projects.proj3_url")} 
+                target="_blank" 
+                rel="noreferrer" 
+                className="btn-primary project-vote-btn"
+              >
+                <ExternalLink size={16} style={{ marginRight: "6px" }} />
+                {t("projects.vote_action")}
+              </a>
+            </AnimatedCard>
+
+            <AnimatedCard className="glass-panel project-card" delay={0.4}>
+              <div className="badge-nominee">
+                {t("projects.proj4_category")}
+              </div>
+              <Eye className="service-icon" style={{ color: "var(--accent-color)", marginBottom: "1.5rem" }} size={32} />
+              <h3>{t("projects.proj4_title")}</h3>
+              <p>{t("projects.proj4_desc")}</p>
+              <a 
+                href={t("projects.proj4_url")} 
+                target="_blank" 
+                rel="noreferrer" 
+                className="btn-primary project-vote-btn"
+              >
+                <ExternalLink size={16} style={{ marginRight: "6px" }} />
+                {t("projects.vote_action")}
+              </a>
+            </AnimatedCard>
+
+            <AnimatedCard className="glass-panel project-card" delay={0.5}>
+              <div className="badge-nominee">
+                {t("projects.proj5_category")}
+              </div>
+              <Wind className="service-icon" style={{ color: "var(--accent-color)", marginBottom: "1.5rem" }} size={32} />
+              <h3>{t("projects.proj5_title")}</h3>
+              <p>{t("projects.proj5_desc")}</p>
+              <a 
+                href={t("projects.proj5_url")} 
+                target="_blank" 
+                rel="noreferrer" 
+                className="btn-primary project-vote-btn"
+              >
+                <ExternalLink size={16} style={{ marginRight: "6px" }} />
+                {t("projects.vote_action")}
+              </a>
             </AnimatedCard>
           </div>
         </AnimatedSection>
