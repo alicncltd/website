@@ -650,8 +650,22 @@ app.post("/api/whatsapp/pair", authenticateApiKey, async (req, res) => {
 
     console.log(`Requesting pairing code for: ${cleanNumber}`);
     
-    // Give Puppeteer a moment to load page structure before pairing request
-    await new Promise((resolve) => setTimeout(resolve, 5000));
+    // Wait dynamically until Puppeteer browser context is ready (up to 30 seconds)
+    let pageReady = false;
+    for (let i = 0; i < 60; i++) {
+      if (whatsappClient && whatsappClient.pupPage) {
+        pageReady = true;
+        break;
+      }
+      await new Promise((resolve) => setTimeout(resolve, 500));
+    }
+
+    if (!pageReady) {
+      throw new Error("Timeout waiting for Puppeteer browser page to initialize.");
+    }
+
+    // Give Puppeteer a short moment to load the page structure before making the request
+    await new Promise((resolve) => setTimeout(resolve, 2000));
 
     const code = await whatsappClient.requestPairingCode(cleanNumber);
     latestPairingCode = code;
