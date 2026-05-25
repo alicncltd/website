@@ -168,6 +168,9 @@ export default function Home() {
                   <a href="https://wa.me/923440708494?text=Hi%20,%20I%20am%20coming%20from%20your%20website%20,%20Can%20i%20get%20more%20info%20about%20your%20business%20?" target="_blank" rel="noreferrer" className="btn-primary full-width">
                     {t("contact.whatsapp_action")}
                   </a>
+                  <p className="contact-microcopy" style={{ fontSize: '0.75rem', fontStyle: 'italic', opacity: 0.7, marginTop: '0.75rem', lineHeight: '1.4' }}>
+                    {t("contact.whatsapp_microcopy")}
+                  </p>
                 </div>
               </AnimatedCard>
 
@@ -193,32 +196,6 @@ export default function Home() {
                   <p>{t("contact.cadcrowd_desc")}</p>
                   <a href="https://www.cadcrowd.com/profile/212733-thealidev" target="_blank" rel="noreferrer" className="btn-outline full-width">
                     {t("contact.cadcrowd_action")}
-                  </a>
-                </div>
-              </AnimatedCard>
-
-              <AnimatedCard className="glass-panel contact-method-card" delay={0.4}>
-                <div className="method-icon-wrapper kakaotalk" style={{ background: '#FEE500', color: '#3C1E1E' }}>
-                  <Phone size={24} />
-                </div>
-                <div className="method-info">
-                  <h3>{t("contact.kakaotalk_title")}</h3>
-                  <p>{t("contact.kakaotalk_desc")}</p>
-                  <a href="https://open.kakao.com/o/s2H3YJqi" target="_blank" rel="noreferrer" className="btn-outline full-width">
-                    {t("contact.kakaotalk_action")}
-                  </a>
-                </div>
-              </AnimatedCard>
-
-              <AnimatedCard className="glass-panel contact-method-card" delay={0.5}>
-                <div className="method-icon-wrapper line" style={{ background: '#06C755', color: 'white' }}>
-                  <Phone size={24} />
-                </div>
-                <div className="method-info">
-                  <h3>{t("contact.line_title")}</h3>
-                  <p>{t("contact.line_desc")}</p>
-                  <a href="https://line.me/ti/p/J2-p6bC9h8" target="_blank" rel="noreferrer" className="btn-outline full-width">
-                    {t("contact.line_action")}
                   </a>
                 </div>
               </AnimatedCard>
