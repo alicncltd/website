@@ -3,26 +3,18 @@
 import React, { useState, useEffect } from "react";
 import { 
   PenTool, Cpu, Layers, HardHat, Award, ExternalLink, 
-  Mail, Phone, Send, Globe, Sun, Moon, Menu, X, History
+  Mail, Phone, Send, Globe, Sun, Moon, Menu, X
 } from "lucide-react";
 import Image from "next/image";
 import { useTheme } from "next-themes";
 import { AnimatedSection, AnimatedCard } from "../../components/AnimatedSection";
-import "./ko_admin.css"; // Custom styling overrides for timeline and layouts
+import "../../components/Navbar.css"; // Enforce flawless layout of navbar elements
 
 export default function KoreanHome() {
   const [scrolled, setScrolled] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
   const { theme, setTheme } = useTheme();
   const [mounted, setMounted] = useState(false);
-  
-  // Form State
-  const [name, setName] = useState("");
-  const [email, setEmail] = useState("");
-  const [subject, setSubject] = useState("");
-  const [message, setMessage] = useState("");
-  const [formStatus, setFormStatus] = useState("");
-  const [formLoading, setFormLoading] = useState(false);
 
   useEffect(() => {
     setMounted(true);
@@ -39,38 +31,9 @@ export default function KoreanHome() {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setFormLoading(true);
-    setFormStatus("");
-
-    try {
-      const { createClient } = await import("../../lib/supabase/client");
-      const supabase = createClient();
-      
-      const { error } = await supabase.from("system_logs").insert({
-        type: "CONTACT_FORM_KO",
-        message: JSON.stringify({ name, email, subject, message, lang: "ko" }),
-        status: "PENDING"
-      });
-
-      if (error) throw error;
-      
-      setFormStatus("성공적으로 접수되었습니다. 신속하게 견적 및 도면 피드백을 전달해 드리겠습니다!");
-      setName("");
-      setEmail("");
-      setSubject("");
-      setMessage("");
-    } catch (err: any) {
-      setFormStatus(`오류가 발생했습니다: ${err.message || "다시 시도해 주세요."}`);
-    } finally {
-      setFormLoading(false);
-    }
-  };
-
   return (
     <>
-      {/* 1. Native Korean Top Contact Bar */}
+      {/* 1. Sleek Top Contact Strip */}
       <div className="top-contact-bar">
         <div className="top-contact-content">
           <a href="https://wa.me/923440708494?text=Hi%20,%20I%20am%20coming%20from%20your%20website%20,%20Can%20i%20get%20more%20info%20about%20your%20business%20?" target="_blank" rel="noreferrer" className="top-contact-link">
@@ -95,10 +58,10 @@ export default function KoreanHome() {
           </a>
           
           <div className={`nav-links ${menuOpen ? "open" : ""}`}>
-            <a href="#ko-services" onClick={() => setMenuOpen(false)}>서비스 분야</a>
-            <a href="#ko-why-choose-us" onClick={() => setMenuOpen(false)}>설계 강점</a>
-            <a href="#ko-experience" onClick={() => setMenuOpen(false)}>실무 이력</a>
-            <a href="#ko-faq" onClick={() => setMenuOpen(false)}>자주 묻는 질문</a>
+            <a href="#services" onClick={() => setMenuOpen(false)}>서비스 분야</a>
+            <a href="#why-choose-us" onClick={() => setMenuOpen(false)}>설계 강점</a>
+            <a href="#experience" onClick={() => setMenuOpen(false)}>실무 이력</a>
+            <a href="#faq" onClick={() => setMenuOpen(false)}>자주 묻는 질문</a>
             
             <div className="nav-actions" style={{ display: 'flex', gap: '15px', alignItems: 'center' }}>
               {mounted && (
@@ -118,7 +81,7 @@ export default function KoreanHome() {
               </a>
             </div>
 
-            <a href="#ko-contact" className="btn-primary nav-btn" onClick={() => setMenuOpen(false)}>
+            <a href="#contact" className="btn-primary nav-btn" onClick={() => setMenuOpen(false)}>
               도면 견적 문의
             </a>
           </div>
@@ -132,7 +95,7 @@ export default function KoreanHome() {
       {/* 3. Native Korean Main Content */}
       <main>
         {/* Hero Section */}
-        <AnimatedSection className="hero-section" id="ko-home">
+        <AnimatedSection className="hero-section" id="home">
           <Image src="/hero_bg.png" alt="High-Precision CNC Woodshop Floor" fill priority className="hero-bg-image" style={{ objectFit: 'cover', opacity: 0.1 }} />
           <div className="hero-content">
             <div style={{ marginBottom: '2rem' }}>
@@ -145,19 +108,19 @@ export default function KoreanHome() {
               고정밀 CAD/CAM <br />
               <span className="gradient-text">B2B 도면 & G-코드</span> 제작 대행
             </h1>
-            <p className="hero-description" style={{ maxWidth: '800px', margin: '0 auto 2.5rem' }}>
+            <p className="hero-description">
               불완전한 벡터 도면과 비최적화 툴패스로 인해 고가의 목재 합판과 아크릴 자재를 낭비하지 마세요. 
               Veteran operator인 Raja Muhammad Ali Asghar 대표가 다년간 실제 가구 공방 및 조각실 현장에서 스핀들을 조작하고 톱밥을 마시며 쌓은 노하우를 녹여냅니다. 
               기계 멈춤, 가공 면 뜯김, 툴 충돌 걱정 없는 완전무결하고 정밀한 CNC 최적화 가공 도면을 이메일과 카카오톡으로 신속하게 전송해 드립니다.
             </p>
             <div className="hero-actions">
-              <a href="#ko-contact" className="btn-primary">카카오톡 B2B 견적 문의하기</a>
+              <a href="#contact" className="btn-primary">카카오톡 B2B 견적 문의하기</a>
             </div>
           </div>
         </AnimatedSection>
 
         {/* Services Section */}
-        <AnimatedSection className="section" id="ko-services">
+        <AnimatedSection className="section" id="services">
           <h2 className="section-title">CNC 특화 <span className="gradient-text">CAD/CAM 서비스</span></h2>
           <div className="grid-3">
             <AnimatedCard className="glass-panel service-card" delay={0.1}>
@@ -179,7 +142,7 @@ export default function KoreanHome() {
         </AnimatedSection>
 
         {/* Why Choose Us Section */}
-        <AnimatedSection className="section" id="ko-why-choose-us">
+        <AnimatedSection className="section" id="why-choose-us">
           <h2 className="section-title">현장 작업자의 <span className="gradient-text">확실한 차이점</span></h2>
           <div className="grid-3">
             <AnimatedCard className="glass-panel service-card" delay={0.1}>
@@ -199,12 +162,12 @@ export default function KoreanHome() {
         </AnimatedSection>
 
         {/* FAQ Section */}
-        <AnimatedSection className="section" id="ko-faq">
+        <AnimatedSection className="section" id="faq">
           <h2 className="section-title">자주 묻는 <span className="gradient-text">질문 (명확한 답변)</span></h2>
           <div className="grid-2">
             <AnimatedCard className="glass-panel service-card" delay={0.1}>
               <h3>Q. 목재나 원판 부품을 실제 가공해서 택배로 배송해 주시나요?</h3>
-              <p>아니요. 당사는 100% 디지털 CAD/CAM 가공 도면 및 G코드 설계 대행 виртуальный 팩토리입니다. 실물 자재 배송에 드는 값비싼 화물 물류비, 인천항 통관 지연, 파손 부담 없이, 대표님의 이메일과 카카오톡으로 신속히 정밀 블루프린트를 전송합니다.</p>
+              <p>아니요. 당사는 100% 디지털 CAD/CAM 가공 도면 및 G코드 설계 대행 가상 팩토리입니다. 실물 자재 배송에 드는 값비싼 화물 물류비, 인천항 통관 지연, 파손 부담 없이, 대표님의 이메일과 카카오톡으로 신속히 정밀 블루프린트를 전송합니다.</p>
             </AnimatedCard>
             <AnimatedCard className="glass-panel service-card" delay={0.2}>
               <h3>Q. 견적 문의와 작업 의뢰는 어떤 절차로 진행되나요?</h3>
@@ -212,234 +175,182 @@ export default function KoreanHome() {
             </AnimatedCard>
             <AnimatedCard className="glass-panel service-card" delay={0.3}>
               <h3>Q. 호환되는 소프트웨어 및 가공 파일 형식은 어떻게 되나요?</h3>
-              <p>국내외 모든 상업용 CNC 라우터 컨트롤러와 완벽 호환됩니다. 벡터 도면(.DXF, .SVG), 3D 릴리프 모델(.STEP, .IGES, .STL), 기계 구동 G코드(.NC, .TAP)를 지원하며, 주 설계 툴은 AutoCAD, Onshape, Vectric Aspire입니다.</p>
+              <p>국내외 모든 상업용 CNC 라우터 컨트롤러와 완벽 호환됩니다. 벡터 파일(.DXF, .SVG), 3D 릴리프 모델(.STEP, .IGES, .STL), 기계 구동 G코드(.NC, .TAP)를 지원하며, 주 설계 툴은 AutoCAD, Onshape, Vectric Aspire입니다.</p>
             </AnimatedCard>
             <AnimatedCard className="glass-panel service-card" delay={0.4}>
               <h3>Q. 도면 출고까지 제작 소요 기간은 얼마나 걸리나요?</h3>
-              <p>단순 2D 판재 레이아웃 및 공간 네스팅 배열은 24~48시간 이내에 번개 출고됩니다. 복잡한 3D 조립 가구 기계식 하드웨어 모듈화 모델링 및 깊이 연산 최적화는 3~5일이 소요됩니다. 급한 공장 가동 일정이 있으시면 카카오톡으로 선 배정을 신청하세요.</p>
+              <p>단순 2D 판재 레이아웃 및 공간 네스팅 배열은 24~48시간 이내에 번개 출고됩니다. 복잡한 3D 조립 가구 기계식 하드웨어 모듈화 모델링 및 G코드 최적화는 3~5일이 소요됩니다. 급한 공장 가동 일정이 있으시면 카카오톡으로 선 배정을 신청하세요.</p>
             </AnimatedCard>
           </div>
         </AnimatedSection>
 
         {/* Experience Timeline Section */}
-        <AnimatedSection className="section" id="ko-experience">
+        <AnimatedSection className="section" id="experience">
           <h2 className="section-title">알리 대표의 <span className="gradient-text">실전 Workshop 이력</span></h2>
-          <div className="timeline-container-ko" style={{ maxWidth: '800px', margin: '0 auto', textAlign: 'left' }}>
+          <div className="experience-container">
             <div className="timeline">
-              <div className="timeline-item">
-                <div className="timeline-badge" style={{ left: '-3rem' }}>Virtual</div>
+              <AnimatedCard className="timeline-item glass-panel" delay={0.1}>
+                <Award className="timeline-icon" size={24} />
                 <div className="timeline-content">
                   <h4>Virtual CAD/CAM 벡터 최고 설계 감독</h4>
-                  <span className="timeline-date">2026년 5월 – 현재</span>
-                  <p>완전 virtuales B2B 프리랜서 캐드캠 오피스 공장 운영. 글로벌 고객사(미국, 유럽, 국내)를 위한 정밀 기계 부품 및 가공 합판 최적화 갠트리 제어 코드 릴리스.</p>
+                  <h5>Ali CNC (디지털 프리랜서 제국)</h5>
+                  <p className="timeline-date">2026년 5월 – 현재</p>
+                  <p style={{ fontSize: '0.9rem', opacity: 0.8, marginTop: '0.5rem' }}>
+                    완전 virtuales B2B 프리랜서 캐드캠 오피스 공장 운영. 글로벌 고객사(미국, 유럽, 국내)를 위한 정밀 기계 부품 및 가공 합판 최적화 G코드 제어 설계.
+                  </p>
                 </div>
-              </div>
+              </AnimatedCard>
 
-              <div className="timeline-item">
-                <div className="timeline-badge" style={{ left: '-3rem' }}>Machinist</div>
+              <AnimatedCard className="timeline-item glass-panel" delay={0.2}>
+                <Award className="timeline-icon" size={24} />
                 <div className="timeline-content">
                   <h4>현장 CNC 스핀들 오퍼레이터 & 기계실 테크니션</h4>
-                  <span className="timeline-date">2025년 9월 – 2026년 5월</span>
-                  <p>실제 대형 원목 가구 공장(Umer CNC)의 톱밥실에서 근무. 하드우드 옹이 깨짐, 스핀들 모터 과열 정지, 베큠 압력 손실 등 현장 공구 조작과 정비를 마스터하며 물리적 감각 습득.</p>
+                  <h5>Umer CNC (실제 물리적 톱밥 가공공장)</h5>
+                  <p className="timeline-date">2025년 9월 – 2026년 5월</p>
+                  <p style={{ fontSize: '0.9rem', opacity: 0.8, marginTop: '0.5rem' }}>
+                    실제 대형 원목 가구 공장의 톱밥실에서 근무. 하드우드 옹이 깨짐 방지, 스핀들 모터 정밀 제어, 배큠 압력 조절 등 현장 공구 조작과 정비를 마스터하며 물리적 감각 습득.
+                  </p>
                 </div>
-              </div>
+              </AnimatedCard>
 
-              <div className="timeline-item">
-                <div className="timeline-badge" style={{ left: '-3rem' }}>Academy</div>
+              <AnimatedCard className="timeline-item glass-panel" delay={0.3}>
+                <Award className="timeline-icon" size={24} />
                 <div className="timeline-content">
                   <h4>공인 G-Code 제어 설계사 (TITAN-3M & 2M)</h4>
-                  <span className="timeline-date">2026년 4월</span>
-                  <p>세계 1위 CNC 마시닝 테크놀로지 칼리지 교육 과정 이수. 무결한 좌표계 및 원점 옵셋 좌표 이동 계산법을 정밀 통계 설계에 반영.</p>
+                  <h5>TITANS of CNC: 아카데미</h5>
+                  <p className="timeline-date">2026년 4월</p>
+                  <p style={{ fontSize: '0.9rem', opacity: 0.8, marginTop: '0.5rem' }}>
+                    세계 1위 CNC 마시닝 테크놀로지 칼리지 교육 과정 이수. G코드 좌표계 옵셋 설정 및 좌표 구동 정합성을 기계 코딩에 반영.
+                  </p>
                 </div>
-              </div>
+              </AnimatedCard>
 
-              <div className="timeline-item">
-                <div className="timeline-badge" style={{ left: '-3rem' }}>PSEB</div>
+              <AnimatedCard className="timeline-item glass-panel" delay={0.4}>
+                <Award className="timeline-icon" size={24} />
                 <div className="timeline-content">
-                  <h4>Virtual 우드 카빙 벡터 해킹 라이선스 취득</h4>
-                  <span className="timeline-date">2026년 4월 – 현재</span>
-                  <p>파키스탄 소프트웨어 수출국(PSEB) 공인 프리랜서 테크니컬 어드바이저 등록. 안전하고 효율적인 파일 전송 보증.</p>
+                  <h4>Virtual 우드 카빙 벡터 설계 에이전트</h4>
+                  <h5>파키스탄 소프트웨어 수출국 (PSEB)</h5>
+                  <p className="timeline-date">2026년 4월 – 현재</p>
+                  <p style={{ fontSize: '0.9rem', opacity: 0.8, marginTop: '0.5rem' }}>
+                    파키스탄 소프트웨어 수출국(PSEB) 공인 프리랜서 테크니컬 어드바이저 등록. 안전하고 효율적인 설계 납품 도면 보증.
+                  </p>
                 </div>
-              </div>
+              </AnimatedCard>
             </div>
           </div>
         </AnimatedSection>
 
         {/* Contact Section */}
-        <AnimatedSection className="section" id="ko-contact">
+        <AnimatedSection className="section" id="contact">
           <h2 className="section-title">B2B 신속 <span className="gradient-text">견적 & 도면 검수</span></h2>
-          <p className="section-subtitle" style={{ maxWidth: '600px', margin: '0 auto 3rem', color: 'var(--text-secondary)' }}>
-            가공하려는 도면 스케치, 규격 치수 메모, 또는 기존 캐드 파일을 전달해 주세요. 오차 없는 정밀 분석을 약속합니다.
+          <p className="hero-description" style={{ textAlign: "center", marginBottom: "4rem" }}>
+            가공하려는 도면 스케치, 규격 치수 메모, 또는 캐드 원본 파일을 전달해 주세요. 오차 없는 정밀 판독을 약속합니다.
           </p>
 
-          <div className="admin-grid" style={{ display: 'grid', gridTemplateColumns: '1fr 1.2fr', gap: '2rem', textAlign: 'left' }}>
-            {/* Left Column: Localized Trust Channels */}
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
-              
-              {/* Special KakaoTalk Open Chat Card - Primary for Korea */}
-              <div className="control-card glass-panel" style={{ border: '2px solid rgba(245, 158, 11, 0.4)' }}>
-                <h3 className="card-title" style={{ color: '#f59e0b' }}>
-                  <Award size={20} />
-                  카카오톡 1:1 오픈채팅 견적
-                </h3>
-                <p style={{ fontSize: '0.9rem', color: 'var(--text-secondary)', margin: '0 0 1rem' }}>
-                  공방 사장님들이 가장 신뢰하시는 카카오톡 오픈채팅 실시간 접수 채널입니다. 모바일로 찍은 손그림이나 사진도 즉시 접수가 가능합니다.
-                </p>
-                <a 
-                  href="https://open.kakao.com/" 
-                  target="_blank" 
-                  rel="noreferrer" 
-                  className="btn-primary" 
-                  style={{ width: '100%', justifyContent: 'center', background: '#f59e0b', color: '#000', fontWeight: 'bold' }}
-                >
-                  카카오톡 오픈채팅 문의하기
-                </a>
-                <p style={{ fontSize: '0.75rem', color: 'var(--text-secondary)', marginTop: '0.75rem', fontStyle: 'italic' }}>
-                  ⚡ 실시간 한국어 데스크: 한국 목공소 업무 시간대에 맞춰 긴급 도면 피드백 및 조율을 반영합니다.
-                </p>
-              </div>
+          <div className="contact-grid">
+            {/* Direct Contact Methods */}
+            <div className="contact-methods">
+              <AnimatedCard className="glass-panel contact-method-card" delay={0.1}>
+                {/* Yellow Theme for KakaoTalk in South Korea */}
+                <div className="method-icon-wrapper" style={{ background: '#ffcd00', color: '#3c1e1e' }}>
+                  <Phone size={24} />
+                </div>
+                <div className="method-info">
+                  <h3>카카오톡 1:1 오픈채팅 견적</h3>
+                  <p>공방 사장님들이 가장 편리하게 이용하시는 카카오톡 오픈채팅 실시간 접수 채널입니다.</p>
+                  <a href="https://open.kakao.com/" target="_blank" rel="noreferrer" className="btn-primary full-width" style={{ background: '#ffcd00', color: '#3c1e1e', animation: 'none', border: 'none' }}>
+                    카카오톡 오픈채팅 문의하기
+                  </a>
+                  <p className="contact-microcopy" style={{ fontSize: '0.75rem', fontStyle: 'italic', opacity: 0.7, marginTop: '0.75rem', lineHeight: '1.4' }}>
+                    ⚡ 실시간 한국어 데스크: 한국 목공소 업무 시간대에 맞춰 긴급 도면 피드백 및 조율을 실시간으로 조력합니다.
+                  </p>
+                </div>
+              </AnimatedCard>
 
-              {/* Email Intake Card */}
-              <div className="control-card glass-panel">
-                <h3 className="card-title">
-                  <Mail size={18} style={{ color: 'var(--accent-color)' }} />
-                  이메일 기술 문서 접수
-                </h3>
-                <p style={{ fontSize: '0.9rem', color: 'var(--text-secondary)', margin: '0 0 1rem' }}>
-                  용량이 큰 캐드 원본 도면 파일(.DWG, .DXF)이나 여러 장의 스펙 문서는 공식 접수 이메일로 첨부해 주시면 정밀 판독합니다.
-                </p>
-                <a 
-                  href="mailto:thealidevmail@gmail.com" 
-                  className="btn-outline" 
-                  style={{ width: '100%', justifyContent: 'center', display: 'inline-flex', padding: '10px', borderRadius: '8px', border: '1px solid var(--glass-border)' }}
-                >
-                  thealidevmail@gmail.com
-                </a>
-              </div>
+              <AnimatedCard className="glass-panel contact-method-card" delay={0.2}>
+                <div className="method-icon-wrapper email">
+                  <Mail size={24} />
+                </div>
+                <div className="method-info">
+                  <h3>이메일 기술 문서 접수</h3>
+                  <p>용량이 큰 캐드 원본 도면 파일(.DWG, .DXF)은 이메일로 첨부해 주시면 신속 판독합니다.</p>
+                  <a href="mailto:thealidevmail@gmail.com" className="btn-outline full-width">
+                    thealidevmail@gmail.com
+                  </a>
+                </div>
+              </AnimatedCard>
 
-              {/* CadCrowd Portfolio Card */}
-              <div className="control-card glass-panel">
-                <h3 className="card-title">
-                  <ExternalLink size={18} style={{ color: 'var(--accent-color)' }} />
-                  CadCrowd 공인 캐드 포트폴리오
-                </h3>
-                <p style={{ fontSize: '0.9rem', color: 'var(--text-secondary)', margin: '0 0 1rem' }}>
-                  글로벌 프리랜스 기계 설계 전문가 플랫폼을 통해 당사의 공식 인증 기계 설계 포트폴리오 및 가공 검수 평점을 확인하세요.
-                </p>
-                <a 
-                  href="https://www.cadcrowd.com/profile/212733-thealidev" 
-                  target="_blank" 
-                  rel="noreferrer" 
-                  className="btn-outline"
-                  style={{ width: '100%', justifyContent: 'center', display: 'inline-flex', padding: '10px', borderRadius: '8px', border: '1px solid var(--glass-border)' }}
-                >
-                  CadCrowd 프로필 보기
-                </a>
-              </div>
-
+              <AnimatedCard className="glass-panel contact-method-card" delay={0.3}>
+                <div className="method-icon-wrapper cadcrowd">
+                  <ExternalLink size={24} />
+                </div>
+                <div className="method-info">
+                  <h3>CadCrowd 공인 캐드 포트폴리오</h3>
+                  <p>글로벌 전문가 플랫폼을 통해 당사의 공식 인증 기계 설계 포트폴리오를 확인하세요.</p>
+                  <a href="https://www.cadcrowd.com/profile/212733-thealidev" target="_blank" rel="noreferrer" className="btn-outline full-width">
+                    CadCrowd 프로필 보기
+                  </a>
+                </div>
+              </AnimatedCard>
             </div>
 
-            {/* Right Column: Localized B2B Intake Form */}
-            <div className="control-card glass-panel" style={{ padding: '2rem' }}>
-              <h3 style={{ fontSize: '1.25rem', fontWeight: 700, marginBottom: '1.5rem', display: 'flex', gap: '8px', alignItems: 'center' }}>
-                <Send size={18} style={{ color: 'var(--accent-color)' }} />
-                가공 도면 접수 및 기술 검토 요청
-              </h3>
-              
-              <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '1.2rem' }}>
-                <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
-                  <label style={{ fontSize: '0.85rem', color: 'var(--text-secondary)' }}>의뢰인 또는 업체명</label>
-                  <input 
-                    type="text" 
-                    placeholder="예: 홍길동 (길동목공소)" 
-                    value={name}
-                    onChange={(e) => setName(e.target.value)}
-                    required
-                    style={{ padding: '12px', background: 'rgba(255,255,255,0.05)', border: '1px solid var(--glass-border)', borderRadius: '8px', color: 'var(--text-primary)' }}
-                  />
-                </div>
-
-                <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
-                  <label style={{ fontSize: '0.85rem', color: 'var(--text-secondary)' }}>비즈니스 이메일 주소</label>
-                  <input 
-                    type="email" 
-                    placeholder="you@company.com" 
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                    required
-                    style={{ padding: '12px', background: 'rgba(255,255,255,0.05)', border: '1px solid var(--glass-border)', borderRadius: '8px', color: 'var(--text-primary)' }}
-                  />
-                </div>
-
-                <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
-                  <label style={{ fontSize: '0.85rem', color: 'var(--text-secondary)' }}>가공 타입 / 사용 소프트웨어</label>
-                  <input 
-                    type="text" 
-                    placeholder="예: 싱크대 도면 네스팅, 아스파이어 부조 조각 G코드" 
-                    value={subject}
-                    onChange={(e) => setSubject(e.target.value)}
-                    required
-                    style={{ padding: '12px', background: 'rgba(255,255,255,0.05)', border: '1px solid var(--glass-border)', borderRadius: '8px', color: 'var(--text-primary)' }}
-                  />
-                </div>
-
-                <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
-                  <label style={{ fontSize: '0.85rem', color: 'var(--text-secondary)' }}>의뢰 스펙 및 라우터 기계 정보</label>
-                  <textarea 
-                    placeholder="MDF/원목 두께, 사용 가공 비트 직경, 기계 컨트롤러 스펙, 요구 마감 정도 등 상세 요청사항을 적어주시면 더 오차 없는 설계가 가능합니다..." 
-                    value={message}
-                    onChange={(e) => setMessage(e.target.value)}
-                    required
-                    rows={4}
-                    style={{ padding: '12px', background: 'rgba(255,255,255,0.05)', border: '1px solid var(--glass-border)', borderRadius: '8px', color: 'var(--text-primary)', fontFamily: 'inherit', resize: 'vertical' }}
-                  />
-                </div>
-
-                <button type="submit" className="btn-primary" disabled={formLoading} style={{ justifyContent: 'center', padding: '14px', fontSize: '1rem' }}>
-                  {formLoading ? "전송 중..." : "견적 및 기술 검수 제출"}
-                </button>
-
-                {formStatus && (
-                  <div className="auth-success" style={{ margin: 0, fontSize: '0.85rem', padding: '10px', borderRadius: '6px', textAlign: 'center' }}>
-                    {formStatus}
+            {/* Localized B2B Intake Form */}
+            <div className="contact-form-container">
+              <AnimatedCard className="glass-panel form-card" delay={0.3}>
+                <h2 className="form-title">가공 도면 접수 및 기술 검토 요청</h2>
+                <form action="https://formspree.io/f/mrejorww" method="POST" className="contact-form">
+                  <div className="form-group">
+                    <label htmlFor="name">의뢰인 또는 업체명</label>
+                    <input type="text" id="name" name="name" placeholder="예: 홍길동 (길동목공소)" required />
                   </div>
-                )}
-              </form>
+                  <div className="form-group">
+                    <label htmlFor="email">비즈니스 이메일 주소</label>
+                    <input type="email" id="email" name="email" placeholder="you@company.com" required />
+                  </div>
+                  <div className="form-group">
+                    <label htmlFor="subject">가공 타입 / 사용 소프트웨어</label>
+                    <input type="text" id="subject" name="subject" placeholder="예: 싱크대 도면 네스팅, 아스파이어 G코드" required />
+                  </div>
+                  <div className="form-group">
+                    <label htmlFor="message">의뢰 스펙 및 라우터 기계 정보</label>
+                    <textarea id="message" name="message" rows={5} placeholder="MDF/원목 두께, 사용 가공 비트 직경, 기계 컨트롤러 스펙, 요구 마감 정도 등 상세 요청사항을 적어주시면 더 오차 없는 설계가 가능합니다..." required></textarea>
+                  </div>
+                  <button type="submit" className="btn-primary submit-btn">
+                    <Send size={18} style={{ marginRight: '8px' }} />
+                    견적 및 기술 검수 제출
+                  </button>
+                </form>
+              </AnimatedCard>
             </div>
           </div>
         </AnimatedSection>
       </main>
 
       {/* 4. Native Korean Footer */}
-      <footer className="footer-section">
-        <div className="section" style={{ padding: '4rem 1.5rem 2rem' }}>
-          <div className="footer-content" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '2rem', textAlign: 'center' }}>
-            <div style={{ maxWidth: '600px' }}>
-              <h2 style={{ fontSize: '1.75rem', fontWeight: 800, marginBottom: '1rem', color: 'var(--text-primary)' }}>
-                스핀들이 멈춰있는 시간은 고스란히 손실입니다. <br />
-                지금 바로 완벽한 가공 도면을 확보하세요.
-              </h2>
-              <p style={{ color: 'var(--text-secondary)', fontSize: '0.95rem', lineHeight: 1.6 }}>
-                합판 재단 에러, 아스파이어 공구 경로 깨짐, 툴 충돌로 인한 작업 중단을 근절하세요. 
-                라우터 베트 위에 누워있는 기계실의 기계 감각을 지닌 B2B 전문 파트너와 함께 가공 능률을 200% 확장하세요.
-              </p>
-            </div>
+      <footer className="footer">
+        <div className="footer-content" style={{ maxWidth: '1280px', margin: '0 auto' }}>
+          <h2 style={{ fontSize: '1.75rem', fontWeight: 800, marginBottom: '1rem', color: 'var(--text-primary)' }}>
+            스핀들이 멈춰있는 시간은 고스란히 손실입니다. <br />
+            지금 바로 완벽한 가공 도면을 확보하세요.
+          </h2>
+          <p style={{ color: 'var(--text-secondary)', fontSize: '0.95rem', lineHeight: 1.6, maxWidth: '600px', margin: '0 auto 2.5rem' }}>
+            합판 재단 에러, 아스파이어 공구 경로 깨짐, 툴 충돌로 인한 작업 중단을 근절하세요. 
+            라우터 베트 위에 누워있는 기계실의 기계 감각을 지닌 B2B 전문 파트너와 함께 가공 능률을 200% 확장하세요.
+          </p>
 
-            <a href="#ko-contact" className="btn-primary" style={{ padding: '12px 30px' }}>
-              B2B 카카오톡 견적 접수하기
-            </a>
+          <a href="#contact" className="btn-primary" style={{ padding: '12px 30px' }}>
+            B2B 카카오톡 견적 접수하기
+          </a>
 
-            <div className="footer-links" style={{ display: 'flex', gap: '20px', fontSize: '0.9rem', flexWrap: 'wrap', justifyContent: 'center' }}>
-              <a href="https://www.cadcrowd.com/profile/212733-thealidev" target="_blank" rel="noreferrer" className="footer-link">CadCrowd</a>
-              <a href="https://www.crunchbase.com/organization/ali-cnc-pakistan" target="_blank" rel="noreferrer" className="footer-link">Crunchbase</a>
+          <div className="footer-bottom">
+            <div style={{ display: 'flex', gap: '20px', fontSize: '0.9rem', justifyContent: 'center', marginBottom: '2rem' }}>
+              <a href="https://www.cadcrowd.com/profile/212733-thealidev" target="_blank" rel="noreferrer" style={{ color: 'var(--text-secondary)' }}>CadCrowd</a>
+              <a href="https://www.crunchbase.com/organization/ali-cnc-pakistan" target="_blank" rel="noreferrer" style={{ color: 'var(--text-secondary)' }}>Crunchbase</a>
             </div>
-
-            <div style={{ borderTop: '1px solid var(--glass-border)', width: '100%', paddingTop: '2rem', marginTop: '1rem' }}>
-              <p style={{ color: 'var(--text-secondary)', fontSize: '0.8rem', lineHeight: 1.5 }}>
-                © {new Date().getFullYear()} Ali CNC SMC Ptv Ltd. Made in Rawalpindi with love, coffee, and 100% digital, physical-dust-free virtual sawdust. <br />
-                본 웹사이트를 빌드하고 구동하는 과정에서 그 어떤 라우터 머신이나 날물도 다치지 않았음을 엄격히 증명합니다.
-              </p>
-            </div>
+            <p style={{ color: 'var(--text-secondary)', fontSize: '0.8rem', lineHeight: 1.5 }}>
+              © {new Date().getFullYear()} Ali CNC SMC Ptv Ltd. Made in Rawalpindi with love, coffee, and 100% digital, physical-dust-free virtual sawdust. <br />
+              본 웹사이트를 빌드하고 구동하는 과정에서 그 어떤 라우터 머신이나 날물도 다치지 않았음을 엄격히 증명합니다.
+            </p>
           </div>
         </div>
       </footer>
