@@ -12,13 +12,13 @@ const inter = Inter({
 export const metadata: Metadata = {
   metadataBase: new URL("https://www.alicnc.online"),
   title: {
-    default: "Ali CNC SMC Ptv Ltd | High-Precision 3D Modeling & CNC",
-    template: "%s | Ali CNC SMC Ptv Ltd"
+    default: "Ali CNC | High-Precision 3D Modeling & CNC",
+    template: "%s | Ali CNC"
   },
-  description: "Expert 3D Modeling & CNC Fabrication by Ali CNC SMC Ptv Ltd. Specialized in CAD Design, DFM, and CNC Programming in Rawalpindi.",
+  description: "Expert 3D Modeling & CNC Fabrication by Ali CNC. Specialized in CAD Design, DFM, and CNC Programming in Rawalpindi.",
   keywords: ["CNC Pakistan", "3D Modeling", "CAD Design", "CNC Fabrication", "Rawalpindi CNC", "Precision Engineering"],
-  authors: [{ name: "Ali CNC SMC Ptv Ltd" }],
-  creator: "Ali CNC SMC Ptv Ltd",
+  authors: [{ name: "Ali CNC" }],
+  creator: "Ali CNC",
   alternates: {
     canonical: "https://www.alicnc.online",
   },
@@ -30,21 +30,21 @@ export const metadata: Metadata = {
     type: "website",
     locale: "en_PK",
     url: "https://www.alicnc.online",
-    title: "Ali CNC SMC Ptv Ltd | High-Precision 3D Modeling & CNC",
+    title: "Ali CNC | High-Precision 3D Modeling & CNC",
     description: "Expert CNC Fabrication and 3D Modeling services in Rawalpindi, Pakistan.",
-    siteName: "Ali CNC SMC Ptv Ltd",
+    siteName: "Ali CNC",
     images: [
       {
         url: "/logo_final.png",
         width: 1200,
         height: 630,
-        alt: "Ali CNC SMC Ptv Ltd Logo",
+        alt: "Ali CNC Logo",
       },
     ],
   },
   twitter: {
     card: "summary_large_image",
-    title: "Ali CNC SMC Ptv Ltd | High-Precision 3D Modeling & CNC",
+    title: "Ali CNC | High-Precision 3D Modeling & CNC",
     description: "Expert CNC Fabrication and 3D Modeling services in Rawalpindi, Pakistan.",
     images: ["/logo_final.png"],
   },
@@ -54,7 +54,7 @@ export const metadata: Metadata = {
 const jsonLd = {
   "@context": "https://schema.org",
   "@type": "ProfessionalService",
-  "name": "Ali CNC SMC Ptv Ltd",
+  "name": "Ali CNC",
   "image": "https://www.alicnc.online/logo_final.png",
   "url": "https://www.alicnc.online",
   "telephone": "+923440708494",

@@ -348,7 +348,7 @@ export default function KoreanHome() {
               <a href="https://www.crunchbase.com/organization/ali-cnc-pakistan" target="_blank" rel="noreferrer" style={{ color: 'var(--text-secondary)' }}>Crunchbase</a>
             </div>
             <p style={{ color: 'var(--text-secondary)', fontSize: '0.8rem', lineHeight: 1.5 }}>
-              © {new Date().getFullYear()} Ali CNC SMC Ptv Ltd. Made in Rawalpindi with love, coffee, and 100% digital, physical-dust-free virtual sawdust. <br />
+              © {new Date().getFullYear()} Ali CNC. Made in Rawalpindi with love, coffee, and 100% digital, physical-dust-free virtual sawdust. <br />
               본 웹사이트를 빌드하고 구동하는 과정에서 그 어떤 라우터 머신이나 날물도 다치지 않았음을 엄격히 증명합니다.
             </p>
           </div>

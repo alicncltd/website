@@ -494,7 +494,7 @@ setInterval(async () => {
           <p>To reconnect, please visit your Admin dashboard and link the device using your phone number:</p>
           <a href="${frontendLoginUrl}" style="display:inline-block;padding:10px 20px;background:#0ea5e9;color:white;text-decoration:none;border-radius:8px;font-weight:bold;">Reconnect Device Now</a>
           <br/><br/>
-          <p>Thank you,<br/>Ali CNC SMC Ptv Ltd System Monitor</p>
+          <p>Thank you,<br/>Ali CNC System Monitor</p>
         `
       });
 
@@ -571,7 +571,7 @@ async function runDailyHealthCheck() {
     let auditSummary = "Gemini Auditor not configured.";
 
     if (geminiApiKey) {
-      const prompt = `You are a world-class AI website auditor and B2B system analytics analyst for "Ali CNC SMC Ptv Ltd".
+      const prompt = `You are a world-class AI website auditor and B2B system analytics analyst for "Ali CNC".
 Review the following live system status and visitor logs captured in the last 6 hours:
 
 - Frontend URL Status: ${frontendStatus}
@@ -626,7 +626,7 @@ Please write a professional website audit assessment. Identify any system errors
     const localTimeStr = now.toLocaleString("en-US", { timeZone: "Asia/Karachi" });
 
     // Write PDF layout
-    doc.fontSize(22).fillColor("#0ea5e9").text("Ali CNC SMC Ptv Ltd", { align: "center" });
+    doc.fontSize(22).fillColor("#0ea5e9").text("Ali CNC", { align: "center" });
     doc.fontSize(16).fillColor("#0f172a").text("6-Hour AI System Health & Traffic Report", { align: "center" });
     doc.moveDown();
     doc.fontSize(10).fillColor("#475569").text(`Generated: ${localTimeStr} (PKT)`, { align: "right" });
