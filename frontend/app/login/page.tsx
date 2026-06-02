@@ -24,7 +24,7 @@ export default function LoginPage() {
     async function checkUser() {
       const { data } = await supabase.auth.getSession();
       if (data?.session) {
-        router.push("/admin/whatsapp");
+        router.push("/");
       }
     }
     checkUser();
@@ -45,7 +45,7 @@ export default function LoginPage() {
         });
         if (error) throw error;
         
-        router.push("/admin/whatsapp");
+        router.push("/");
       } else {
         // Sign Up
         const { error } = await supabase.auth.signUp({

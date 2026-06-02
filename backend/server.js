@@ -1,11 +1,9 @@
 import express from "express";
 import cors from "cors";
 import dotenv from "dotenv";
-import pkg from "whatsapp-web.js";
 import { createClient } from "@supabase/supabase-js";
 import { v2 as cloudinary } from "cloudinary";
 import { Resend } from "resend";
-import AdmZip from "adm-zip";
 import fs from "fs";
 import path from "path";
 import fetch from "node-fetch";
@@ -18,9 +16,6 @@ import os from "os";
 if (typeof global.WebSocket === "undefined") {
   global.WebSocket = ws;
 }
-
-
-const { Client, LocalAuth } = pkg;
 
 dotenv.config();
 
@@ -45,85 +40,7 @@ cloudinary.config({
 
 const resend = new Resend(process.env.RESEND_API_KEY || "");
 
-// 2. Global State
-let whatsappClient = null;
-let clientStatus = "DISCONNECTED"; // DISCONNECTED, INITIALIZING, PAIRING, CONNECTED
-let latestPairingCode = "";
-let latestQr = "";
-let lastStatusEmailSent = false;
-const sessionDir = "./.wwebjs_auth";
-const sessionZipPath = "./session.zip";
-
-// Secure API Middleware
-function authenticateApiKey(req, res, next) {
-  const apiKey = req.headers["x-api-key"];
-  if (!apiKey || apiKey !== BACKEND_API_KEY) {
-    return res.status(401).json({ error: "Unauthorized access: Invalid API Key" });
-  }
-  next();
-}
-
-// 3. Database session persistence helper functions
-async function saveSessionToSupabase() {
-  console.log("Packaging session files for Supabase persistence...");
-  try {
-    if (!fs.existsSync(sessionDir)) {
-      console.warn("Session directory does not exist. Skipping backup.");
-      return;
-    }
-    const zip = new AdmZip();
-    zip.addLocalFolder(sessionDir);
-    const zipBuffer = zip.toBuffer();
-    const base64Data = zipBuffer.toString("base64");
-
-    const { error } = await supabase
-      .from("whatsapp_sessions")
-      .upsert({
-        id: "main_session",
-        session_data: base64Data,
-        updated_at: new Date().toISOString()
-      });
-
-    if (error) throw error;
-    console.log("Session successfully backed up to Supabase.");
-  } catch (err) {
-    console.error("Failed to back up session to Supabase:", err);
-  }
-}
-
-async function loadSessionFromSupabase() {
-  console.log("Attempting to restore session from Supabase...");
-  try {
-    const { data, error } = await supabase
-      .from("whatsapp_sessions")
-      .select("session_data")
-      .eq("id", "main_session")
-      .maybeSingle();
-
-    if (error) throw error;
-
-    if (data && data.session_data) {
-      console.log("Found session backup. Restoring local files...");
-      const buffer = Buffer.from(data.session_data, "base64");
-      fs.writeFileSync(sessionZipPath, buffer);
-      
-      const zip = new AdmZip(sessionZipPath);
-      zip.extractAllTo(sessionDir, true);
-      
-      fs.unlinkSync(sessionZipPath);
-      console.log("Session restored successfully.");
-      return true;
-    } else {
-      console.log("No previous session backup found.");
-      return false;
-    }
-  } catch (err) {
-    console.error("Failed to restore session from Supabase:", err);
-    return false;
-  }
-}
-
-// Cross-platform helper to resolve Chrome executable path
+// 2. Cross-platform helper to resolve Chrome executable path
 function getChromePath() {
   if (process.env.PUPPETEER_EXECUTABLE_PATH) {
     return process.env.PUPPETEER_EXECUTABLE_PATH;
@@ -164,208 +81,40 @@ function getChromePath() {
   return null;
 }
 
-// 4. Initialize WhatsApp Web Client
-async function initWhatsApp(phoneNumber = null) {
-  if (whatsappClient) {
-    console.log("WhatsApp client is already active.");
-    return;
+// 3. Gemini B2B Catalog Description Enrichment Generator
+async function generateB2BDescription(name, price) {
+  const geminiApiKey = process.env.GEMINI_API_KEY;
+  if (!geminiApiKey) {
+    return "Expert CAD/CAM design and high-precision CNC optimization tailored for commercial woodwork and engraving.";
   }
-
-  clientStatus = "INITIALIZING";
-  await loadSessionFromSupabase();
-
-  whatsappClient = new Client({
-    authStrategy: new LocalAuth(),
-    puppeteer: {
-      headless: true,
-      executablePath: getChromePath() || undefined,
-      args: [
-        "--no-sandbox",
-        "--disable-setuid-sandbox",
-        "--disable-dev-shm-usage",
-        "--disable-gpu"
-      ],
-    },
-  });
-
-  whatsappClient.on("qr", (qr) => {
-    latestQr = qr;
-    clientStatus = "PAIRING";
-    console.log("WhatsApp QR generated.");
-  });
-
-  whatsappClient.on("authenticated", () => {
-    console.log("WhatsApp authenticated.");
-    clientStatus = "AUTHENTICATING";
-  });
-
-  whatsappClient.on("auth_failure", (msg) => {
-    console.error("WhatsApp auth failure:", msg);
-    clientStatus = "DISCONNECTED";
-  });
-
-  whatsappClient.on("ready", async () => {
-    console.log("WhatsApp client ready.");
-    clientStatus = "CONNECTED";
-    lastStatusEmailSent = false;
-    latestPairingCode = "";
-    latestQr = "";
-
-    // Save session in background
-    setTimeout(saveSessionToSupabase, 10000);
-
-    // Trigger catalog sync
-    syncCatalog();
-  });
-
-  whatsappClient.on("disconnected", (reason) => {
-    console.log("WhatsApp client was disconnected:", reason);
-    clientStatus = "DISCONNECTED";
-    whatsappClient = null;
-  });
-
+  
   try {
-    whatsappClient.initialize();
-  } catch (err) {
-    console.error("Failed to initialize WhatsApp Web Client:", err);
-    clientStatus = "DISCONNECTED";
-    whatsappClient = null;
-  }
-}
+    const prompt = `You are a premier B2B copywriter for "Ali CNC Private Limited".
+Write a highly professional, technically rich, B2B direct-response catalog description for a CNC product named "${name}" (Price: ${price}).
+Focus on woodworking shop floor benefits: flawless edge finishes, vacuum table spatial efficiency, reducing machine cycle run times, router bit protection from thermal buildup, and watertight mechanical tolerances.
+Keep the description direct, professional, and convincing for shop owners.
+Return only a clean, well-formatted plain paragraph with NO markdown tags, NO headers, and NO styling. Keep it under 200 words.`;
 
-// 5. Catalog Synchronization via wa-js
-async function syncCatalog() {
-  if (clientStatus !== "CONNECTED" || !whatsappClient) {
-    console.warn("WhatsApp not connected. Cannot sync catalog.");
-    return;
-  }
-
-  console.log("Starting catalog synchronization with Cloudinary...");
-  try {
-    const page = whatsappClient.pupPage;
-    
-    // Inject WA-JS if not already present
-    await page.evaluate(() => {
-      if (window.WPP) return;
-      const script = document.createElement("script");
-      script.src = "https://cdn.jsdelivr.net/npm/@wppconnect/wa-js@latest/dist/wppconnect-wa-js.js";
-      document.head.appendChild(script);
-    });
-
-    // Wait for WPP to be loaded
-    await page.waitForFunction(() => window.WPP && window.WPP.webpack && window.WPP.webpack.isReady, { timeout: 30000 });
-    
-    // Inject all Webpack modules
-    await page.evaluate(() => {
-      window.WPP.webpack.injectAll();
-    });
-
-    const myJid = await page.evaluate(() => window.WPP.conn.getMyJid());
-    console.log("Connected JID:", myJid);
-
-    // Fetch products
-    const products = await page.evaluate(async (jid) => {
-      try {
-        return await window.WPP.catalog.getProducts(jid);
-      } catch (err) {
-        console.error("Failed to get products via WPP:", err);
-        return [];
+    const response = await fetch(
+      `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${geminiApiKey}`,
+      {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          contents: [{ parts: [{ text: prompt }] }]
+        })
       }
-    }, myJid);
+    );
 
-    console.log(`Retrieved ${products.length} products from WhatsApp Business Catalog.`);
-
-    for (const product of products) {
-      // Find image links in product
-      let imageUrl = "";
-      if (product.imageUrls && product.imageUrls.length > 0) {
-        imageUrl = product.imageUrls[0];
-      } else if (product.mediaUrl) {
-        imageUrl = product.mediaUrl;
-      } else if (product.images && product.images.length > 0) {
-        imageUrl = product.images[0].url;
-      }
-
-      if (!imageUrl) {
-        console.warn(`Product ${product.id} (${product.name}) has no catalog image.`);
-        continue;
-      }
-
-      // Check if product is already cached in database
-      const { data: cachedItem } = await supabase
-        .from("catalog_items")
-        .select("id, cloudinary_url")
-        .eq("id", product.id)
-        .maybeSingle();
-
-      if (cachedItem) {
-        console.log(`Product ${product.id} is already cached. Skipping Cloudinary upload.`);
-        continue;
-      }
-
-      console.log(`Downloading and syncing image for ${product.name}...`);
-      
-      // Download image from WhatsApp Page URL context
-      const base64Image = await page.evaluate(async (url) => {
-        try {
-          const res = await fetch(url);
-          const blob = await res.blob();
-          return new Promise((resolve) => {
-            const reader = new FileReader();
-            reader.onloadend = () => resolve(reader.result);
-            reader.readAsDataURL(blob);
-          });
-        } catch (e) {
-          return null;
-        }
-      }, imageUrl);
-
-      if (!base64Image) {
-        console.error(`Failed to download image for ${product.name}`);
-        continue;
-      }
-
-      // Upload to Cloudinary
-      const uploadRes = await cloudinary.uploader.upload(base64Image, {
-        folder: "whatsapp_catalog",
-        public_id: `product_${product.id}`,
-        overwrite: true
-      });
-
-      console.log(`Uploaded image to Cloudinary: ${uploadRes.secure_url}`);
-
-      // Upsert into Supabase
-      const { error } = await supabase
-        .from("catalog_items")
-        .upsert({
-          id: product.id,
-          name: product.name,
-          description: product.description || "",
-          price: product.price ? (product.price / 1000).toString() : "0", // WhatsApp prices are usually scaled by 1000
-          cloudinary_url: uploadRes.secure_url,
-          updated_at: new Date().toISOString()
-        });
-
-      if (error) console.error("Error saving product cache to Supabase:", error);
+    if (response.ok) {
+      const resJson = await response.json();
+      const desc = resJson.candidates?.[0]?.content?.parts?.[0]?.text;
+      if (desc) return desc.trim();
     }
-
-    console.log("Catalog sync completed successfully.");
-    
-    // Log success entry
-    await supabase.from("system_logs").insert({
-      type: "CATALOG_SYNC",
-      message: `Successfully synchronized ${products.length} products.`,
-      status: "SUCCESS"
-    });
-
-  } catch (err) {
-    console.error("Failed to sync catalog:", err);
-    await supabase.from("system_logs").insert({
-      type: "CATALOG_SYNC",
-      message: `Failed catalog synchronization: ${err.message}`,
-      status: "FAILURE"
-    });
+  } catch (e) {
+    console.error("Gemini description generation failed:", e);
   }
+  return `Expert high-precision CAD/CAM toolpath modeling and G-code engineering for "${name}". Optimized for maximum material yield and spindle efficiency on CNC routers.`;
 }
 
 // 6. Public Catalog Scraper Fallback (Zero-login method)
@@ -435,11 +184,19 @@ async function scrapePublicCatalog(phoneNumber) {
         overwrite: true
       });
 
+      // Enrich catalog description with Gemini B2B copywriter
+      let finalDescription = "Expert B2B CAD/CAM and high-precision CNC optimization.";
+      try {
+        finalDescription = await generateB2BDescription(item.name, item.price);
+      } catch (e) {
+        console.error("Gemini catalog enrichment failed:", e);
+      }
+
       // Save to cache
       await supabase.from("catalog_items").upsert({
         id: item.id,
         name: item.name,
-        description: "Scraped from public WA.me catalog profile.",
+        description: finalDescription,
         price: item.price.replace(/[^0-9.]/g, "") || "0",
         cloudinary_url: uploadRes.secure_url,
         updated_at: new Date().toISOString()
@@ -465,50 +222,6 @@ async function scrapePublicCatalog(phoneNumber) {
     if (tempBrowser) await tempBrowser.close();
   }
 }
-
-// 7. 30-Second Connection Monitoring Heartbeat
-setInterval(async () => {
-  if (!whatsappClient) return;
-
-  try {
-    const isConnected = whatsappClient.info && whatsappClient.info.wid;
-    
-    if (!isConnected && clientStatus === "CONNECTED") {
-      clientStatus = "DISCONNECTED";
-      console.warn("WhatsApp Connection Lost!");
-    }
-
-    if (clientStatus !== "CONNECTED" && !lastStatusEmailSent) {
-      console.log("Alert: WhatsApp Connection is broken. Sending relogin notification email...");
-      
-      const adminEmail = process.env.ADMIN_NOTIFICATION_EMAIL;
-      const frontendLoginUrl = `${process.env.FRONTEND_URL || "http://localhost:3000"}/admin/whatsapp`;
-
-      const { data, error } = await resend.emails.send({
-        from: "Ali CNC Private Limited Alerts <onboarding@resend.dev>",
-        to: adminEmail,
-        subject: "🚨 Action Required: WhatsApp Connection Broken",
-        html: `
-          <h3>Your WhatsApp Business Connection is Broken</h3>
-          <p>The system detected that the WhatsApp integration has disconnected at <b>${new Date().toLocaleString()}</b>.</p>
-          <p>To reconnect, please visit your Admin dashboard and link the device using your phone number:</p>
-          <a href="${frontendLoginUrl}" style="display:inline-block;padding:10px 20px;background:#0ea5e9;color:white;text-decoration:none;border-radius:8px;font-weight:bold;">Reconnect Device Now</a>
-          <br/><br/>
-          <p>Thank you,<br/>Ali CNC Private Limited System Monitor</p>
-        `
-      });
-
-      if (error) {
-        console.error("Failed to send status email via Resend:", error);
-      } else {
-        console.log("Alert email sent successfully.");
-        lastStatusEmailSent = true;
-      }
-    }
-  } catch (err) {
-    console.error("Error in WhatsApp connection checker interval:", err);
-  }
-}, 30000);
 
 // 8. 6-Hour Gemini AI Website Health Auditor & PDF Generator
 async function runDailyHealthCheck() {
@@ -576,7 +289,6 @@ Review the following live system status and visitor logs captured in the last 6 
 
 - Frontend URL Status: ${frontendStatus}
 - Accessibility Check: ${frontendAccessibility}
-- WhatsApp Integration Status: ${clientStatus}
 
 Visitor Analytics (Last 6 Hours):
 - Total Page Visits: ${totalVisits}
@@ -635,7 +347,6 @@ Please write a professional website audit assessment. Identify any system errors
     doc.fontSize(14).fillColor("#0ea5e9").text("1. Overall System Status");
     doc.fontSize(11).fillColor("#0f172a").text(`Frontend URL: ${frontendUrl}`);
     doc.text(`Frontend Accessibility: ${frontendStatus}`);
-    doc.text(`WhatsApp Bridge Status: ${clientStatus}`);
     doc.moveDown();
 
     doc.fontSize(14).fillColor("#0ea5e9").text("2. 6-Hour Visitor Traffic Metrics");
@@ -773,70 +484,7 @@ app.post("/api/settings/google-analytics", authenticateApiKey, async (req, res) 
 
 // Public Health Check
 app.get("/health", (req, res) => {
-  res.json({ status: "OK", serverTime: new Date().toISOString(), whatsapp: clientStatus });
-});
-
-// Request WhatsApp Pairing Code
-app.post("/api/whatsapp/pair", authenticateApiKey, async (req, res) => {
-  const { phoneNumber } = req.body;
-  if (!phoneNumber) {
-    return res.status(400).json({ error: "Missing phoneNumber in request body" });
-  }
-
-  // Remove symbol spacing formatting (e.g. + or spaces)
-  const cleanNumber = phoneNumber.replace(/[^0-9]/g, "");
-
-  try {
-    if (!whatsappClient) {
-      await initWhatsApp();
-    }
-
-    console.log(`Requesting pairing code for: ${cleanNumber}`);
-    
-    // Wait dynamically until Puppeteer browser context is ready (up to 30 seconds)
-    let pageReady = false;
-    for (let i = 0; i < 60; i++) {
-      if (whatsappClient && whatsappClient.pupPage) {
-        pageReady = true;
-        break;
-      }
-      await new Promise((resolve) => setTimeout(resolve, 500));
-    }
-
-    if (!pageReady) {
-      throw new Error("Timeout waiting for Puppeteer browser page to initialize.");
-    }
-
-    // Give Puppeteer a short moment to load the page structure before making the request
-    await new Promise((resolve) => setTimeout(resolve, 2000));
-
-    const code = await whatsappClient.requestPairingCode(cleanNumber);
-    latestPairingCode = code;
-    
-    res.json({ status: "PAIRING", code });
-  } catch (err) {
-    console.error("Pairing code generation failed:", err);
-    res.status(500).json({ error: `Pairing failed: ${err.message}` });
-  }
-});
-
-// Check WhatsApp connection status
-app.get("/api/whatsapp/status", authenticateApiKey, (req, res) => {
-  res.json({
-    status: clientStatus,
-    pairingCode: latestPairingCode,
-    qr: latestQr
-  });
-});
-
-// Manually trigger catalog sync
-app.post("/api/whatsapp/sync", authenticateApiKey, async (req, res) => {
-  if (clientStatus !== "CONNECTED") {
-    return res.status(400).json({ error: "WhatsApp client is not connected" });
-  }
-  
-  syncCatalog(); // Execute async in background
-  res.json({ status: "SYNCING", message: "Catalog synchronization started." });
+  res.json({ status: "OK", serverTime: new Date().toISOString() });
 });
 
 // Stateless Scrape endpoint fallback
@@ -861,18 +509,23 @@ app.post("/api/admin/audit", authenticateApiKey, async (req, res) => {
   res.json({ status: "TRIGGERED", message: "Audit execution started." });
 });
 
-// Start Express Server & Autoload WhatsApp Client if session exists
+// Cron scheduler to scrape catalog statelessly and enrich it with Gemini every 12 hours
+cron.schedule("0 */12 * * *", async () => {
+  console.log("Triggering 12-Hour Automated Public Catalog Scraping & Gemini Enrichment...");
+  try {
+    await scrapePublicCatalog("923440708494");
+  } catch (err) {
+    console.error("Scheduled 12-hour catalog update failed:", err);
+  }
+});
+
+// Start Express Server & Autoload Stateless Catalog Seeding
 app.listen(PORT, async () => {
   console.log(`Backend Server running on port ${PORT}`);
   
-  // Autostart WhatsApp if there's a cached session
-  try {
-    const sessionRestored = await loadSessionFromSupabase();
-    if (sessionRestored) {
-      console.log("Restored session found. Booting WhatsApp automatically...");
-      initWhatsApp();
-    }
-  } catch (e) {
-    console.error("Autostart failed:", e);
-  }
+  // Seed the catalog by running stateless scrape on start in the background
+  console.log("Auto-seeding catalog from public WA catalog...");
+  scrapePublicCatalog("923440708494").catch(err => {
+    console.error("Initial catalog auto-seeding failed:", err);
+  });
 });
