@@ -18,8 +18,6 @@ RUN npm ci --only=production --ignore-scripts
 # Copy application files
 COPY . .
 
-# Run the patch script now that all files are copied
-RUN node patch_wweb.js
 
 # Adjust permissions for Puppeteer's default running user
 RUN chown -R pptruser:pptruser /app
