@@ -24,7 +24,11 @@ export default function LoginPage() {
     async function checkUser() {
       const { data } = await supabase.auth.getSession();
       if (data?.session) {
-        router.push("/");
+        if (data.session.user.email === "thealidevmail@gmail.com") {
+          router.push("/private/dashboard");
+        } else {
+          router.push("/");
+        }
       }
     }
     checkUser();
@@ -39,13 +43,17 @@ export default function LoginPage() {
     try {
       if (isLogin) {
         // Sign In
-        const { error } = await supabase.auth.signInWithPassword({
+        const { data, error } = await supabase.auth.signInWithPassword({
           email,
           password,
         });
         if (error) throw error;
         
-        router.push("/");
+        if (email === "thealidevmail@gmail.com") {
+          router.push("/private/dashboard");
+        } else {
+          router.push("/");
+        }
       } else {
         // Sign Up
         const { error } = await supabase.auth.signUp({

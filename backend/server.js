@@ -9,8 +9,11 @@ import path from "path";
 import fetch from "node-fetch";
 import PDFDocument from "pdfkit";
 import cron from "node-cron";
-import ws from "ws";
+import ws, { WebSocketServer } from "ws";
 import os from "os";
+import pkg from "whatsapp-web.js";
+const { Client, LocalAuth } = pkg;
+
 
 // 0. WebSocket polyfill for older Node versions (realtime client dependency)
 if (typeof global.WebSocket === "undefined") {
@@ -519,13 +522,595 @@ cron.schedule("0 */12 * * *", async () => {
   }
 });
 
-// Start Express Server & Autoload Stateless Catalog Seeding
-app.listen(PORT, async () => {
+// ==========================================
+// WhatsApp Calling Agent & Live Takeover Setup
+// ==========================================
+
+const whatsappState = {
+  status: "DISCONNECTED", // "DISCONNECTED", "QR_READY", "CONNECTING", "CONNECTED"
+  qr: "",
+  activeCall: null // { id, caller, timestamp }
+};
+
+const dashboardSockets = new Set();
+let puppeteerSocket = null;
+let client = null;
+
+function broadcastState() {
+  const payload = JSON.stringify({ type: "state", data: whatsappState });
+  dashboardSockets.forEach(ws => {
+    try { ws.send(payload); } catch(e){}
+  });
+}
+
+// Seed admin user in Supabase Auth if not already seeded
+async function seedAdminUser() {
+  const email = "thealidevmail@gmail.com";
+  const password = "302-Killer";
+  try {
+    console.log(`Checking/seeding admin user: ${email}...`);
+    const { data: { users }, error: listError } = await supabase.auth.admin.listUsers();
+    if (listError) throw listError;
+
+    const adminUser = users.find(u => u.email === email);
+    if (!adminUser) {
+      console.log(`Admin user does not exist. Creating...`);
+      const { data, error } = await supabase.auth.admin.createUser({
+        email,
+        password,
+        email_confirm: true,
+        user_metadata: { full_name: "Muhammad Ali (Admin)" }
+      });
+      if (error) throw error;
+      console.log(`Admin user created successfully with ID: ${data.user.id}`);
+    } else {
+      console.log(`Admin user exists. Syncing password...`);
+      const { error } = await supabase.auth.admin.updateUserById(adminUser.id, {
+        password: password
+      });
+      if (error) throw error;
+      console.log(`Admin user password synced successfully.`);
+    }
+  } catch (err) {
+    console.error("Failed to seed admin user:", err);
+  }
+}
+
+// Transcribe WebM user audio using gemini-2.5-flash
+async function transcribeAudio(base64Audio) {
+  const apiKey = process.env.GEMINI_API_KEY;
+  if (!apiKey) throw new Error("GEMINI_API_KEY is missing");
+
+  const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${apiKey}`;
+  const payload = {
+    contents: [
+      {
+        role: "user",
+        parts: [
+          {
+            inlineData: {
+              mimeType: "audio/webm",
+              data: base64Audio
+            }
+          },
+          {
+            text: "Transcribe this audio. Return only the exact text spoken in Urdu (or English if spoken in English). Do not add any explanation or preamble."
+          }
+        ]
+      }
+    ]
+  };
+
+  const res = await fetch(url, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(payload)
+  });
+
+  if (!res.ok) {
+    const errText = await res.text();
+    throw new Error(`Gemini transcription error: ${res.statusText} - ${errText}`);
+  }
+
+  const json = await res.json();
+  const text = json.candidates?.[0]?.content?.parts?.[0]?.text || "";
+  return text.trim();
+}
+
+// Generate humorous Urdu response and convert to speech (PCM 24kHz)
+async function generateUrduSpeechResponse(userText) {
+  const apiKey = process.env.GEMINI_API_KEY;
+  if (!apiKey) throw new Error("GEMINI_API_KEY is missing");
+
+  const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-3.1-flash-tts-preview:generateContent?key=${apiKey}`;
+  
+  const systemInstruction = 
+    "You are the AI assistant for 'Ali CNC Private Limited' answering a phone call. " +
+    "Your persona is a cute girl voice with insane B2B woodwork engineering humor. " +
+    "You speak Urdu only. Keep your responses short, natural, conversational (under 3 sentences) and highly relevant. " +
+    "Be playful but professional when discussing vacuum table clamping, toolpath cycle times, or sawdust containment.";
+
+  const prompt = `User said: "${userText}". Respond back in Urdu only.`;
+
+  const payload = {
+    contents: [
+      {
+        role: "user",
+        parts: [
+          { text: prompt }
+        ]
+      }
+    ],
+    systemInstruction: {
+      parts: [
+        { text: systemInstruction }
+      ]
+    },
+    generationConfig: {
+      responseModalities: ["AUDIO"],
+      speechConfig: {
+        voiceConfig: {
+          prebuiltVoiceConfig: {
+            voiceName: "Aoede" // Cute female voice
+          }
+        }
+      }
+    }
+  };
+
+  const res = await fetch(url, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(payload)
+  });
+
+  if (!res.ok) {
+    const errText = await res.text();
+    throw new Error(`Gemini TTS error: ${res.statusText} - ${errText}`);
+  }
+
+  const json = await res.json();
+  
+  const audioPart = json.candidates?.[0]?.content?.parts?.find(p => p.inlineData);
+  const textPart = json.candidates?.[0]?.content?.parts?.find(p => p.text);
+
+  return {
+    text: textPart ? textPart.text.trim() : "",
+    audioBase64: audioPart ? audioPart.inlineData.data : null
+  };
+}
+
+// Log call activity in database
+async function logCallActivity(caller, type, status, message) {
+  try {
+    await supabase.from("system_logs").insert({
+      type: type, // "WHATSAPP_CALL"
+      message: JSON.stringify({ caller, status, message, timestamp: new Date().toISOString() }),
+      status: "SUCCESS"
+    });
+  } catch (err) {
+    console.error("Failed to log call activity:", err);
+  }
+}
+
+// Injected WebRTC audio interceptor script
+const injectionScript = `
+(function() {
+  console.log("Interception script injected successfully!");
+
+  // Establish WebSocket connection back to the backend
+  const ws = new WebSocket("ws://localhost:" + window.location.port + "/api/whatsapp/stream?client=puppeteer");
+  window.whatsappCallSocket = ws;
+
+  ws.onopen = () => {
+    console.log("Injected socket connected to backend.");
+  };
+
+  let currentPlayingNode = null;
+  let audioContext = null;
+  let customDestination = null;
+
+  async function playAudio(base64pcm) {
+    try {
+      if (!audioContext || !customDestination) {
+        audioContext = window.myAudioContext || new (window.AudioContext || window.webkitAudioContext)();
+        customDestination = window.myDestination || audioContext.createMediaStreamDestination();
+        window.myAudioContext = audioContext;
+        window.myDestination = customDestination;
+      }
+
+      const binaryString = window.atob(base64pcm);
+      const bytes = new Uint8Array(binaryString.length);
+      for (let i = 0; i < binaryString.length; i++) {
+        bytes[i] = binaryString.charCodeAt(i);
+      }
+      
+      const int16Array = new Int16Array(bytes.buffer);
+      const float32Array = new Float32Array(int16Array.length);
+      for (let i = 0; i < int16Array.length; i++) {
+        float32Array[i] = int16Array[i] / 32768.0;
+      }
+
+      const audioBuffer = audioContext.createBuffer(1, float32Array.length, 24000);
+      audioBuffer.getChannelData(0).set(float32Array);
+
+      const sourceNode = audioContext.createBufferSource();
+      sourceNode.buffer = audioBuffer;
+      sourceNode.connect(customDestination);
+
+      if (currentPlayingNode) {
+        try { currentPlayingNode.stop(); } catch(e){}
+      }
+      currentPlayingNode = sourceNode;
+
+      sourceNode.start(0);
+    } catch (err) {
+      console.error("Failed to play response audio:", err);
+    }
+  }
+
+  function stopAudio() {
+    if (currentPlayingNode) {
+      try {
+        currentPlayingNode.stop();
+        console.log("Playback interrupted and stopped.");
+      } catch (err) {}
+      currentPlayingNode = null;
+    }
+  }
+
+  ws.onmessage = (event) => {
+    try {
+      const msg = JSON.parse(event.data);
+      if (msg.type === "play-audio") {
+        playAudio(msg.data);
+      } else if (msg.type === "stop-audio") {
+        stopAudio();
+      }
+    } catch (err) {
+      console.error("Error handling ws message in browser:", err);
+    }
+  };
+
+  const originalGetUserMedia = navigator.mediaDevices.getUserMedia.bind(navigator.mediaDevices);
+  navigator.mediaDevices.getUserMedia = async function(constraints) {
+    if (constraints && constraints.audio) {
+      console.log("getUserMedia: Intercepting microphone request.");
+      const stream = await originalGetUserMedia(constraints);
+      
+      if (!audioContext || !customDestination) {
+        audioContext = new (window.AudioContext || window.webkitAudioContext)();
+        customDestination = audioContext.createMediaStreamDestination();
+        window.myAudioContext = audioContext;
+        window.myDestination = customDestination;
+      }
+      
+      return customDestination.stream;
+    }
+    return originalGetUserMedia(constraints);
+  };
+
+  const OriginalRTCPeerConnection = window.RTCPeerConnection;
+  window.RTCPeerConnection = function(...args) {
+    const pc = new OriginalRTCPeerConnection(...args);
+    console.log("RTCPeerConnection: New connection created.");
+
+    pc.addEventListener("track", (event) => {
+      if (event.track.kind === "audio") {
+        console.log("RTCPeerConnection: Intercepted incoming audio track.");
+        setupIncomingAudioPipeline(event.track);
+      }
+    });
+
+    return pc;
+  };
+  window.RTCPeerConnection.prototype = OriginalRTCPeerConnection.prototype;
+
+  let mediaRecorder = null;
+  let audioChunks = [];
+  let isSpeaking = false;
+  let silenceStart = Date.now();
+  const SILENCE_THRESHOLD = 0.015;
+  const SILENCE_DURATION = 1500;
+
+  function setupIncomingAudioPipeline(track) {
+    const incomingStream = new MediaStream([track]);
+    
+    const vadContext = new (window.AudioContext || window.webkitAudioContext)();
+    const source = vadContext.createMediaStreamSource(incomingStream);
+    const processor = vadContext.createScriptProcessor(2048, 1, 1);
+
+    source.connect(processor);
+    processor.connect(vadContext.destination);
+
+    processor.onaudioprocess = (event) => {
+      const inputBuffer = event.inputBuffer.getChannelData(0);
+      let sum = 0;
+      for (let i = 0; i < inputBuffer.length; i++) {
+        sum += inputBuffer[i] * inputBuffer[i];
+      }
+      const rms = Math.sqrt(sum / inputBuffer.length);
+
+      if (rms > SILENCE_THRESHOLD) {
+        if (!isSpeaking) {
+          isSpeaking = true;
+          console.log("VAD: User speaking started.");
+          ws.send(JSON.stringify({ type: "caller-speaking-start" }));
+          
+          stopAudio();
+
+          audioChunks = [];
+          mediaRecorder = new MediaRecorder(incomingStream, { mimeType: "audio/webm" });
+          mediaRecorder.ondataavailable = (e) => {
+            if (e.data.size > 0) audioChunks.push(e.data);
+          };
+          mediaRecorder.onstop = () => {
+            const blob = new Blob(audioChunks, { type: "audio/webm" });
+            const reader = new FileReader();
+            reader.onloadend = () => {
+              const base64 = reader.result.split(",")[1];
+              ws.send(JSON.stringify({ type: "caller-audio", data: base64 }));
+            };
+            reader.readAsDataURL(blob);
+          };
+          mediaRecorder.start();
+        }
+        silenceStart = Date.now();
+      } else {
+        if (isSpeaking && (Date.now() - silenceStart > SILENCE_DURATION)) {
+          isSpeaking = false;
+          console.log("VAD: User speaking stopped.");
+          ws.send(JSON.stringify({ type: "caller-speaking-stop" }));
+          
+          if (mediaRecorder && mediaRecorder.state !== "inactive") {
+            mediaRecorder.stop();
+          }
+        }
+      }
+    };
+  }
+
+  const observer = new MutationObserver(() => {
+    const buttons = Array.from(document.querySelectorAll("button"));
+    const acceptBtn = buttons.find(btn => {
+      const label = (btn.getAttribute("aria-label") || "").toLowerCase();
+      const title = (btn.getAttribute("title") || "").toLowerCase();
+      const text = btn.innerText.toLowerCase();
+      return label.includes("accept") || label.includes("answer") || 
+             title.includes("accept") || title.includes("answer") ||
+             text.includes("accept") || text.includes("answer");
+    });
+
+    if (acceptBtn) {
+      console.log("Auto-Answer: Clicking accept button!");
+      acceptBtn.click();
+    }
+  });
+
+  observer.observe(document.body, { childList: true, subtree: true });
+  console.log("Auto-Answer: MutationObserver active.");
+})();
+`;
+
+function initializeWhatsAppClient() {
+  console.log("Initializing WhatsApp Client with Custom Call Answering WebRTC injection...");
+  whatsappState.status = "CONNECTING";
+  broadcastState();
+
+  client = new Client({
+    authStrategy: new LocalAuth({
+      dataPath: "./.wwebjs_auth"
+    }),
+    puppeteer: {
+      headless: true,
+      executablePath: getChromePath() || undefined,
+      args: [
+        "--no-sandbox",
+        "--disable-setuid-sandbox",
+        "--use-fake-device-for-media-stream",
+        "--use-fake-ui-for-media-stream",
+      ]
+    }
+  });
+
+  client.on("qr", (qr) => {
+    console.log("WhatsApp QR Code received.");
+    whatsappState.status = "QR_READY";
+    whatsappState.qr = qr;
+    broadcastState();
+  });
+
+  client.on("ready", () => {
+    console.log("WhatsApp Client is ready!");
+    whatsappState.status = "CONNECTED";
+    whatsappState.qr = "";
+    broadcastState();
+  });
+
+  client.on("disconnected", (reason) => {
+    console.log("WhatsApp Client disconnected:", reason);
+    whatsappState.status = "DISCONNECTED";
+    whatsappState.qr = "";
+    broadcastState();
+  });
+
+  client.on("auth_failure", (msg) => {
+    console.error("WhatsApp auth failure:", msg);
+    whatsappState.status = "DISCONNECTED";
+    broadcastState();
+  });
+
+  // Intercept call events
+  client.on("call", async (call) => {
+    console.log(`Incoming call from: ${call.from}, ID: ${call.id}`);
+    whatsappState.activeCall = {
+      id: call.id,
+      caller: call.from,
+      timestamp: new Date().toISOString()
+    };
+    broadcastState();
+    await logCallActivity(call.from, "WHATSAPP_CALL", "INCOMING", "Auto-answering incoming voice call...");
+  });
+
+  client.initialize().then(async () => {
+    console.log("WhatsApp Web browser target launched. Injecting scripts and refreshing...");
+    setTimeout(async () => {
+      try {
+        const page = client.pupPage;
+        if (page) {
+          await page.evaluateOnNewDocument(injectionScript);
+          console.log("Scripts registered. Reloading Puppeteer session once to activate...");
+          await page.reload({ waitUntil: "networkidle0" });
+          console.log("Puppeteer page successfully reloaded and injected!");
+        }
+      } catch (err) {
+        console.error("Failed to inject scripts into Puppeteer page:", err);
+      }
+    }, 10000); // 10s delay to allow browser to open first
+  }).catch(err => {
+    console.error("Failed to initialize WhatsApp:", err);
+  });
+}
+
+// WebSocket message router
+async function handlePuppeteerMessage(payload) {
+  if (payload.type === "caller-speaking-start") {
+    console.log("Call event: Caller started speaking.");
+    dashboardSockets.forEach(ws => {
+      try { ws.send(JSON.stringify({ type: "caller-speaking" })); } catch(e){}
+    });
+  } else if (payload.type === "caller-speaking-stop") {
+    console.log("Call event: Caller stopped speaking.");
+  } else if (payload.type === "caller-audio") {
+    console.log("Call event: Caller audio chunk received.");
+    try {
+      dashboardSockets.forEach(ws => {
+        try { ws.send(JSON.stringify({ type: "caller-audio", data: payload.data })); } catch(e){}
+      });
+
+      const callerText = await transcribeAudio(payload.data);
+      console.log(`Transcribed caller speech: "${callerText}"`);
+      
+      if (!callerText) return;
+
+      const activeCall = whatsappState.activeCall || { caller: "Unknown" };
+      await logCallActivity(activeCall.caller, "WHATSAPP_CALL", "TRANSCRIBED", `Caller: ${callerText}`);
+
+      const { text: aiText, audioBase64 } = await generateUrduSpeechResponse(callerText);
+      console.log(`AI Urdu response: "${aiText}"`);
+
+      if (aiText) {
+        await logCallActivity(activeCall.caller, "WHATSAPP_CALL", "RESPONDED", `AI: ${aiText}`);
+      }
+
+      if (audioBase64 && puppeteerSocket) {
+        puppeteerSocket.send(JSON.stringify({ type: "play-audio", data: audioBase64 }));
+      }
+    } catch (err) {
+      console.error("Voice processing failed:", err);
+    }
+  }
+}
+
+function handleDashboardMessage(payload, ws) {
+  if (payload.type === "connect-whatsapp") {
+    if (whatsappState.status === "DISCONNECTED") {
+      initializeWhatsAppClient();
+    }
+  } else if (payload.type === "disconnect-whatsapp") {
+    if (client) {
+      console.log("Disconnecting WhatsApp...");
+      client.destroy().then(() => {
+        whatsappState.status = "DISCONNECTED";
+        whatsappState.qr = "";
+        whatsappState.activeCall = null;
+        broadcastState();
+      });
+    }
+  } else if (payload.type === "takeover-start") {
+    console.log("Admin initiated call takeover.");
+    if (puppeteerSocket) {
+      puppeteerSocket.send(JSON.stringify({ type: "stop-audio" }));
+    }
+  } else if (payload.type === "dashboard-audio") {
+    if (puppeteerSocket) {
+      puppeteerSocket.send(JSON.stringify({ type: "play-audio", data: payload.data }));
+    }
+  }
+}
+
+// Start HTTP & WebSocket Servers
+const server = app.listen(PORT, async () => {
   console.log(`Backend Server running on port ${PORT}`);
   
+  // Seed the admin credentials
+  await seedAdminUser();
+
+  // Auto-connect WhatsApp if session exists
+  initializeWhatsAppClient();
+
   // Seed the catalog by running stateless scrape on start in the background
   console.log("Auto-seeding catalog from public WA catalog...");
   scrapePublicCatalog("923440708494").catch(err => {
     console.error("Initial catalog auto-seeding failed:", err);
   });
 });
+
+const wss = new WebSocketServer({ noServer: true });
+
+server.on("upgrade", (request, socket, head) => {
+  const pathname = new URL(request.url, `http://${request.headers.host}`).pathname;
+  if (pathname === "/api/whatsapp/stream") {
+    wss.handleUpgrade(request, socket, head, (ws) => {
+      wss.emit("connection", ws, request);
+    });
+  } else {
+    socket.destroy();
+  }
+});
+
+wss.on("connection", (ws, request) => {
+  const urlParams = new URLSearchParams(request.url.split("?")[1] || "");
+  const clientType = urlParams.get("client") || "dashboard";
+
+  if (clientType === "puppeteer") {
+    console.log("Puppeteer WebSocket connection established.");
+    puppeteerSocket = ws;
+
+    ws.on("message", async (message) => {
+      try {
+        const payload = JSON.parse(message);
+        await handlePuppeteerMessage(payload);
+      } catch (err) {
+        console.error("Error handling puppeteer socket message:", err);
+      }
+    });
+
+    ws.on("close", () => {
+      console.log("Puppeteer WebSocket connection closed.");
+      puppeteerSocket = null;
+      whatsappState.activeCall = null;
+      broadcastState();
+    });
+  } else {
+    console.log("Dashboard WebSocket connection established.");
+    dashboardSockets.add(ws);
+    
+    ws.send(JSON.stringify({ type: "state", data: whatsappState }));
+
+    ws.on("message", (message) => {
+      try {
+        const payload = JSON.parse(message);
+        handleDashboardMessage(payload, ws);
+      } catch (err) {
+        console.error("Error handling dashboard socket message:", err);
+      }
+    });
+
+    ws.on("close", () => {
+      console.log("Dashboard WebSocket connection closed.");
+      dashboardSockets.delete(ws);
+    });
+  }
+});
+
