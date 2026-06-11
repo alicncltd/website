@@ -42,7 +42,7 @@ export default function Home() {
           <Image src="/hero_bg.png" alt="High-Precision CNC Workshop Background" fill priority className="hero-bg-image" style={{ objectFit: 'cover', opacity: 0.1 }} />
           <div className="hero-content">
             <div style={{ marginBottom: '2rem' }}>
-              <Image src="/logo_final.svg" alt="Ali CNC Private Limited Logo" width={220} height={120} priority style={{ margin: '0 auto', objectFit: 'contain', height: 'auto' }} />
+              <Image src="/logo_final.svg" alt="Ali CNC Logo" width={220} height={120} priority style={{ margin: '0 auto', objectFit: 'contain', height: 'auto' }} />
             </div>
             <span className="hero-greeting" style={{ display: 'block', marginBottom: '1rem', fontWeight: 600, color: 'var(--accent-color)', letterSpacing: '0.05em', textTransform: 'uppercase' }}>
               {t("hero.welcome")}
@@ -257,7 +257,7 @@ export default function Home() {
         <footer id="footer" className="footer">
           <div className="footer-content">
             <div style={{ marginBottom: '1.5rem' }}>
-              <Image src="/logo_final.svg" alt="Ali CNC Private Limited Logo" width={146} height={80} loading="lazy" style={{ margin: '0 auto', opacity: 0.8, objectFit: 'contain', height: 'auto' }} />
+              <Image src="/logo_final.svg" alt="Ali CNC Logo" width={146} height={80} loading="lazy" style={{ margin: '0 auto', opacity: 0.8, objectFit: 'contain', height: 'auto' }} />
             </div>
             <h2 className="footer-title">{t("footer.title")}</h2>
             <p>{t("footer.description")}</p>

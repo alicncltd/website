@@ -26,8 +26,6 @@ export default function LoginPage() {
       if (data?.session) {
         if (data.session.user.email === "thealidevmail@gmail.com") {
           router.push("/private/dashboard");
-        } else {
-          router.push("/");
         }
       }
     }

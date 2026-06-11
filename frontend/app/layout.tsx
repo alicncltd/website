@@ -12,13 +12,13 @@ const inter = Inter({
 export const metadata: Metadata = {
   metadataBase: new URL("https://www.alicnc.online"),
   title: {
-    default: "Ali CNC Private Limited | High-Precision 3D Modeling & CNC",
-    template: "%s | Ali CNC Private Limited"
+    default: "Ali CNC | High-Precision 3D Modeling & CNC",
+    template: "%s | Ali CNC"
   },
-  description: "Expert 3D Modeling & CNC Fabrication by Ali CNC Private Limited. Specialized in CAD Design, DFM, and CNC Programming in Rawalpindi.",
+  description: "Expert 3D Modeling & CNC Fabrication by Ali CNC. Specialized in CAD Design, DFM, and CNC Programming in Rawalpindi.",
   keywords: ["CNC Pakistan", "3D Modeling", "CAD Design", "CNC Fabrication", "Rawalpindi CNC", "Precision Engineering"],
-  authors: [{ name: "Ali CNC Private Limited" }],
-  creator: "Ali CNC Private Limited",
+  authors: [{ name: "Ali CNC" }],
+  creator: "Ali CNC",
   alternates: {
     canonical: "https://www.alicnc.online",
   },
@@ -30,9 +30,9 @@ export const metadata: Metadata = {
     type: "website",
     locale: "en_PK",
     url: "https://www.alicnc.online",
-    title: "Ali CNC Private Limited | High-Precision 3D Modeling & CNC",
+    title: "Ali CNC | High-Precision 3D Modeling & CNC",
     description: "Expert CNC Fabrication and 3D Modeling services in Rawalpindi, Pakistan.",
-    siteName: "Ali CNC Private Limited",
+    siteName: "Ali CNC",
     images: [
       {
         url: "/logo_final.png",

@@ -101,7 +101,7 @@ async function generateB2BDescription(name, price) {
   }
   
   try {
-    const prompt = `You are a premier B2B copywriter for "Ali CNC Private Limited".
+    const prompt = `You are a premier B2B copywriter for "Ali CNC".
 Write a highly professional, technically rich, B2B direct-response catalog description for a CNC product named "${name}" (Price: ${price}).
 Focus on woodworking shop floor benefits: flawless edge finishes, vacuum table spatial efficiency, reducing machine cycle run times, router bit protection from thermal buildup, and watertight mechanical tolerances.
 Keep the description direct, professional, and convincing for shop owners.
@@ -287,7 +287,7 @@ async function runDailyHealthCheck() {
     let auditSummary = "Gemini Auditor not configured.";
 
     if (geminiApiKey) {
-      const prompt = `You are a world-class AI website auditor and B2B system analytics analyst for "Ali CNC Private Limited".
+      const prompt = `You are a world-class AI website auditor and B2B system analytics analyst for "Ali CNC".
 Review the following live system status and visitor logs captured in the last 6 hours:
 
 - Frontend URL Status: ${frontendStatus}
@@ -341,7 +341,7 @@ Please write a professional website audit assessment. Identify any system errors
     const localTimeStr = now.toLocaleString("en-US", { timeZone: "Asia/Karachi" });
 
     // Write PDF layout
-    doc.fontSize(22).fillColor("#0ea5e9").text("Ali CNC Private Limited", { align: "center" });
+    doc.fontSize(22).fillColor("#0ea5e9").text("Ali CNC", { align: "center" });
     doc.fontSize(16).fillColor("#0f172a").text("6-Hour AI System Health & Traffic Report", { align: "center" });
     doc.moveDown();
     doc.fontSize(10).fillColor("#475569").text(`Generated: ${localTimeStr} (PKT)`, { align: "right" });
@@ -398,11 +398,11 @@ Please write a professional website audit assessment. Identify any system errors
     const uniqueFilename = `ali_cnc_audit_${dateFormattedStr}_${timeFormattedStr}.pdf`;
 
     const { error: mailErr } = await resend.emails.send({
-      from: "Ali CNC Private Limited Auditor <onboarding@resend.dev>",
+      from: "Ali CNC Auditor <onboarding@resend.dev>",
       to: adminEmail,
       subject: `🕒 6-Hour AI Audit Report - ${localTimeStr}`,
       html: `
-        <h3>Ali CNC Private Limited System Audit Report</h3>
+        <h3>Ali CNC System Audit Report</h3>
         <p>A new 6-hour automated health check and visitor traffic assessment has been compiled via Gemini AI.</p>
         <p><b>Report Time:</b> ${localTimeStr} (PKT)</p>
         <p>Please find the comprehensive audit and engineering changelog attached as a PDF.</p>
@@ -625,7 +625,7 @@ async function generateUrduSpeechResponse(userText) {
   const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-3.1-flash-tts-preview:generateContent?key=${apiKey}`;
   
   const systemInstruction = 
-    "You are the AI assistant for 'Ali CNC Private Limited' answering a phone call. " +
+    "You are the AI assistant for 'Ali CNC' answering a phone call. " +
     "Your persona is a cute girl voice with insane B2B woodwork engineering humor. " +
     "You speak Urdu only. Keep your responses short, natural, conversational (under 3 sentences) and highly relevant. " +
     "Be playful but professional when discussing vacuum table clamping, toolpath cycle times, or sawdust containment.";

@@ -12,13 +12,13 @@ const inter = Inter({
 export const metadata: Metadata = {
   metadataBase: new URL("https://www.alicnc.online"),
   title: {
-    default: "Ali CNC Private Limited | 고정밀 B2B 3D CAD 설계 & CNC G코드 최적화",
-    template: "%s | Ali CNC Private Limited"
+    default: "Ali CNC | 고정밀 B2B 3D CAD 설계 & CNC G코드 최적화",
+    template: "%s | Ali CNC"
   },
   description: "국내 가구 공방, 목공소, 아크릴 간판 제작사를 위한 B2B 전문 도면 설계 및 CNC 가공용 G코드 최적화 서비스. 불량률 제로, 자재 손실 최소화 네스팅 설계.",
   keywords: ["CNC 가공", "3D CAD 모델링", "AutoCAD 도면 대행", "아스파이어 G코드", "자재 네스팅 설계", "CNC 가공 도면"],
-  authors: [{ name: "Ali CNC Private Limited" }],
-  creator: "Ali CNC Private Limited",
+  authors: [{ name: "Ali CNC" }],
+  creator: "Ali CNC",
   alternates: {
     canonical: "https://www.alicnc.online/ko",
   },
@@ -30,15 +30,15 @@ export const metadata: Metadata = {
     type: "website",
     locale: "ko_KR",
     url: "https://www.alicnc.online/ko",
-    title: "Ali CNC Private Limited | 고정밀 B2B 3D CAD 설계 & G코드 최적화",
+    title: "Ali CNC | 고정밀 B2B 3D CAD 설계 & G코드 최적화",
     description: "국내 가구 공방 및 CNC 목공소를 위한 고정밀 B2B 도면 설계 및 G코드 최적화 서비스.",
-    siteName: "Ali CNC Private Limited",
+    siteName: "Ali CNC",
     images: [
       {
         url: "/logo_final.png",
         width: 1200,
         height: 630,
-        alt: "Ali CNC Private Limited 로고",
+        alt: "Ali CNC 로고",
       },
     ],
   },

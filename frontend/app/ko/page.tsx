@@ -52,9 +52,9 @@ export default function KoreanHome() {
         <div className="nav-content">
           <a href="/ko" className="logo">
             <div className="logo-img-wrapper">
-              <Image src="/logo_final.svg" alt="Ali CNC Private Limited Logo" width={80} height={44} priority className="logo-img" style={{ width: 'auto', height: '100%' }} />
+              <Image src="/logo_final.svg" alt="Ali CNC Logo" width={80} height={44} priority className="logo-img" style={{ width: 'auto', height: '100%' }} />
             </div>
-            <span className="logo-text">Ali<span className="gradient-text">CNC Private Limited</span></span>
+            <span className="logo-text">Ali<span className="gradient-text">CNC</span></span>
           </a>
           
           <div className={`nav-links ${menuOpen ? "open" : ""}`}>
@@ -70,7 +70,7 @@ export default function KoreanHome() {
                   onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
                   aria-label="Toggle Theme"
                 >
-                  {theme === 'dark' ? <Sun size={20} /> : <Moon size={20} />}
+                  {theme === 'dark' ? <Sun size={20} /> : <Sun size={20} />}
                 </button>
               )}
               
@@ -99,7 +99,7 @@ export default function KoreanHome() {
           <Image src="/hero_bg.png" alt="High-Precision CNC Woodshop Floor" fill priority className="hero-bg-image" style={{ objectFit: 'cover', opacity: 0.1 }} />
           <div className="hero-content">
             <div style={{ marginBottom: '2rem' }}>
-              <Image src="/logo_final.svg" alt="Ali CNC Private Limited Logo" width={220} height={120} priority style={{ margin: '0 auto', objectFit: 'contain', height: 'auto' }} />
+              <Image src="/logo_final.svg" alt="Ali CNC Logo" width={220} height={120} priority style={{ margin: '0 auto', objectFit: 'contain', height: 'auto' }} />
             </div>
             <span className="hero-greeting" style={{ display: 'block', marginBottom: '1rem', fontWeight: 600, color: 'var(--accent-color)', letterSpacing: '0.05em', textTransform: 'uppercase' }}>
               우리는 도면을 설계하고, 대표님은 스핀들을 돌립니다.™
@@ -193,7 +193,7 @@ export default function KoreanHome() {
                 <Award className="timeline-icon" size={24} />
                 <div className="timeline-content">
                   <h4>Virtual CAD/CAM 벡터 최고 설계 감독</h4>
-                  <h5>Ali CNC Private Limited (디지털 프리랜서 제국)</h5>
+                  <h5>Ali CNC (디지털 프리랜서 제국)</h5>
                   <p className="timeline-date">2026년 5월 – 현재</p>
                   <p style={{ fontSize: '0.9rem', opacity: 0.8, marginTop: '0.5rem' }}>
                     완전 virtuales B2B 프리랜서 캐드캠 오피스 공장 운영. 글로벌 고객사(미국, 유럽, 국내)를 위한 정밀 기계 부품 및 가공 합판 최적화 G코드 제어 설계.
@@ -348,7 +348,7 @@ export default function KoreanHome() {
               <a href="https://www.crunchbase.com/organization/ali-cnc-pakistan" target="_blank" rel="noreferrer" style={{ color: 'var(--text-secondary)' }}>Crunchbase</a>
             </div>
             <p style={{ color: 'var(--text-secondary)', fontSize: '0.8rem', lineHeight: 1.5 }}>
-              © {new Date().getFullYear()} Ali CNC Private Limited. Made in Rawalpindi with love, coffee, and 100% digital, physical-dust-free virtual sawdust. <br />
+              © {new Date().getFullYear()} Ali CNC. Made in Rawalpindi with love, coffee, and 100% digital, physical-dust-free virtual sawdust. <br />
               본 웹사이트를 빌드하고 구동하는 과정에서 그 어떤 라우터 머신이나 날물도 다치지 않았음을 엄격히 증명합니다.
             </p>
           </div>
