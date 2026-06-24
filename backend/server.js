@@ -12,7 +12,17 @@ import cron from "node-cron";
 import ws, { WebSocketServer } from "ws";
 import os from "os";
 import pkg from "whatsapp-web.js";
+import multer from "multer";
+import { fileURLToPath } from "url";
+import { vectorizeFrame, generateSimulatedFrame } from "./vectorizer.js";
+import { encodeSvgvHeader, encodeSvgvFrameToBuffer, encodeSvgvEOF } from "./encoder.js";
+import { spawn } from "child_process";
+import ffmpegPath from "ffmpeg-static";
+
 const { Client, LocalAuth } = pkg;
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 
 // 0. WebSocket polyfill for older Node versions (realtime client dependency)
@@ -21,6 +31,22 @@ if (typeof global.WebSocket === "undefined") {
 }
 
 dotenv.config();
+
+const uploadDir = path.join(__dirname, "uploads");
+const tempDir = path.join(__dirname, "temp");
+if (!fs.existsSync(uploadDir)) fs.mkdirSync(uploadDir, { recursive: true });
+if (!fs.existsSync(tempDir)) fs.mkdirSync(tempDir, { recursive: true });
+
+const storage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    cb(null, uploadDir);
+  },
+  filename: (req, file, cb) => {
+    cb(null, `${Date.now()}-${file.originalname}`);
+  },
+});
+
+const upload = multer({ storage });
 
 const app = express();
 app.use(cors());
@@ -487,7 +513,265 @@ app.post("/api/settings/google-analytics", authenticateApiKey, async (req, res) 
 
 // Public Health Check
 app.get("/health", (req, res) => {
-  res.json({ status: "OK", serverTime: new Date().toISOString() });
+  res.json({ status: "OK", serverTime: new Date().toISOString(), ffmpeg: !!ffmpegPath });
+});
+
+// Helper: extracts audio track from video as MP3 format
+function extractAudio(videoPath, audioOutPath) {
+  return new Promise((resolve) => {
+    if (!ffmpegPath) return resolve(false);
+    const ffmpeg = spawn(ffmpegPath, [
+      '-y',
+      '-i', videoPath,
+      '-vn',
+      '-ar', '44100',
+      '-ac', '2',
+      '-b:a', '128k',
+      '-f', 'mp3',
+      audioOutPath
+    ]);
+
+    ffmpeg.on('close', (code) => {
+      resolve(code === 0);
+    });
+  });
+}
+
+// Helper: Extracts resolution (width x height) and frame rate (FPS) from video file
+function getVideoMetadata(videoPath) {
+  return new Promise((resolve, reject) => {
+    if (!ffmpegPath) return reject(new Error('FFmpeg path not found'));
+    const ffmpeg = spawn(ffmpegPath, ['-i', videoPath]);
+    let stderr = '';
+
+    ffmpeg.stderr.on('data', (chunk) => {
+      stderr += chunk.toString();
+    });
+
+    ffmpeg.on('close', () => {
+      const resMatch = stderr.match(/\s(\d{2,4})x(\d{2,4})\b/);
+      const fpsMatch = stderr.match(/([\d.]+)\s+fps/);
+
+      const width = resMatch ? parseInt(resMatch[1], 10) : 640;
+      const height = resMatch ? parseInt(resMatch[2], 10) : 480;
+      const originalFps = fpsMatch ? Math.round(parseFloat(fpsMatch[1])) : 25;
+      const fps = Math.min(30, originalFps); // Cap at 30 FPS to prevent browser lag during vector rendering
+
+      resolve({ width, height, fps });
+    });
+  });
+}
+
+// SVGV Endpoint: POST /api/vectorize
+app.post('/api/vectorize', upload.single('video'), async (req, res) => {
+  if (!req.file) {
+    return res.status(400).json({ error: 'No video file uploaded' });
+  }
+
+  const videoPath = req.file.path;
+
+  if (!ffmpegPath) {
+    if (fs.existsSync(videoPath)) fs.unlinkSync(videoPath);
+    return res.status(500).json({ error: 'FFmpeg binary not found on backend' });
+  }
+
+  try {
+    const meta = await getVideoMetadata(videoPath);
+    const parsedWidth = req.body.width ? parseInt(req.body.width, 10) : 0;
+    const parsedHeight = req.body.height ? parseInt(req.body.height, 10) : 0;
+    const parsedFps = req.body.fps ? parseInt(req.body.fps, 10) : 0;
+
+    const targetWidth = !isNaN(parsedWidth) && parsedWidth > 0 ? parsedWidth : meta.width;
+    const targetHeight = !isNaN(parsedHeight) && parsedHeight > 0 ? parsedHeight : meta.height;
+    const targetFps = !isNaN(parsedFps) && parsedFps > 0 ? parsedFps : meta.fps;
+
+    const options = {
+      edgeThreshold: req.body.edgeThreshold ? parseInt(req.body.edgeThreshold, 10) : 50,
+      rdpTolerance: req.body.rdpTolerance ? parseFloat(req.body.rdpTolerance) : 3.0,
+      minPathLength: req.body.minPathLength ? parseInt(req.body.minPathLength, 10) : 8,
+      rasterPatchRatio: req.body.rasterPatchRatio ? parseFloat(req.body.rasterPatchRatio) : 0.15,
+      meshGridSize: req.body.meshGridSize ? parseInt(req.body.meshGridSize, 10) : 32,
+      blockSize: req.body.blockSize ? parseInt(req.body.blockSize, 10) : 16,
+    };
+
+    const tempOutPath = path.join(tempDir, `${path.basename(videoPath)}.svgv`);
+    const tempAudioPath = path.join(tempDir, `${path.basename(videoPath)}.mp3`);
+
+    console.log(`Extracting audio from ${videoPath}...`);
+    const hasAudio = await extractAudio(videoPath, tempAudioPath);
+
+    const outStream = fs.createWriteStream(tempOutPath);
+
+    // Write header with placeholder frame count (0)
+    const headerBuf = encodeSvgvHeader(targetWidth, targetHeight, targetFps, 0);
+    outStream.write(headerBuf);
+
+    // Spawn FFmpeg to extract raw RGBA frames
+    const ffmpegArgs = [
+      '-i', videoPath,
+      '-f', 'rawvideo',
+      '-pix_fmt', 'rgba',
+      '-s', `${targetWidth}x${targetHeight}`,
+      '-r', `${targetFps}`,
+      '-v', 'quiet',
+      '-'
+    ];
+
+    const ffmpeg = spawn(ffmpegPath, ffmpegArgs);
+
+    const frameBytesSize = targetWidth * targetHeight * 4;
+    let accumulatedBuffer = Buffer.alloc(0);
+    let frameCount = 0;
+
+    ffmpeg.stdout.on('data', (chunk) => {
+      accumulatedBuffer = Buffer.concat([accumulatedBuffer, chunk]);
+
+      while (accumulatedBuffer.length >= frameBytesSize) {
+        const frameData = accumulatedBuffer.subarray(0, frameBytesSize);
+        accumulatedBuffer = accumulatedBuffer.subarray(frameBytesSize);
+
+        const frame = vectorizeFrame(new Uint8Array(frameData), targetWidth, targetHeight, options);
+        const frameBuf = encodeSvgvFrameToBuffer(frame);
+
+        outStream.write(frameBuf);
+        frameCount++;
+      }
+    });
+
+    ffmpeg.on('close', async (code) => {
+      if (frameCount === 0) {
+        outStream.close();
+        if (fs.existsSync(videoPath)) fs.unlinkSync(videoPath);
+        if (fs.existsSync(tempOutPath)) fs.unlinkSync(tempOutPath);
+        if (fs.existsSync(tempAudioPath)) fs.unlinkSync(tempAudioPath);
+        return res.status(500).json({ error: 'No frames could be extracted from this video.' });
+      }
+
+      // Write EOF marker
+      outStream.write(encodeSvgvEOF());
+
+      // Write audio block
+      if (hasAudio && fs.existsSync(tempAudioPath)) {
+        try {
+          const audioData = fs.readFileSync(tempAudioPath);
+          const lenBuf = Buffer.alloc(4);
+          lenBuf.writeInt32LE(audioData.length, 0);
+          outStream.write(lenBuf);
+          outStream.write(audioData);
+        } catch (err) {
+          console.error('Error embedding audio:', err);
+          const lenBuf = Buffer.alloc(4);
+          lenBuf.writeInt32LE(0, 0);
+          outStream.write(lenBuf);
+        } finally {
+          try {
+            if (fs.existsSync(tempAudioPath)) fs.unlinkSync(tempAudioPath);
+          } catch (e) {}
+        }
+      } else {
+        const lenBuf = Buffer.alloc(4);
+        lenBuf.writeInt32LE(0, 0);
+        outStream.write(lenBuf);
+      }
+
+      outStream.end(async () => {
+        try {
+          const fd = fs.openSync(tempOutPath, 'r+');
+          const countBuf = Buffer.alloc(4);
+          countBuf.writeInt32LE(frameCount, 0);
+          fs.writeSync(fd, countBuf, 0, 4, 9);
+          fs.closeSync(fd);
+
+          // Log vectorization to Supabase system_logs
+          try {
+            await supabase.from("system_logs").insert({
+              type: "SVGV_VECTORIZE",
+              message: `Vectorized video file: ${req.file.originalname} (${frameCount} frames, resolution: ${targetWidth}x${targetHeight})`,
+              status: "SUCCESS"
+            });
+          } catch (dbErr) {
+            console.error("Failed to log SVGV action in Supabase:", dbErr);
+          }
+
+          res.setHeader('Content-Type', 'application/octet-stream');
+          res.setHeader('Content-Disposition', `attachment; filename="${path.basename(tempOutPath)}"`);
+          
+          const readStream = fs.createReadStream(tempOutPath);
+          readStream.pipe(res);
+
+          readStream.on('close', () => {
+            try {
+              if (fs.existsSync(videoPath)) fs.unlinkSync(videoPath);
+              if (fs.existsSync(tempOutPath)) fs.unlinkSync(tempOutPath);
+            } catch (err) {}
+          });
+        } catch (err) {
+          console.error('Error rewriting header count:', err);
+          res.status(500).json({ error: 'Failed to finalize SVGV file header.' });
+        }
+      });
+    });
+
+  } catch (error) {
+    console.error('Vectorization failed:', error);
+    res.status(500).json({ error: error.message || 'An error occurred during video processing.' });
+  }
+});
+
+// SVGV Endpoint: POST /api/simulated
+app.post('/api/simulated', async (req, res) => {
+  const width = parseInt(req.body.width || '320', 10);
+  const height = parseInt(req.body.height || '240', 10);
+  const fps = parseInt(req.body.fps || '15', 10);
+  const totalFrames = parseInt(req.body.frameCount || '100', 10);
+
+  const tempOutPath = path.join(tempDir, `simulated-${Date.now()}.svgv`);
+
+  try {
+    const outStream = fs.createWriteStream(tempOutPath);
+
+    const headerBuf = encodeSvgvHeader(width, height, fps, totalFrames);
+    outStream.write(headerBuf);
+
+    for (let f = 0; f < totalFrames; f++) {
+      const rgba = generateSimulatedFrame(f, totalFrames, width, height);
+      const frame = vectorizeFrame(rgba, width, height, {
+        edgeThreshold: 30,
+        rdpTolerance: 2.5,
+        minPathLength: 4,
+        rasterPatchRatio: 0.15,
+        meshGridSize: 6
+      });
+      const frameBuf = encodeSvgvFrameToBuffer(frame);
+      outStream.write(frameBuf);
+    }
+
+    outStream.write(encodeSvgvEOF());
+    outStream.end(async () => {
+      // Log to database
+      try {
+        await supabase.from("system_logs").insert({
+          type: "SVGV_VECTORIZE",
+          message: `Generated simulated SVGV file (${totalFrames} frames, resolution: ${width}x${height})`,
+          status: "SUCCESS"
+        });
+      } catch (dbErr) {}
+
+      res.setHeader('Content-Type', 'application/octet-stream');
+      res.setHeader('Content-Disposition', `attachment; filename="simulated.svgv"`);
+      
+      const readStream = fs.createReadStream(tempOutPath);
+      readStream.pipe(res);
+
+      readStream.on('close', () => {
+        try {
+          if (fs.existsSync(tempOutPath)) fs.unlinkSync(tempOutPath);
+        } catch (err) {}
+      });
+    });
+  } catch (error) {
+    res.status(500).json({ error: error.message || 'Failed to generate simulation.' });
+  }
 });
 
 // Stateless Scrape endpoint fallback
