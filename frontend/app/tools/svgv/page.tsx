@@ -1,10 +1,10 @@
 "use client";
 
 import React, { useState, useEffect, useRef } from "react";
-import Navbar from "../../components/Navbar";
-import { SvgvDecoder } from "../../lib/svgv/decoder";
-import { SvgvPlayer } from "../../lib/svgv/player";
-import * as db from "../../lib/svgv/db";
+import Navbar from "../../../components/Navbar";
+import { SvgvDecoder } from "../../../lib/svgv/decoder";
+import { SvgvPlayer } from "../../../lib/svgv/player";
+import * as db from "../../../lib/svgv/db";
 import { 
   Video, Play, Square, RotateCcw, Volume2, Folder, 
   Trash2, Upload, Settings, Award, AlertCircle, FileText, CheckCircle2 
