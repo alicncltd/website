@@ -1,36 +1,110 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Ali CNC Pakistan Monorepo
 
-## Getting Started
+Welcome to the **Ali CNC Pakistan** monorepo—a premium, state-of-the-art enterprise system integrating CAD/CAM vector compilation, quantitative algorithmic cryptocurrency trading, automated WhatsApp voice call agents, and advanced software engineering utilities.
 
-First, run the development server:
+---
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+## 🏗️ Project Architecture
+This project is configured as a monorepo containing three core components:
+1. **Frontend (`/frontend`)**: Next.js v16.2.4 application compiled with Turbopack, styled using Tailwind CSS v4 and Vanilla HSL variables, and animated via Framer Motion. 
+2. **Backend (`/backend`)**: Node.js Express server orchestrating WebSocket streams, child processes, background crons, and headless browser scraping.
+3. **Database Schema (`/supabase`)**: PostgreSQL schema definitions, RLS (Row Level Security) policies, and persistence adapters for WhatsApp sessions and logs.
+
+---
+
+## 🚀 Core Features
+
+### 1. Headless WhatsApp Voice CRM Agent
+- **Automated Puppeteer Interception**: Spawns a headless Chrome browser running WhatsApp Web. Injects a WebRTC listener script to hook incoming voice streams.
+- **Urdu Translation & TTS Streaming**: Runs browser-side Voice Activity Detection (VAD) to segment audio, uploads WebM files, transcribes speech utilizing `gemini-2.5-flash`, generates humorous Urdu audio responses using `gemini-3.1-flash-tts-preview`'s `Aoede` voice, and plays it back directly inside the active Webrtc call.
+- **Active Admin Interception**: Features a secure dashboard enabling a human operator to bypass the AI, capturing the mic input and streaming audio live to takeover the call.
+
+### 2. 6-Hour Geopolitical Intel Aggregator & Cron
+- **RSS Feed Crawler**: Running a background cron scheduler every 6 hours to pull international feeds (Google News, Reuters, Truth Social feeds like `@realDonaldTrump.rss`, and simulated Twitter statement fallbacks).
+- **Gemini Intelligence Summarization**: Analyzes feed snapshots to compile geopolitical, global trade, and policy changes.
+- **Automated PDF Auditor**: Renders an institutional PDF audit report detailing system logs, engineers' changelogs, and AI news briefings, mailing it directly to the administrator using the Resend API.
+
+---
+
+## 🛠️ Advanced Tools Suite
+
+### 3. SVGV Player & Compressor (`/tools/svgv`)
+- **Video Vectorization**: Compiles MP4 videos into high-precision CNC G-code paths. Runs a custom CPU-based Sobel edge filter, Ramer-Douglas-Peucker (RDP) contour simplification, and low-poly background triangulation.
+- **Custom Binary Decoder**: Compresses vectors into custom `.svgv` binary streams with integrated audio tracks.
+- **Client Canvas Player**: Renders binary vector paths frame-by-frame on HTML canvas, supporting custom playback speed adjustments, seek bars, and IndexedDB local gallery caching.
+
+### 4. Oracle AI Trading Analyst (`/tools/oracle`)
+- **Multi-Committee Scoring**: Scores assets based on Technical indicators (RSI, EMA, Bollinger, MACD), derivatives flows (open interest, funding rates, long/short ratio), and spot whale buy/sell volumes.
+- **Gemini AI Judge Arbitration**: Feeds raw committee metrics and parsed macro geopolitical headings to `models/gemini-3.6-flash` to challenge the prediction, outputting entry ranges, exits, and risk reward ratings.
+
+### 5. Multi-Model AI Router (`/tools/router`)
+- **Difficulty Classifier**: Evaluates prompt complexity and token lengths, dynamically routing queries to the cost-optimal model (`gemini-2.5-flash` for simple requests, `gemini-2.5-pro` for programming or reasoning).
+- **Analytics Tracker**: Visualizes LLM decision nodes and logs costs, latency durations, and token usages.
+
+### 6. ETL Scraper & Crawler (`/tools/scraper`)
+- **Parallel HTML Crawler**: Crawls queue lists of URLs, extracts main page details, and utilizes Gemini as an ETL block to map pages to clean JSON schemas. Supports CSV spreadsheets downloading.
+
+### 7. Collaborative Sketchboard (`/tools/workspace`)
+- **Multiplayer WS Board**: Vector canvas synchronizing drawing brush strokes and pointer positions across active clients in real-time via WebSockets.
+
+### 8. Webhook Ingestion Simulator (`/tools/webhook`)
+- **Developer Sandbox**: Dispatches simulated Stripe events, processes idempotency guard checks to block duplicates, logs transactions, and manages manual sync retries in the Dead-Letter Queue (DLQ).
+
+---
+
+## ⚙️ Configuration & Environment
+
+Set up the following variables in your environment files:
+
+### Backend Configuration (`backend/.env`)
+```ini
+PORT=8080
+SUPABASE_URL=https://your-supabase-project.supabase.co
+SUPABASE_SERVICE_ROLE_KEY=ey...
+GEMINI_API_KEY=AIzaSy...
+RESEND_API_KEY=re_...
+CLOUDINARY_URL=cloudinary://...
+BACKEND_API_KEY=your_private_api_key_123
+FRONTEND_URL=https://alicnc.pk
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+### Frontend Configuration (`frontend/.env.local`)
+```ini
+NEXT_PUBLIC_BACKEND_URL=http://localhost:8080
+BACKEND_API_KEY=your_private_api_key_123
+NEXT_PUBLIC_SITE_URL=https://alicnc.pk
+```
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+---
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## 🏃 Getting Started
 
-## Learn More
+### Prerequisites
+- Node.js (v18+)
+- Python (v3.10+) with `venv` module
 
-To learn more about Next.js, take a look at the following resources:
+### Run the Backend Server
+```bash
+cd backend
+# Create Python virtual environment for Oracle AI
+python -m venv oracle_ai/venv
+# Activate venv and install dependencies
+source oracle_ai/venv/bin/activate  # Or: oracle_ai\venv\Scripts\activate on Windows
+pip install -r oracle_ai/requirements.txt
+pip install google-genai
+# Run backend
+npm install
+node server.js
+```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+### Run the Frontend Dashboard
+```bash
+cd frontend
+npm install
+npm run dev
+```
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+---
 
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## 📄 License
+This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
