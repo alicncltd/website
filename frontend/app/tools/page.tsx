@@ -3,7 +3,7 @@
 import React from "react";
 import Navbar from "../../components/Navbar";
 import Link from "next/link";
-import { Video, ArrowRight, Settings, Phone, Mail, ExternalLink, Send, TrendingUp, Cpu, Globe, Users, Terminal } from "lucide-react";
+import { Video, ArrowRight, Settings, Phone, Mail, ExternalLink, Send, TrendingUp, Cpu, Globe, Users, Terminal, Radio } from "lucide-react";
 import { useTranslation } from "../../components/TranslationContext";
 import { AnimatedSection, AnimatedCard } from "../../components/AnimatedSection";
 import Image from "next/image";
@@ -344,6 +344,59 @@ export default function ToolsDashboard() {
               </p>
               
               <Link href="/tools/webhook" className="btn-primary" style={{ 
+                display: "inline-flex", 
+                alignItems: "center", 
+                justifyContent: "center",
+                gap: "8px",
+                width: "100%"
+              }}>
+                Open Tool <ArrowRight size={16} />
+              </Link>
+            </div>
+
+            {/* Geopolitical Intel Feed Card */}
+            <div className="glass-panel" style={{ 
+              padding: "2.5rem", 
+              borderRadius: "16px", 
+              display: "flex", 
+              flexDirection: "column",
+              height: "100%",
+              transition: "transform 0.3s ease, border-color 0.3s ease",
+              cursor: "pointer",
+              border: "1px solid rgba(255, 255, 255, 0.08)"
+            }}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.transform = "translateY(-5px)";
+              e.currentTarget.style.borderColor = "var(--accent-color)";
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.transform = "translateY(0)";
+              e.currentTarget.style.borderColor = "rgba(255, 255, 255, 0.08)";
+            }}
+            >
+              <div style={{ 
+                width: "50px", 
+                height: "50px", 
+                borderRadius: "10px", 
+                background: "rgba(14, 165, 233, 0.15)", 
+                display: "flex", 
+                alignItems: "center", 
+                justifyContent: "center", 
+                marginBottom: "1.5rem",
+                color: "#0ea5e9"
+              }}>
+                <Radio size={26} />
+              </div>
+              
+              <h2 style={{ fontSize: "1.5rem", fontWeight: "700", marginBottom: "1rem", color: "var(--text-primary)" }}>
+                Geopolitical Intel Aggregator
+              </h2>
+              
+              <p style={{ fontSize: "0.95rem", lineHeight: "1.6", color: "var(--text-secondary)", marginBottom: "2rem", flexGrow: 1 }}>
+                Pull live global news from Google News, Reuters, Truth Social feeds, and active politician posts, summarized via the Gemini API.
+              </p>
+              
+              <Link href="/tools/news" className="btn-primary" style={{ 
                 display: "inline-flex", 
                 alignItems: "center", 
                 justifyContent: "center",
