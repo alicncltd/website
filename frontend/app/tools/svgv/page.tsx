@@ -205,96 +205,127 @@ export default function SvgvPage() {
     fileInputRef.current?.click();
   };
 
-  // Form Submit (Upload & Vectorize)
+  // Form Submit (Local Decoders Vectorization)
   const handleCompressSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!selectedFile) return;
 
     setProcessingState("processing");
     setProgressPercent(0);
-    setProgressText("Uploading video...");
+    setProgressText("Initializing video decoder locally...");
     setErrorMsg("");
 
-    const formData = new FormData();
-    formData.append("video", selectedFile);
-    formData.append("edgeThreshold", String(edgeThreshold));
-    formData.append("rdpTolerance", String(rdpTolerance));
-    formData.append("meshGridSize", String(meshGridSize));
-    formData.append("rasterPatchRatio", String(rasterPatchRatio));
-    formData.append("blockSize", String(blockSize));
+    try {
+      const video = document.createElement("video");
+      video.preload = "auto";
+      video.muted = true;
+      video.playsInline = true;
+      
+      const fileURL = URL.createObjectURL(selectedFile);
+      video.src = fileURL;
 
-    const xhr = new XMLHttpRequest();
-    xhr.open("POST", `${getApiBase()}/api/vectorize`, true);
-    xhr.responseType = "arraybuffer";
+      await new Promise((resolve, reject) => {
+        video.onloadedmetadata = resolve;
+        video.onerror = () => reject(new Error("Failed to load video file."));
+      });
 
-    // Track upload progress (first 40% of the bar)
-    xhr.upload.onprogress = (event) => {
-      if (event.lengthComputable) {
-        const percent = (event.loaded / event.total) * 100;
-        setProgressPercent(percent * 0.4);
-        setProgressText(`Uploading video: ${percent.toFixed(0)}%`);
+      const duration = video.duration;
+      const targetWidth = 320;
+      const targetHeight = Math.floor(targetWidth * (video.videoHeight / video.videoWidth));
+      const targetFps = 15;
+      const totalFrames = Math.max(1, Math.floor(duration * targetFps));
+
+      const offscreenCanvas = document.createElement("canvas");
+      offscreenCanvas.width = targetWidth;
+      offscreenCanvas.height = targetHeight;
+      const ctx = offscreenCanvas.getContext("2d", { willReadFrequently: true });
+      if (!ctx) throw new Error("Could not initialize 2D context.");
+
+      const { vectorizeFrame } = await import("../../../lib/svgv/vectorizer");
+      const { encodeSvgvHeader, encodeSvgvFrameToBuffer, encodeSvgvEOF } = await import("../../../lib/svgv/encoder");
+
+      const frameInterval = 1 / targetFps;
+      const frameBuffers: Uint8Array[] = [];
+
+      setProgressText("Starting local frame-by-frame vectorization...");
+
+      for (let frameIdx = 0; frameIdx < totalFrames; frameIdx++) {
+        const frameTime = frameIdx * frameInterval;
+        video.currentTime = frameTime;
+
+        await new Promise((resolve) => {
+          video.onseeked = resolve;
+        });
+
+        ctx.drawImage(video, 0, 0, targetWidth, targetHeight);
+        const imgData = ctx.getImageData(0, 0, targetWidth, targetHeight);
+        
+        const frameResult = vectorizeFrame(
+          new Uint8Array(imgData.data),
+          targetWidth,
+          targetHeight,
+          {
+            edgeThreshold,
+            rdpTolerance,
+            meshGridSize,
+            rasterPatchRatio,
+            blockSize
+          }
+        );
+
+        const frameBuf = encodeSvgvFrameToBuffer(frameResult);
+        frameBuffers.push(frameBuf);
+
+        const progress = Math.floor((frameIdx / totalFrames) * 100);
+        setProgressPercent(progress);
+        setProgressText(`Vectorizing local frames: ${frameIdx + 1}/${totalFrames} (${progress}%)`);
       }
-    };
 
-    // Track processing progress (remaining 60%)
-    xhr.onloadstart = () => {
-      let currentPct = 40;
-      progressIntervalRef.current = setInterval(() => {
-        if (currentPct < 95) {
-          currentPct += (98 - currentPct) * 0.05; // Asymptotic progress curve
-          setProgressPercent(currentPct);
-          setProgressText("Processing and vectorizing frames... (this might take 1-2 mins)");
-        }
-      }, 1500);
-    };
+      setProgressText("Compiling final binary package...");
+      const headerBuf = encodeSvgvHeader(targetWidth, targetHeight, targetFps, totalFrames);
+      const eofBuf = encodeSvgvEOF();
+      
+      const audioFooter = new Uint8Array(4); // 0 audio size
+      
+      let totalLength = headerBuf.length + eofBuf.length + audioFooter.length;
+      for (const buf of frameBuffers) totalLength += buf.length;
 
-    xhr.onload = () => {
-      if (progressIntervalRef.current) clearInterval(progressIntervalRef.current);
-      if (xhr.status === 200) {
-        const arrayBuffer = xhr.response as ArrayBuffer;
-        const binaryData = new Uint8Array(arrayBuffer);
+      const finalBinary = new Uint8Array(totalLength);
+      let offset = 0;
+      
+      finalBinary.set(headerBuf, offset);
+      offset += headerBuf.length;
 
-        // Decode header to retrieve metadata
-        try {
-          const decoder = new SvgvDecoder(binaryData);
-          const header = decoder.getHeader();
-          const targetName = selectedFile.name.replace(".mp4", ".svgv");
-
-          setProgressPercent(100);
-          setProcessingState("success");
-          setSyncedStats({
-            name: targetName,
-            origSize: formatBytes(selectedFile.size),
-            newSize: formatBytes(binaryData.length),
-            ratio: ((binaryData.length / selectedFile.size) * 100).toFixed(1) + "%",
-            frameCount: header.frameCount,
-            fps: header.fps,
-            res: `${header.width}x${header.height}`,
-            binary: binaryData
-          });
-        } catch (err: any) {
-          setProcessingState("error");
-          setErrorMsg(`Decoding failed: ${err.message}`);
-        }
-      } else {
-        setProcessingState("error");
-        try {
-          const decoded = new TextDecoder("utf-8").decode(xhr.response as ArrayBuffer);
-          const parsed = JSON.parse(decoded);
-          setErrorMsg(parsed.error || "Server processing failed.");
-        } catch {
-          setErrorMsg(`Server returned status code: ${xhr.status}`);
-        }
+      for (const buf of frameBuffers) {
+        finalBinary.set(buf, offset);
+        offset += buf.length;
       }
-    };
 
-    xhr.onerror = () => {
-      if (progressIntervalRef.current) clearInterval(progressIntervalRef.current);
+      finalBinary.set(eofBuf, offset);
+      offset += eofBuf.length;
+
+      finalBinary.set(audioFooter, offset);
+
+      const targetName = selectedFile.name.replace(/\.[^/.]+$/, "") + ".svgv";
+      setProgressPercent(100);
+      setProcessingState("success");
+      setSyncedStats({
+        name: targetName,
+        origSize: formatBytes(selectedFile.size),
+        newSize: formatBytes(finalBinary.length),
+        ratio: ((finalBinary.length / selectedFile.size) * 100).toFixed(1) + "%",
+        frameCount: totalFrames,
+        fps: targetFps,
+        res: `${targetWidth}x${targetHeight}`,
+        binary: finalBinary
+      });
+
+      URL.revokeObjectURL(fileURL);
+    } catch (err: any) {
+      console.error("Local vectorization failed:", err);
       setProcessingState("error");
-      setErrorMsg("Network request failed. Ensure the backend server is running.");
-    };
-
-    xhr.send(formData);
+      setErrorMsg(`Local vectorization failed: ${err.message}`);
+    }
   };
 
   // Generate Simulation
