@@ -3,7 +3,7 @@
 import React from "react";
 import Navbar from "../../components/Navbar";
 import Link from "next/link";
-import { Video, ArrowRight, Settings, Phone, Mail, ExternalLink, Send } from "lucide-react";
+import { Video, ArrowRight, Settings, Phone, Mail, ExternalLink, Send, TrendingUp, Cpu, Globe, Users, Terminal } from "lucide-react";
 import { useTranslation } from "../../components/TranslationContext";
 import { AnimatedSection, AnimatedCard } from "../../components/AnimatedSection";
 import Image from "next/image";
@@ -79,6 +79,271 @@ export default function ToolsDashboard() {
               </p>
               
               <Link href="/tools/svgv" className="btn-primary" style={{ 
+                display: "inline-flex", 
+                alignItems: "center", 
+                justifyContent: "center",
+                gap: "8px",
+                width: "100%"
+              }}>
+                Open Tool <ArrowRight size={16} />
+              </Link>
+            </div>
+
+            {/* Oracle AI Trading Analyst Tool Card */}
+            <div className="glass-panel" style={{ 
+              padding: "2.5rem", 
+              borderRadius: "16px", 
+              display: "flex", 
+              flexDirection: "column",
+              height: "100%",
+              transition: "transform 0.3s ease, border-color 0.3s ease",
+              cursor: "pointer",
+              border: "1px solid rgba(255, 255, 255, 0.08)"
+            }}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.transform = "translateY(-5px)";
+              e.currentTarget.style.borderColor = "var(--accent-color)";
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.transform = "translateY(0)";
+              e.currentTarget.style.borderColor = "rgba(255, 255, 255, 0.08)";
+            }}
+            >
+              <div style={{ 
+                width: "50px", 
+                height: "50px", 
+                borderRadius: "10px", 
+                background: "rgba(14, 165, 233, 0.15)", 
+                display: "flex", 
+                alignItems: "center", 
+                justifyContent: "center", 
+                marginBottom: "1.5rem",
+                color: "#0ea5e9"
+              }}>
+                <TrendingUp size={26} />
+              </div>
+              
+              <h2 style={{ fontSize: "1.5rem", fontWeight: "700", marginBottom: "1rem", color: "var(--text-primary)" }}>
+                Oracle Trading AI Analyst
+              </h2>
+              
+              <p style={{ fontSize: "0.95rem", lineHeight: "1.6", color: "var(--text-secondary)", marginBottom: "2rem", flexGrow: 1 }}>
+                Consult technical indicators, fear/greed sentiment, whale activity, and global geopolitical news aggregated via the Gemini-arbitrated AI Judge.
+              </p>
+              
+              <Link href="/tools/oracle" className="btn-primary" style={{ 
+                display: "inline-flex", 
+                alignItems: "center", 
+                justifyContent: "center",
+                gap: "8px",
+                width: "100%"
+              }}>
+                Open Tool <ArrowRight size={16} />
+              </Link>
+            </div>
+
+            {/* AI Router Tool Card */}
+            <div className="glass-panel" style={{ 
+              padding: "2.5rem", 
+              borderRadius: "16px", 
+              display: "flex", 
+              flexDirection: "column",
+              height: "100%",
+              transition: "transform 0.3s ease, border-color 0.3s ease",
+              cursor: "pointer",
+              border: "1px solid rgba(255, 255, 255, 0.08)"
+            }}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.transform = "translateY(-5px)";
+              e.currentTarget.style.borderColor = "var(--accent-color)";
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.transform = "translateY(0)";
+              e.currentTarget.style.borderColor = "rgba(255, 255, 255, 0.08)";
+            }}
+            >
+              <div style={{ 
+                width: "50px", 
+                height: "50px", 
+                borderRadius: "10px", 
+                background: "rgba(14, 165, 233, 0.15)", 
+                display: "flex", 
+                alignItems: "center", 
+                justifyContent: "center", 
+                marginBottom: "1.5rem",
+                color: "#0ea5e9"
+              }}>
+                <Cpu size={26} />
+              </div>
+              
+              <h2 style={{ fontSize: "1.5rem", fontWeight: "700", marginBottom: "1rem", color: "var(--text-primary)" }}>
+                Multi-Model AI Router
+              </h2>
+              
+              <p style={{ fontSize: "0.95rem", lineHeight: "1.6", color: "var(--text-secondary)", marginBottom: "2rem", flexGrow: 1 }}>
+                Evaluate prompt difficulty and dynamically route requests to the cost-optimal LLM while tracking latency and API usage.
+              </p>
+              
+              <Link href="/tools/router" className="btn-primary" style={{ 
+                display: "inline-flex", 
+                alignItems: "center", 
+                justifyContent: "center",
+                gap: "8px",
+                width: "100%"
+              }}>
+                Open Tool <ArrowRight size={16} />
+              </Link>
+            </div>
+
+            {/* ETL Scraper Tool Card */}
+            <div className="glass-panel" style={{ 
+              padding: "2.5rem", 
+              borderRadius: "16px", 
+              display: "flex", 
+              flexDirection: "column",
+              height: "100%",
+              transition: "transform 0.3s ease, border-color 0.3s ease",
+              cursor: "pointer",
+              border: "1px solid rgba(255, 255, 255, 0.08)"
+            }}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.transform = "translateY(-5px)";
+              e.currentTarget.style.borderColor = "var(--accent-color)";
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.transform = "translateY(0)";
+              e.currentTarget.style.borderColor = "rgba(255, 255, 255, 0.08)";
+            }}
+            >
+              <div style={{ 
+                width: "50px", 
+                height: "50px", 
+                borderRadius: "10px", 
+                background: "rgba(16, 185, 129, 0.15)", 
+                display: "flex", 
+                alignItems: "center", 
+                justifyContent: "center", 
+                marginBottom: "1.5rem",
+                color: "#10b981"
+              }}>
+                <Globe size={26} />
+              </div>
+              
+              <h2 style={{ fontSize: "1.5rem", fontWeight: "700", marginBottom: "1rem", color: "var(--text-primary)" }}>
+                ETL Scraper & Crawler
+              </h2>
+              
+              <p style={{ fontSize: "0.95rem", lineHeight: "1.6", color: "var(--text-secondary)", marginBottom: "2rem", flexGrow: 1 }}>
+                Concurrently scrape website URLs, run content extraction pipelines, and output structured JSON and downloadable CSV formats.
+              </p>
+              
+              <Link href="/tools/scraper" className="btn-primary" style={{ 
+                display: "inline-flex", 
+                alignItems: "center", 
+                justifyContent: "center",
+                gap: "8px",
+                width: "100%"
+              }}>
+                Open Tool <ArrowRight size={16} />
+              </Link>
+            </div>
+
+            {/* Collaborative Workspace Card */}
+            <div className="glass-panel" style={{ 
+              padding: "2.5rem", 
+              borderRadius: "16px", 
+              display: "flex", 
+              flexDirection: "column",
+              height: "100%",
+              transition: "transform 0.3s ease, border-color 0.3s ease",
+              cursor: "pointer",
+              border: "1px solid rgba(255, 255, 255, 0.08)"
+            }}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.transform = "translateY(-5px)";
+              e.currentTarget.style.borderColor = "var(--accent-color)";
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.transform = "translateY(0)";
+              e.currentTarget.style.borderColor = "rgba(255, 255, 255, 0.08)";
+            }}
+            >
+              <div style={{ 
+                width: "50px", 
+                height: "50px", 
+                borderRadius: "10px", 
+                background: "rgba(245, 158, 11, 0.15)", 
+                display: "flex", 
+                alignItems: "center", 
+                justifyContent: "center", 
+                marginBottom: "1.5rem",
+                color: "#f59e0b"
+              }}>
+                <Users size={26} />
+              </div>
+              
+              <h2 style={{ fontSize: "1.5rem", fontWeight: "700", marginBottom: "1rem", color: "var(--text-primary)" }}>
+                Collaborative Sketchboard
+              </h2>
+              
+              <p style={{ fontSize: "0.95rem", lineHeight: "1.6", color: "var(--text-secondary)", marginBottom: "2rem", flexGrow: 1 }}>
+                Real-time sketch canvas synchronizing pencil strokes and dynamic user cursor coordinates via active WebSockets.
+              </p>
+              
+              <Link href="/tools/workspace" className="btn-primary" style={{ 
+                display: "inline-flex", 
+                alignItems: "center", 
+                justifyContent: "center",
+                gap: "8px",
+                width: "100%"
+              }}>
+                Open Tool <ArrowRight size={16} />
+              </Link>
+            </div>
+
+            {/* Webhook Payment Sync Engine Card */}
+            <div className="glass-panel" style={{ 
+              padding: "2.5rem", 
+              borderRadius: "16px", 
+              display: "flex", 
+              flexDirection: "column",
+              height: "100%",
+              transition: "transform 0.3s ease, border-color 0.3s ease",
+              cursor: "pointer",
+              border: "1px solid rgba(255, 255, 255, 0.08)"
+            }}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.transform = "translateY(-5px)";
+              e.currentTarget.style.borderColor = "var(--accent-color)";
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.transform = "translateY(0)";
+              e.currentTarget.style.borderColor = "rgba(255, 255, 255, 0.08)";
+            }}
+            >
+              <div style={{ 
+                width: "50px", 
+                height: "50px", 
+                borderRadius: "10px", 
+                background: "rgba(239, 68, 68, 0.15)", 
+                display: "flex", 
+                alignItems: "center", 
+                justifyContent: "center", 
+                marginBottom: "1.5rem",
+                color: "#ef4444"
+              }}>
+                <Terminal size={26} />
+              </div>
+              
+              <h2 style={{ fontSize: "1.5rem", fontWeight: "700", marginBottom: "1rem", color: "var(--text-primary)" }}>
+                Webhook Ingestion Simulator
+              </h2>
+              
+              <p style={{ fontSize: "0.95rem", lineHeight: "1.6", color: "var(--text-secondary)", marginBottom: "2rem", flexGrow: 1 }}>
+                Simulate Stripe transaction events. Test database idempotency sync locks and manual retry triggers in the Dead-Letter Queue (DLQ).
+              </p>
+              
+              <Link href="/tools/webhook" className="btn-primary" style={{ 
                 display: "inline-flex", 
                 alignItems: "center", 
                 justifyContent: "center",
@@ -169,8 +434,8 @@ export default function ToolsDashboard() {
                 <div className="method-info">
                   <h3>{t("contact.email_title")}</h3>
                   <p>{t("contact.email_desc")}</p>
-                  <a href="mailto:thealidevmail@gmail.com" className="btn-outline full-width">
-                    thealidevmail@gmail.com
+                  <a href="mailto:ali@alicnc.pk" className="btn-outline full-width">
+                    ali@alicnc.pk
                   </a>
                 </div>
               </AnimatedCard>

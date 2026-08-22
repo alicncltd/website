@@ -30,9 +30,9 @@ export default function Navbar() {
             <Phone size={13} style={{ marginRight: '6px' }} />
             <span>+92 344 0708494</span>
           </a>
-          <a href="mailto:thealidevmail@gmail.com" className="top-contact-link">
+          <a href="mailto:ali@alicnc.pk" className="top-contact-link">
             <Mail size={13} style={{ marginRight: '6px' }} />
-            <span>thealidevmail@gmail.com</span>
+            <span>ali@alicnc.pk</span>
           </a>
         </div>
       </div>

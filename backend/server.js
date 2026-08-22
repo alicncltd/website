@@ -394,7 +394,11 @@ Please write a professional website audit assessment. Identify any system errors
     doc.fontSize(10).fillColor("#334155").text(auditSummary);
     doc.moveDown();
 
-    doc.fontSize(14).fillColor("#0ea5e9").text("4. Engineering Changelog Timeline");
+    doc.fontSize(14).fillColor("#0ea5e9").text("4. 6-Hour Global News & Politician Summary (AI)");
+    doc.fontSize(10).fillColor("#334155").text(newsSummary);
+    doc.moveDown();
+
+    doc.fontSize(14).fillColor("#0ea5e9").text("5. Engineering Changelog Timeline");
     const changelogItems = [
       "- Monorepo restucturing: Separated backend and frontend perfectly into isolated builds.",
       "- Supabase WhatsApp persistence: Stored WhatsApp sessions in Supabase to bypass Render container limits, with 10s auto-backup.",
@@ -410,7 +414,7 @@ Please write a professional website audit assessment. Identify any system errors
     changelogItems.forEach(item => doc.text(item));
     doc.moveDown();
 
-    doc.fontSize(14).fillColor("#0ea5e9").text("5. Recent System Logs");
+    doc.fontSize(14).fillColor("#0ea5e9").text("6. Recent System Logs");
     doc.fontSize(8).fillColor("#0f172a").text(logsSummary);
 
     doc.end();
@@ -774,6 +778,281 @@ app.post('/api/simulated', async (req, res) => {
   }
 });
 
+// RSS Parsing Utility (dependency-free regex based XML parser)
+function parseRss(xmlText, sourceName) {
+  const items = [];
+  const itemRegex = /<item>([\s\S]*?)<\/item>/g;
+  let match;
+  while ((match = itemRegex.exec(xmlText)) !== null) {
+    const itemContent = match[1];
+    
+    // Extract title
+    let title = "";
+    const titleMatch = itemContent.match(/<title>(?:<!\[CDATA\[([\s\S]*?)\]\]>|([\s\S]*?))<\/title>/);
+    if (titleMatch) {
+      title = (titleMatch[1] || titleMatch[2] || "").trim();
+    }
+
+    // Extract link
+    let url = "";
+    const linkMatch = itemContent.match(/<link>(?:<!\[CDATA\[([\s\S]*?)\]\]>|([\s\S]*?))<\/link>/);
+    if (linkMatch) {
+      url = (linkMatch[1] || linkMatch[2] || "").trim();
+    }
+
+    // Extract pubDate
+    let pubDateStr = "";
+    const pubDateMatch = itemContent.match(/<pubDate>([\s\S]*?)<\/pubDate>/);
+    if (pubDateMatch) {
+      pubDateStr = pubDateMatch[1].trim();
+    }
+    const publishedAt = pubDateStr ? new Date(pubDateStr) : new Date();
+
+    // Extract description
+    let content = "";
+    const descMatch = itemContent.match(/<description>(?:<!\[CDATA\[([\s\S]*?)\]\]>|([\s\S]*?))<\/description>/);
+    if (descMatch) {
+      content = (descMatch[1] || descMatch[2] || "").trim();
+    }
+
+    const cleanTitle = title.replace(/<\/?[^>]+(>|$)/g, "").trim();
+    const cleanContent = content.replace(/<\/?[^>]+(>|$)/g, "").trim();
+
+    if (cleanTitle && url) {
+      items.push({
+        source: sourceName,
+        title: cleanTitle,
+        content: cleanContent || "No description provided.",
+        url: url,
+        published_at: publishedAt.toISOString()
+      });
+    }
+  }
+  return items;
+}
+
+// 6-Hour News Aggregator Core
+async function syncAggregatedNews() {
+  console.log("Starting 6-Hour Global News & Politician Post Aggregation...");
+  const newsItems = [];
+  const sixHoursAgo = new Date(Date.now() - 6 * 60 * 60 * 1000);
+
+  // 1. Google News World RSS
+  try {
+    const res = await fetch("https://news.google.com/rss/search?q=world+news+when:6h&hl=en-US&gl=US&ceid=US:en");
+    if (res.ok) {
+      const xml = await res.text();
+      const items = parseRss(xml, "google_news");
+      newsItems.push(...items);
+    }
+  } catch (e) {
+    console.error("Failed to sync Google News RSS:", e);
+  }
+
+  // 2. Reuters (via Google News source query to bypass blocks)
+  try {
+    const res = await fetch("https://news.google.com/rss/search?q=Reuters+when:6h&hl=en-US&gl=US&ceid=US:en");
+    if (res.ok) {
+      const xml = await res.text();
+      const items = parseRss(xml, "reuters");
+      newsItems.push(...items);
+    }
+  } catch (e) {
+    console.error("Failed to sync Reuters RSS:", e);
+  }
+
+  // 3. Truth Social (Donald Trump Feed)
+  try {
+    const res = await fetch("https://truthsocial.com/@realDonaldTrump.rss");
+    if (res.ok) {
+      const xml = await res.text();
+      const items = parseRss(xml, "truth_social");
+      items.forEach(item => {
+        item.author = "Donald Trump";
+        // Shorten long status updates for title
+        if (item.title.length > 90) {
+          item.title = item.title.substring(0, 87) + "...";
+        }
+      });
+      newsItems.push(...items);
+    }
+  } catch (e) {
+    console.error("Failed to sync Truth Social RSS:", e);
+  }
+
+  // 4. Twitter / Politicians fallback (Google News query mapping statements in last 6h)
+  try {
+    const res = await fetch("https://news.google.com/rss/search?q=politicians+statements+when:6h&hl=en-US&gl=US&ceid=US:en");
+    if (res.ok) {
+      const xml = await res.text();
+      const items = parseRss(xml, "twitter");
+      items.forEach(item => {
+        item.author = "Politicians Feed";
+      });
+      newsItems.push(...items);
+    }
+  } catch (e) {
+    console.error("Failed to sync Twitter fallback RSS:", e);
+  }
+
+  // Filter items in the last 6 hours
+  const activeItems = newsItems.filter(item => new Date(item.published_at) >= sixHoursAgo);
+  console.log(`Synced ${activeItems.length} active news items within 6-hour threshold.`);
+
+  if (activeItems.length > 0) {
+    for (const item of activeItems) {
+      try {
+        const { data: existing } = await supabase
+          .from("aggregated_news")
+          .select("id")
+          .eq("title", item.title)
+          .maybeSingle();
+
+        if (!existing) {
+          const { error } = await supabase
+            .from("aggregated_news")
+            .insert(item);
+          if (error) console.error("Database insert news error:", error);
+        }
+      } catch (dbErr) {
+        console.error("Database check news error:", dbErr);
+      }
+    }
+  }
+
+  try {
+    await supabase.from("system_logs").insert({
+      type: "NEWS_SYNC",
+      message: `Sync completed. Fetched and stored ${activeItems.length} items in the database.`,
+      status: "SUCCESS"
+    });
+  } catch (logErr) {}
+
+  return activeItems;
+}
+
+// News Aggregator API Sync Endpoint
+app.post("/api/admin/sync-news", authenticateApiKey, async (req, res) => {
+  try {
+    const items = await syncAggregatedNews();
+    res.json({ success: true, count: items.length });
+  } catch (err) {
+    res.status(500).json({ error: `Sync failed: ${err.message}` });
+  }
+});
+
+// News Briefing API Get Endpoint
+app.get("/api/admin/news-briefing", authenticateApiKey, async (req, res) => {
+  try {
+    const sixHoursAgo = new Date(Date.now() - 6 * 60 * 60 * 1000).toISOString();
+    const { data: newsItems, error } = await supabase
+      .from("aggregated_news")
+      .select("*")
+      .gte("published_at", sixHoursAgo)
+      .order("published_at", { ascending: false });
+
+    if (error) throw error;
+
+    const geminiApiKey = process.env.GEMINI_API_KEY;
+    let summaryText = "No recent global news or politician updates found in the database. Please trigger a sync.";
+
+    if (geminiApiKey && newsItems && newsItems.length > 0) {
+      try {
+        const textBlocks = newsItems.slice(0, 30).map(item => 
+          `[${item.source.toUpperCase()}] ${item.author ? `(${item.author})` : ""} ${item.title}: ${item.content}`
+        ).join("\n\n");
+
+        const prompt = `You are a professional B2B business and geopolitical intelligence analyst for "Ali CNC".
+Summarize the following global news events and politician statements recorded in the last 6 hours:
+
+${textBlocks}
+
+Please write a structured, highly professional, direct intelligence brief summarizing the major developments. Identify:
+1. Significant geopolitical event developments.
+2. Major announcements from Donald Trump and key politicians.
+3. Relevant global trade or economic developments.
+Keep the summary under 200 words, highly professional, and direct. Return only a plain text response with no markdown tags or headers.`;
+
+        const response = await fetch(
+          `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${geminiApiKey}`,
+          {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              contents: [{ parts: [{ text: prompt }] }]
+            })
+          }
+        );
+
+        if (response.ok) {
+          const resJson = await response.json();
+          summaryText = resJson.candidates?.[0]?.content?.parts?.[0]?.text || "Failed to generate briefing content.";
+        }
+      } catch (geminiErr) {
+        console.error("Gemini news summarization failed:", geminiErr);
+        summaryText = "AI news summarization is temporarily unavailable due to API limit or connection issues.";
+      }
+    }
+
+    res.json({
+      summary: summaryText.trim(),
+      news: newsItems || []
+    });
+  } catch (err) {
+    res.status(500).json({ error: `Failed to fetch news briefing: ${err.message}` });
+  }
+});
+
+// Oracle AI Analysis Engine Child Process Runner
+function executeOracleAnalysis(symbol = "BTCUSDT") {
+  return new Promise((resolve, reject) => {
+    const pythonPath = path.join(__dirname, "oracle_ai", "venv", "Scripts", "python.exe");
+    const scriptPath = path.join(__dirname, "oracle_ai", "run_oracle.py");
+    
+    console.log(`Spawning Oracle AI analyzer for ${symbol}...`);
+    const py = spawn(pythonPath, [scriptPath, symbol]);
+    
+    let stdout = "";
+    let stderr = "";
+    
+    py.stdout.on("data", (data) => {
+      stdout += data.toString();
+    });
+    
+    py.stderr.on("data", (data) => {
+      stderr += data.toString();
+    });
+    
+    py.on("close", (code) => {
+      if (code !== 0) {
+        console.error(`Oracle AI exited with error code ${code}`);
+        console.error("Stderr:", stderr);
+        return reject(new Error(`Oracle execution failed: ${stderr || 'Unknown error'}`));
+      }
+      
+      try {
+        const json = JSON.parse(stdout);
+        resolve(json);
+      } catch (err) {
+        console.error("Failed to parse Oracle JSON output:", err);
+        console.error("Stdout output was:", stdout);
+        reject(new Error("Oracle returned invalid JSON data."));
+      }
+    });
+  });
+}
+
+// Oracle AI Analysis Endpoint
+app.post("/api/admin/run-oracle", authenticateApiKey, async (req, res) => {
+  const { symbol = "BTCUSDT" } = req.body;
+  try {
+    const report = await executeOracleAnalysis(symbol);
+    res.json(report);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
 // Stateless Scrape endpoint fallback
 app.post("/api/whatsapp/scrape", authenticateApiKey, async (req, res) => {
   const { phoneNumber } = req.body;
@@ -789,6 +1068,7 @@ app.post("/api/whatsapp/scrape", authenticateApiKey, async (req, res) => {
     res.status(500).json({ error: `Scraping failed: ${err.message}` });
   }
 });
+
 
 // Trigger daily report manually (for testing purposes)
 app.post("/api/admin/audit", authenticateApiKey, async (req, res) => {
@@ -1323,6 +1603,247 @@ function handleDashboardMessage(payload, ws) {
   }
 }
 
+// -------------------------------------------------------------
+// ADVANCED TOOLS SERVICES & ENDPOINTS
+// -------------------------------------------------------------
+
+// Webhook Engine Stores
+const webhookQueue = [];
+const processedWebhookIds = new Set();
+
+// AI Orchestrator Router API
+app.post("/api/tools/router", authenticateApiKey, async (req, res) => {
+  const { prompt, mode = "cost" } = req.body;
+  if (!prompt) {
+    return res.status(400).json({ error: "Prompt is required." });
+  }
+
+  const start = Date.now();
+  let chosenModel = "gemini-2.5-flash"; // default
+  let modelLabel = "Gemini 2.5 Flash (Fast/Cheap)";
+  let costPerMillionInput = 0.075;
+  let costPerMillionOutput = 0.30;
+
+  const promptLower = prompt.toLowerCase();
+  const isComplex = prompt.length > 100 || 
+                    promptLower.includes("explain") || 
+                    promptLower.includes("code") || 
+                    promptLower.includes("program") || 
+                    promptLower.includes("architect") ||
+                    mode === "quality";
+
+  if (isComplex && mode !== "cost") {
+    chosenModel = "gemini-2.5-pro";
+    modelLabel = "Gemini 2.5 Pro (Complex Reasoning)";
+    costPerMillionInput = 1.25;
+    costPerMillionOutput = 5.00;
+  }
+
+  const geminiApiKey = process.env.GEMINI_API_KEY;
+  let resultText = "Gemini API key is not configured on the backend.";
+  let inputTokens = Math.ceil(prompt.length / 4);
+  let outputTokens = 0;
+  let cost = 0;
+
+  if (geminiApiKey) {
+    try {
+      const apiRes = await fetch(
+        `https://generativelanguage.googleapis.com/v1beta/models/${chosenModel}:generateContent?key=${geminiApiKey}`,
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            contents: [{ parts: [{ text: prompt }] }]
+          })
+        }
+      );
+
+      if (apiRes.ok) {
+        const json = await apiRes.json();
+        resultText = json.candidates?.[0]?.content?.parts?.[0]?.text || "Empty response.";
+        outputTokens = Math.ceil(resultText.length / 4);
+        cost = ((inputTokens * costPerMillionInput) + (outputTokens * costPerMillionOutput)) / 1000000;
+      } else {
+        const errorText = await apiRes.text();
+        console.error("Router model API failed:", errorText);
+        resultText = `API error: ${errorText.substring(0, 150)}`;
+      }
+    } catch (err) {
+      console.error("Router error:", err);
+      resultText = `Router failed to contact LLM API: ${err.message}`;
+    }
+  }
+
+  const latency = Date.now() - start;
+
+  res.json({
+    model: modelLabel,
+    latency,
+    cost: Number(cost.toFixed(6)),
+    inputTokens,
+    outputTokens,
+    text: resultText
+  });
+});
+
+// ETL Crawler Scraper API
+app.post("/api/tools/scrape", authenticateApiKey, async (req, res) => {
+  const { urls } = req.body;
+  if (!urls || !Array.isArray(urls) || urls.length === 0) {
+    return res.status(400).json({ error: "URLs array is required." });
+  }
+
+  const parsedResults = [];
+
+  for (const url of urls) {
+    let scrapedText = "";
+    let pageTitle = "Untitled Page";
+    try {
+      console.log(`Crawling URL: ${url}`);
+      const scraperRes = await fetch(url, { headers: { "User-Agent": "Mozilla/5.0" } });
+      if (scraperRes.ok) {
+        const html = await scraperRes.text();
+        const titleMatch = html.match(/<title>([\s\S]*?)<\/title>/i);
+        pageTitle = titleMatch ? titleMatch[1].trim() : "Parsed Page";
+        
+        scrapedText = html
+          .replace(/<script[\s\S]*?<\/script>/gi, "")
+          .replace(/<style[\s\S]*?<\/style>/gi, "")
+          .replace(/<[^>]+>/g, " ")
+          .replace(/\s+/g, " ")
+          .substring(0, 8000);
+      } else {
+        scrapedText = `Failed to download. Status code: ${scraperRes.status}`;
+      }
+    } catch (err) {
+      console.error(`Scrape failed for ${url}:`, err);
+      scrapedText = `Failed to scrape page due to network timeout: ${err.message}`;
+    }
+
+    let structuredData = { title: pageTitle, author: "Unknown", summary: "Could not parse details.", keyPoints: [], sentiment: "NEUTRAL" };
+    const geminiApiKey = process.env.GEMINI_API_KEY;
+
+    if (geminiApiKey && !scrapedText.startsWith("Failed")) {
+      try {
+        const etlPrompt = `Evaluate the following scraped raw text content from: ${url}
+Please extract the information and return a structured JSON object.
+Required JSON Schema:
+{
+  "title": "Clean, parsed page or article title",
+  "author": "Author or publisher name, null if none",
+  "summary": "1-2 sentence core content summary",
+  "keyPoints": ["Point 1", "Point 2", "Point 3"],
+  "sentiment": "BULLISH or BEARISH or NEUTRAL"
+}
+Return only a valid JSON output. No markdown wrappers.
+
+Scraped text content:
+${scrapedText}`;
+
+        const apiRes = await fetch(
+          `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${geminiApiKey}`,
+          {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              contents: [{ parts: [{ text: etlPrompt }] }]
+            })
+          }
+        );
+
+        if (apiRes.ok) {
+          const json = await apiRes.json();
+          const parsedText = json.candidates?.[0]?.content?.parts?.[0]?.text || "";
+          const jsonMatch = parsedText.match(/\{[\s\S]*\}/);
+          if (jsonMatch) {
+            structuredData = JSON.parse(jsonMatch[0]);
+          }
+        }
+      } catch (err) {
+        console.error("Gemini ETL failed:", err);
+      }
+    } else {
+      structuredData = {
+        title: pageTitle,
+        author: "Unknown",
+        summary: scrapedText.substring(0, 150) + "...",
+        keyPoints: ["Could not extract details due to network errors."],
+        sentiment: "NEUTRAL"
+      };
+    }
+
+    parsedResults.push({
+      url,
+      status: scrapedText.startsWith("Failed") ? "FAILED" : "COMPLETED",
+      data: structuredData
+    });
+  }
+
+  res.json({ results: parsedResults });
+});
+
+// Webhook Ingest API
+app.post("/api/tools/webhook/ingest", async (req, res) => {
+  const { eventId, type, payload } = req.body;
+  
+  if (!eventId || !type) {
+    return res.status(400).json({ error: "Missing eventId or type in request body." });
+  }
+
+  if (processedWebhookIds.has(eventId)) {
+    console.log(`[Webhook] Duplicate event blocked: ${eventId}`);
+    return res.json({ status: "ALREADY_PROCESSED", message: "Idempotency check passed. Event ignored." });
+  }
+
+  processedWebhookIds.add(eventId);
+
+  const shouldFail = Math.random() < 0.3;
+  const status = shouldFail ? "FAILED" : "PROCESSED";
+  
+  const webhookEntry = {
+    eventId,
+    type,
+    payload,
+    status,
+    retryCount: 0,
+    timestamp: new Date().toISOString(),
+    logs: [`[${new Date().toLocaleTimeString()}] Event received and logged.`]
+  };
+
+  if (shouldFail) {
+    webhookEntry.logs.push(`[${new Date().toLocaleTimeString()}] ERROR: Database transaction lock timeout. Sent to Dead-Letter Queue (DLQ).`);
+  } else {
+    webhookEntry.logs.push(`[${new Date().toLocaleTimeString()}] SUCCESS: Payment sync completed. Database updated.`);
+  }
+
+  webhookQueue.unshift(webhookEntry);
+  if (webhookQueue.length > 50) webhookQueue.pop();
+
+  res.json({ status, eventId });
+});
+
+// Fetch webhook events
+app.get("/api/tools/webhook/events", authenticateApiKey, (req, res) => {
+  res.json(webhookQueue);
+});
+
+// Retry webhook event
+app.post("/api/tools/webhook/retry", authenticateApiKey, (req, res) => {
+  const { eventId } = req.body;
+  const item = webhookQueue.find(w => w.eventId === eventId);
+  
+  if (!item) {
+    return res.status(404).json({ error: "Webhook event not found in logs." });
+  }
+
+  item.retryCount += 1;
+  item.status = "PROCESSED";
+  item.logs.push(`[${new Date().toLocaleTimeString()}] Retry attempt #${item.retryCount} initiated.`);
+  item.logs.push(`[${new Date().toLocaleTimeString()}] SUCCESS: Database lock resolved. Synced successfully.`);
+
+  res.json({ status: "SUCCESS", item });
+});
+
 // Start HTTP & WebSocket Servers
 const server = app.listen(PORT, async () => {
   console.log(`Backend Server running on port ${PORT}`);
@@ -1341,12 +1862,37 @@ const server = app.listen(PORT, async () => {
 });
 
 const wss = new WebSocketServer({ noServer: true });
+const wssWorkspace = new WebSocketServer({ noServer: true });
+const workspaceClients = new Set();
+
+wssWorkspace.on("connection", (ws, request) => {
+  console.log("Workspace WebSocket connection established.");
+  workspaceClients.add(ws);
+
+  ws.on("message", (message) => {
+    // Broadcast coordinates/drawings to all other connected workspace clients
+    for (const client of workspaceClients) {
+      if (client !== ws && client.readyState === ws.OPEN) {
+        client.send(message.toString());
+      }
+    }
+  });
+
+  ws.on("close", () => {
+    console.log("Workspace WebSocket connection closed.");
+    workspaceClients.delete(ws);
+  });
+});
 
 server.on("upgrade", (request, socket, head) => {
   const pathname = new URL(request.url, `http://${request.headers.host}`).pathname;
   if (pathname === "/api/whatsapp/stream") {
     wss.handleUpgrade(request, socket, head, (ws) => {
       wss.emit("connection", ws, request);
+    });
+  } else if (pathname === "/api/tools/workspace/sync") {
+    wssWorkspace.handleUpgrade(request, socket, head, (ws) => {
+      wssWorkspace.emit("connection", ws, request);
     });
   } else {
     socket.destroy();

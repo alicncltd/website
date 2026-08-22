@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://www.alicnc.online/sitemap.xml
+Sitemap: https://www.alicnc.pk/sitemap.xml

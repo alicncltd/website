@@ -10,7 +10,7 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
-  metadataBase: new URL("https://www.alicnc.online"),
+  metadataBase: new URL("https://www.alicnc.pk"),
   title: {
     default: "Ali CNC | 고정밀 B2B 3D CAD 설계 & CNC G코드 최적화",
     template: "%s | Ali CNC"
@@ -20,7 +20,7 @@ export const metadata: Metadata = {
   authors: [{ name: "Ali CNC" }],
   creator: "Ali CNC",
   alternates: {
-    canonical: "https://www.alicnc.online/ko",
+    canonical: "https://www.alicnc.pk/ko",
   },
   icons: {
     icon: "/logo_final.svg",
@@ -29,7 +29,7 @@ export const metadata: Metadata = {
   openGraph: {
     type: "website",
     locale: "ko_KR",
-    url: "https://www.alicnc.online/ko",
+    url: "https://www.alicnc.pk/ko",
     title: "Ali CNC | 고정밀 B2B 3D CAD 설계 & G코드 최적화",
     description: "국내 가구 공방 및 CNC 목공소를 위한 고정밀 B2B 도면 설계 및 G코드 최적화 서비스.",
     siteName: "Ali CNC",
@@ -55,8 +55,8 @@ const jsonLd = {
   "@context": "https://schema.org",
   "@type": "ProfessionalService",
   "name": "Ali CNC Private Limited",
-  "image": "https://www.alicnc.online/logo_final.png",
-  "url": "https://www.alicnc.online/ko",
+  "image": "https://www.alicnc.pk/logo_final.png",
+  "url": "https://www.alicnc.pk/ko",
   "telephone": "+923440708494",
   "address": {
     "@type": "PostalAddress",

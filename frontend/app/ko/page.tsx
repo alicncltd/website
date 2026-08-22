@@ -40,9 +40,9 @@ export default function KoreanHome() {
             <Phone size={13} style={{ marginRight: '6px' }} />
             <span>+92 344 0708494</span>
           </a>
-          <a href="mailto:thealidevmail@gmail.com" className="top-contact-link">
+          <a href="mailto:ali@alicnc.pk" className="top-contact-link">
             <Mail size={13} style={{ marginRight: '6px' }} />
-            <span>thealidevmail@gmail.com</span>
+            <span>ali@alicnc.pk</span>
           </a>
         </div>
       </div>
@@ -274,8 +274,8 @@ export default function KoreanHome() {
                 <div className="method-info">
                   <h3>이메일 기술 문서 접수</h3>
                   <p>용량이 큰 캐드 원본 도면 파일(.DWG, .DXF)은 이메일로 첨부해 주시면 신속 판독합니다.</p>
-                  <a href="mailto:thealidevmail@gmail.com" className="btn-outline full-width">
-                    thealidevmail@gmail.com
+                  <a href="mailto:ali@alicnc.pk" className="btn-outline full-width">
+                    ali@alicnc.pk
                   </a>
                 </div>
               </AnimatedCard>

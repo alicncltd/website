@@ -202,8 +202,8 @@ export default function Home() {
                 <div className="method-info">
                   <h3>{t("contact.email_title")}</h3>
                   <p>{t("contact.email_desc")}</p>
-                  <a href="mailto:thealidevmail@gmail.com" className="btn-outline full-width">
-                    thealidevmail@gmail.com
+                  <a href="mailto:ali@alicnc.pk" className="btn-outline full-width">
+                    ali@alicnc.pk
                   </a>
                 </div>
               </AnimatedCard>

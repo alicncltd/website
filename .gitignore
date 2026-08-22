@@ -46,3 +46,11 @@ DEPLOYMENT_INSTRUCTIONS.txt
 # WhatsApp session state & zip backups
 .wwebjs_auth/
 session.zip
+
+# Python Virtual Environments and Cache folders
+venv/
+.pytest_cache/
+__pycache__/
+*.pyc
+backend/temp/
+backend/oracle_ai/Outputs/*.png

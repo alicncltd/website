@@ -7,7 +7,7 @@ import Navbar from "../../../components/Navbar";
 import { QRCodeSVG } from "qrcode.react";
 import { 
   Phone, User, Server, QrCode, Wifi, WifiOff, LogOut, 
-  Radio, Mic, MicOff, Volume2, Calendar, FileText, CheckCircle 
+  Radio, Mic, MicOff, Volume2, Calendar, FileText, CheckCircle, Newspaper, RefreshCw
 } from "lucide-react";
 import "./dashboard.css";
 
@@ -34,6 +34,11 @@ export default function PrivateDashboard() {
   const [callLogs, setCallLogs] = useState<CallLog[]>([]);
   const [isCallerSpeaking, setIsCallerSpeaking] = useState(false);
   
+  // News Briefing States
+  const [briefing, setBriefing] = useState<{ summary: string; news: any[] } | null>(null);
+  const [loadingBriefing, setLoadingBriefing] = useState(false);
+  const [syncingNews, setSyncingNews] = useState(false);
+  
   const router = useRouter();
   const supabase = createClient();
   const socketRef = useRef<WebSocket | null>(null);
@@ -41,6 +46,39 @@ export default function PrivateDashboard() {
   const audioContextRef = useRef<AudioContext | null>(null);
   const micProcessorRef = useRef<ScriptProcessorNode | null>(null);
   const micStreamRef = useRef<MediaStream | null>(null);
+
+  // Fetch News Briefing (last 6h)
+  const fetchNewsBriefing = async () => {
+    setLoadingBriefing(true);
+    try {
+      const res = await fetch("/api/proxy?endpoint=/api/admin/news-briefing");
+      if (res.ok) {
+        const data = await res.json();
+        setBriefing(data);
+      }
+    } catch (e) {
+      console.error("Failed to fetch news briefing:", e);
+    } finally {
+      setLoadingBriefing(false);
+    }
+  };
+
+  // Sync news manually
+  const triggerNewsSync = async () => {
+    setSyncingNews(true);
+    try {
+      const res = await fetch("/api/proxy?endpoint=/api/admin/sync-news", {
+        method: "POST"
+      });
+      if (res.ok) {
+        await fetchNewsBriefing();
+      }
+    } catch (e) {
+      console.error("Failed to sync news feed:", e);
+    } finally {
+      setSyncingNews(false);
+    }
+  };
 
   // 1. Authenticate Admin User on Mount
   useEffect(() => {
@@ -53,6 +91,7 @@ export default function PrivateDashboard() {
           setIsAdmin(true);
           setLoading(false);
           fetchHistoricalLogs();
+          fetchNewsBriefing();
         }
       } catch (err) {
         console.error("Auth verification failed:", err);
@@ -413,6 +452,94 @@ export default function PrivateDashboard() {
                 </tbody>
               </table>
             </div>
+          </section>
+
+          {/* News Briefing Panel */}
+          <section className="news-briefing-panel glass-panel" style={{ gridColumn: "span 2", marginTop: "1rem" }}>
+            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "1.5rem", borderBottom: "1px solid var(--glass-border)", paddingBottom: "0.75rem" }}>
+              <h2 className="panel-title" style={{ margin: 0, border: "none", padding: 0, display: "flex", alignItems: "center", gap: "8px" }}>
+                <Newspaper size={20} className="text-sky-500" />
+                6-Hour Geopolitical Intel Briefing
+              </h2>
+              <button 
+                onClick={triggerNewsSync} 
+                disabled={syncingNews}
+                className="btn-outline" 
+                style={{ padding: "0.4rem 0.8rem", fontSize: "0.85rem", display: "flex", alignItems: "center", gap: "6px" }}
+              >
+                <RefreshCw size={14} className={syncingNews ? "animate-spin" : ""} />
+                {syncingNews ? "Syncing..." : "Sync Feeds Now"}
+              </button>
+            </div>
+
+            {loadingBriefing ? (
+              <div style={{ textAlign: "center", padding: "3rem", color: "var(--text-secondary)" }}>
+                <RefreshCw size={24} className="animate-spin" style={{ margin: "0 auto 12px" }} />
+                <p>Generating briefing via Gemini AI...</p>
+              </div>
+            ) : briefing ? (
+              <div style={{ display: "flex", flexDirection: "column", gap: "1.5rem" }}>
+                {/* AI Executive Briefing Summary */}
+                <div style={{ background: "rgba(14, 165, 233, 0.03)", borderLeft: "4px solid var(--accent-color)", padding: "1.5rem", borderRadius: "0 12px 12px 0" }}>
+                  <h3 style={{ fontSize: "1rem", fontWeight: "700", marginBottom: "0.5rem", color: "var(--text-primary)" }}>
+                    Geopolitical Executive Summary
+                  </h3>
+                  <p style={{ fontSize: "0.95rem", lineHeight: "1.6", color: "var(--text-primary)", margin: 0 }}>
+                    {briefing.summary || "No active intelligence summary computed for this interval."}
+                  </p>
+                </div>
+
+                {/* Aggregated Feeds Table */}
+                <div>
+                  <h3 style={{ fontSize: "1rem", fontWeight: "700", marginBottom: "1rem", color: "var(--text-primary)" }}>
+                    Chronological Aggregated Sources (Last 6 Hours)
+                  </h3>
+                  <div className="logs-table-wrapper" style={{ maxHeight: "300px" }}>
+                    <table className="logs-table">
+                      <thead>
+                        <tr>
+                          <th>Time</th>
+                          <th>Source</th>
+                          <th>Author</th>
+                          <th>Article Heading / Statement</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {briefing.news && briefing.news.length > 0 ? (
+                          briefing.news.map((item, idx) => (
+                            <tr key={idx}>
+                              <td style={{ whiteSpace: "nowrap", fontSize: "0.85rem", color: "var(--text-secondary)" }}>
+                                {new Date(item.published_at).toLocaleTimeString()}
+                              </td>
+                              <td>
+                                <span className="badge-status responded" style={{ textTransform: "uppercase" }}>
+                                  {item.source}
+                                </span>
+                              </td>
+                              <td style={{ fontWeight: 600 }}>{item.author || "N/A"}</td>
+                              <td>{item.title}</td>
+                            </tr>
+                          ))
+                        ) : (
+                          <tr>
+                            <td colSpan={4} style={{ textAlign: "center", padding: "2rem", color: "var(--text-secondary)" }}>
+                              No news articles aggregated in the last 6 hours. Click "Sync Feeds Now" to fetch latest feeds.
+                            </td>
+                          </tr>
+                        )}
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              </div>
+            ) : (
+              <div style={{ textAlign: "center", padding: "3rem", color: "var(--text-secondary)" }}>
+                <p>No recent news briefing loaded.</p>
+                <button onClick={fetchNewsBriefing} className="btn-primary" style={{ marginTop: "1rem", padding: "0.6rem 1.2rem" }}>
+                  Load Briefing
+                </button>
+              </div>
+            )}
           </section>
 
         </div>

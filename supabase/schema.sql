@@ -42,3 +42,26 @@ CREATE POLICY "Allow full access for service role on catalog_items" ON catalog_i
 
 CREATE POLICY "Allow full access for service role on system_logs" ON system_logs
   FOR ALL USING (true);
+
+-- Table for storing aggregated news (last 6 hours)
+CREATE TABLE IF NOT EXISTS aggregated_news (
+  id BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+  source TEXT NOT NULL,         -- 'google_news', 'reuters', 'truth_social', 'twitter'
+  author TEXT,                  -- e.g., 'Donald Trump', 'Reuters Editor'
+  title TEXT NOT NULL,
+  content TEXT,
+  url TEXT,
+  published_at TIMESTAMPTZ NOT NULL,
+  created_at TIMESTAMPTZ DEFAULT NOW()
+);
+
+-- Enable RLS
+ALTER TABLE aggregated_news ENABLE ROW LEVEL SECURITY;
+
+-- Policies for aggregated_news
+CREATE POLICY "Allow public read access to aggregated_news" ON aggregated_news
+  FOR SELECT USING (true);
+
+CREATE POLICY "Allow full access for service role on aggregated_news" ON aggregated_news
+  FOR ALL USING (true);
+

@@ -10,7 +10,7 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
-  metadataBase: new URL("https://www.alicnc.online"),
+  metadataBase: new URL("https://www.alicnc.pk"),
   title: {
     default: "Ali CNC | High-Precision 3D Modeling & CNC",
     template: "%s | Ali CNC"
@@ -20,7 +20,7 @@ export const metadata: Metadata = {
   authors: [{ name: "Ali CNC" }],
   creator: "Ali CNC",
   alternates: {
-    canonical: "https://www.alicnc.online",
+    canonical: "https://www.alicnc.pk",
   },
   icons: {
     icon: "/logo_final.svg",
@@ -29,7 +29,7 @@ export const metadata: Metadata = {
   openGraph: {
     type: "website",
     locale: "en_PK",
-    url: "https://www.alicnc.online",
+    url: "https://www.alicnc.pk",
     title: "Ali CNC | High-Precision 3D Modeling & CNC",
     description: "Expert CNC Fabrication and 3D Modeling services in Rawalpindi, Pakistan.",
     siteName: "Ali CNC",
@@ -55,8 +55,8 @@ const jsonLd = {
   "@context": "https://schema.org",
   "@type": "ProfessionalService",
   "name": "Ali CNC Private Limited",
-  "image": "https://www.alicnc.online/logo_final.png",
-  "url": "https://www.alicnc.online",
+  "image": "https://www.alicnc.pk/logo_final.png",
+  "url": "https://www.alicnc.pk",
   "telephone": "+923440708494",
   "address": {
     "@type": "PostalAddress",
