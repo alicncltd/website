@@ -86,7 +86,18 @@ class BaseAnalyst(ABC):
 
         metadata: dict | None = None,
 
+        **kwargs
+
     ) -> Evidence:
+
+        if metadata is None:
+            metadata = {}
+
+        if "importance" in kwargs:
+            weight = kwargs.pop("importance")
+
+        for k, v in kwargs.items():
+            metadata[k] = v
 
         return Evidence(
 
@@ -108,7 +119,7 @@ class BaseAnalyst(ABC):
 
             reason=reason,
 
-            metadata=metadata or {}
+            metadata=metadata
 
         )
 

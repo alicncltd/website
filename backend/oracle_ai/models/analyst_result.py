@@ -82,6 +82,9 @@ class AnalystResult:
     def add(self, evidence: Evidence) -> None:
         self.evidence.append(evidence)
 
+    def add_evidence(self, evidence: Evidence) -> None:
+        self.add(evidence)
+
     def extend(self, evidence: list[Evidence]) -> None:
         self.evidence.extend(evidence)
 
