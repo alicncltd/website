@@ -41,22 +41,23 @@ export default function WebhookPage() {
     };
   };
 
-  const fetchEventsFeed = async () => {
-    try {
-      const res = await fetch("/api/proxy?endpoint=/api/tools/webhook/events");
-      if (res.ok) {
-        const data = await res.json();
-        setEvents(data);
+  const fetchEventsFeed = () => {
+    if (typeof window !== "undefined") {
+      try {
+        const stored = localStorage.getItem("alicnc_webhook_events");
+        if (stored) {
+          setEvents(JSON.parse(stored));
+        }
+      } catch (e) {
+        console.error("Failed to load local webhooks:", e);
       }
-    } catch (e) {
-      console.error("Failed to fetch webhook log feed:", e);
     }
   };
 
-  // Poll event logs on mount
+  // Poll event logs on mount (sync with localstorage changes)
   useEffect(() => {
     fetchEventsFeed();
-    const interval = setInterval(fetchEventsFeed, 3000);
+    const interval = setInterval(fetchEventsFeed, 2000);
     return () => clearInterval(interval);
   }, []);
 
@@ -67,40 +68,77 @@ export default function WebhookPage() {
       setLastDispatchedEventId(eventId);
     }
 
-    try {
-      const res = await fetch("/api/tools/webhook/ingest", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          eventId,
-          type: eventType,
-          payload: getPayloadTemplate()
-        })
-      });
+    // Artificial network lag
+    await new Promise((r) => setTimeout(r, 600));
 
-      if (res.ok) {
-        await fetchEventsFeed();
-      }
-    } catch (e) {
-      console.error("Simulation trigger failed:", e);
-    } finally {
+    const currentEvents = [...events];
+    const isDuplicate = currentEvents.some((e) => e.eventId === eventId);
+
+    if (isDuplicate) {
+      // Idempotency log
+      const updatedEvents = currentEvents.map((evt) => {
+        if (evt.eventId === eventId) {
+          return {
+            ...evt,
+            status: "ALREADY_PROCESSED" as const,
+            logs: [
+              ...evt.logs,
+              `[${new Date().toLocaleTimeString()}] Ignored duplicate delivery attempt. Idempotency guard passed.`
+            ]
+          };
+        }
+        return evt;
+      });
+      localStorage.setItem("alicnc_webhook_events", JSON.stringify(updatedEvents));
+      setEvents(updatedEvents);
       setLoading(false);
+      return;
     }
+
+    const shouldFail = Math.random() < 0.3;
+    const status = shouldFail ? "FAILED" : "PROCESSED";
+    
+    const webhookEntry: WebhookEvent = {
+      eventId,
+      type: eventType,
+      payload: getPayloadTemplate(),
+      status,
+      retryCount: 0,
+      timestamp: new Date().toISOString(),
+      logs: [`[${new Date().toLocaleTimeString()}] Local Event ingested.`]
+    };
+
+    if (shouldFail) {
+      webhookEntry.logs.push(`[${new Date().toLocaleTimeString()}] ERROR: Local Database lock timeout. Sent to Dead-Letter Queue (DLQ).`);
+    } else {
+      webhookEntry.logs.push(`[${new Date().toLocaleTimeString()}] SUCCESS: Payment sync completed on local device.`);
+    }
+
+    const updated = [webhookEntry, ...currentEvents].slice(0, 50);
+    localStorage.setItem("alicnc_webhook_events", JSON.stringify(updated));
+    setEvents(updated);
+    setLoading(false);
   };
 
   const handleRetryEvent = async (eventId: string) => {
-    try {
-      const res = await fetch("/api/proxy?endpoint=/api/tools/webhook/retry", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ eventId })
-      });
-      if (res.ok) {
-        await fetchEventsFeed();
+    const updated = events.map((evt) => {
+      if (evt.eventId === eventId) {
+        return {
+          ...evt,
+          status: "PROCESSED" as const,
+          retryCount: evt.retryCount + 1,
+          logs: [
+            ...evt.logs,
+            `[${new Date().toLocaleTimeString()}] Local Retry attempt #${evt.retryCount + 1} initiated.`,
+            `[${new Date().toLocaleTimeString()}] SUCCESS: Local database locks resolved. Sync completed.`
+          ]
+        };
       }
-    } catch (e) {
-      console.error("Retry execution failed:", e);
-    }
+      return evt;
+    });
+
+    localStorage.setItem("alicnc_webhook_events", JSON.stringify(updated));
+    setEvents(updated);
   };
 
   const failedEvents = events.filter((e) => e.status === "FAILED");

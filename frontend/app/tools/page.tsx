@@ -24,9 +24,25 @@ export default function ToolsDashboard() {
             <h1 className="section-title" style={{ marginBottom: "1rem" }}>
               Ali CNC <span className="gradient-text">Tools Suite</span>
             </h1>
-            <p className="hero-description" style={{ margin: "0 auto", maxWidth: "600px" }}>
+            <p className="hero-description" style={{ margin: "0 auto 1.5rem", maxWidth: "600px" }}>
               Advanced CAD/CAM, vector processing, and CNC optimization utilities designed to streamline your workshop workflow.
             </p>
+            
+            {/* Client-Side API Key Config */}
+            <div style={{ maxWidth: "500px", margin: "0 auto", padding: "1rem", background: "var(--glass-bg)", borderRadius: "12px", border: "1px solid var(--glass-border)", display: "flex", gap: "10px", alignItems: "center" }}>
+              <input
+                type="password"
+                placeholder="Enter Gemini API Key (Stored locally in browser)"
+                defaultValue={typeof window !== "undefined" ? localStorage.getItem("alicnc_gemini_api_key") || "" : ""}
+                onChange={(e) => {
+                  if (typeof window !== "undefined") {
+                    localStorage.setItem("alicnc_gemini_api_key", e.target.value);
+                  }
+                }}
+                style={{ flex: 1, background: "rgba(0,0,0,0.3)", border: "1px solid rgba(255,255,255,0.1)", borderRadius: "8px", padding: "0.5rem 0.8rem", color: "white", fontSize: "0.9rem", outline: "none" }}
+              />
+              <span style={{ fontSize: "0.75rem", color: "#10b981", fontWeight: "600" }}>Local Mode</span>
+            </div>
           </div>
 
           {/* Tools Grid */}

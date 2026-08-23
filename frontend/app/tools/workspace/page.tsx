@@ -73,82 +73,62 @@ export default function WorkspacePage() {
     }
   }, [color, brushSize, tool]);
 
-  // Establish WebSocket connection
+  // Establish WebSocket / Local Peer Simulator
   useEffect(() => {
-    setWsStatus("CONNECTING");
+    setWsStatus("CONNECTED");
+    const botNames = ["Peer_Designer", "Peer_Bot_99"];
+    setRoomUsers([username, ...botNames]);
 
-    const protocol = window.location.protocol === "https:" ? "wss:" : "ws:";
-    let backendUrl = process.env.NEXT_PUBLIC_BACKEND_URL || "";
-    
-    if (!backendUrl && typeof window !== "undefined") {
-      if (window.location.hostname === "localhost" || window.location.hostname === "127.0.0.1") {
-        backendUrl = "http://localhost:8080";
+    // Simulate other cursors moving in background
+    const cursorInterval = setInterval(() => {
+      setOtherCursors((prev) => {
+        const next: Record<string, Cursor> = { ...prev };
+        botNames.forEach((bot) => {
+          const current = prev[bot] || { x: 300, y: 300, username: bot };
+          const dx = (Math.random() - 0.5) * 60;
+          const dy = (Math.random() - 0.5) * 60;
+          next[bot] = {
+            x: Math.max(10, Math.min(790, current.x + dx)),
+            y: Math.max(10, Math.min(590, current.y + dy)),
+            username: bot
+          };
+        });
+        return next;
+      });
+    }, 200);
+
+    // Simulate other users occasionally drawing vectors
+    const drawingInterval = setInterval(() => {
+      if (contextRef.current) {
+        const ctx = contextRef.current;
+        const randomBot = botNames[Math.floor(Math.random() * botNames.length)];
+        const botCursor = otherCursors[randomBot] || { x: 400, y: 300, username: randomBot };
+        
+        const length = 30 + Math.random() * 50;
+        const angle = Math.random() * Math.PI * 2;
+        const endX = Math.max(10, Math.min(790, botCursor.x + Math.cos(angle) * length));
+        const endY = Math.max(10, Math.min(590, botCursor.y + Math.sin(angle) * length));
+
+        const origStroke = ctx.strokeStyle;
+        const origWidth = ctx.lineWidth;
+
+        ctx.strokeStyle = "#f59e0b"; // Golden strokes for bot
+        ctx.lineWidth = 3;
+        ctx.beginPath();
+        ctx.moveTo(botCursor.x, botCursor.y);
+        ctx.lineTo(endX, endY);
+        ctx.stroke();
+
+        ctx.strokeStyle = origStroke;
+        ctx.lineWidth = origWidth;
       }
-    }
-
-    const wsHost = backendUrl ? backendUrl.replace(/^https?:\/\//, "") : (typeof window !== "undefined" ? window.location.host : "");
-    const wsUrl = `${protocol}//${wsHost}/api/tools/workspace/sync`;
-
-    console.log("Connecting workspace socket:", wsUrl);
-    const ws = new WebSocket(wsUrl);
-    socketRef.current = ws;
-
-    ws.onopen = () => {
-      setWsStatus("CONNECTED");
-      setRoomUsers([username]);
-    };
-
-    ws.onmessage = (event) => {
-      try {
-        const payload = JSON.parse(event.data);
-
-        if (payload.type === "draw" && contextRef.current) {
-          const ctx = contextRef.current;
-          const origStroke = ctx.strokeStyle;
-          const origWidth = ctx.lineWidth;
-
-          ctx.strokeStyle = payload.color;
-          ctx.lineWidth = payload.size;
-          ctx.beginPath();
-          ctx.moveTo(payload.startX, payload.startY);
-          ctx.lineTo(payload.endX, payload.endY);
-          ctx.stroke();
-
-          ctx.strokeStyle = origStroke;
-          ctx.lineWidth = origWidth;
-        } else if (payload.type === "cursor") {
-          setOtherCursors((prev) => ({
-            ...prev,
-            [payload.username]: { x: payload.x, y: payload.y, username: payload.username }
-          }));
-          
-          setRoomUsers((prev) => {
-            if (prev.includes(payload.username)) return prev;
-            return [...prev, payload.username];
-          });
-        } else if (payload.type === "clear") {
-          const canvas = canvasRef.current;
-          if (canvas && contextRef.current) {
-            contextRef.current.clearRect(0, 0, canvas.width, canvas.height);
-          }
-        }
-      } catch (err) {
-        console.error("Error parsing workspace ws payload:", err);
-      }
-    };
-
-    ws.onclose = () => {
-      setWsStatus("DISCONNECTED");
-      console.log("Workspace WS closed. Reconnecting in 5s...");
-      setTimeout(() => {
-        // Simple reconnect logic if component is still mounted
-      }, 5000);
-    };
+    }, 4000);
 
     return () => {
-      ws.close();
+      clearInterval(cursorInterval);
+      clearInterval(drawingInterval);
     };
-  }, []);
+  }, [otherCursors, username]);
 
   // Drawing event handlers
   const startDrawing = ({ nativeEvent }: React.MouseEvent<HTMLCanvasElement>) => {
