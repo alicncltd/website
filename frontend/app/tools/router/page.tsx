@@ -29,92 +29,24 @@ export default function RouterPage() {
     setError("");
     setResult(null);
 
-    const start = Date.now();
-    let chosenModel = "gemini-2.0-flash";
-    let modelLabel = "Gemini 2.0 Flash (Fast/Cheap)";
-    let costPerMillionInput = 0.075;
-    let costPerMillionOutput = 0.30;
+    try {
+      const res = await fetch("/api/proxy?endpoint=/api/tools/router", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ prompt, mode })
+      });
 
-    const promptLower = prompt.toLowerCase();
-    const isComplex = prompt.length > 100 || 
-                      promptLower.includes("explain") || 
-                      promptLower.includes("code") || 
-                      promptLower.includes("program") || 
-                      promptLower.includes("architect") ||
-                      mode === "quality";
-
-    if (isComplex && mode !== "cost") {
-      chosenModel = "gemini-2.5-pro";
-      modelLabel = "Gemini 2.5 Pro (Complex Reasoning)";
-      costPerMillionInput = 1.25;
-      costPerMillionOutput = 5.00;
-    }
-
-    const localApiKey = typeof window !== "undefined" ? localStorage.getItem("alicnc_gemini_api_key") || "" : "";
-
-    if (localApiKey) {
-      try {
-        const res = await fetch(
-          `https://generativelanguage.googleapis.com/v1beta/models/${chosenModel}:generateContent?key=${localApiKey}`,
-          {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({
-              contents: [{ parts: [{ text: prompt }] }]
-            })
-          }
-        );
-
-        if (!res.ok) {
-          throw new Error(`API returned status ${res.status}: ${await res.text()}`);
-        }
-
-        const data = await res.json();
-        const text = data.candidates?.[0]?.content?.parts?.[0]?.text || "Empty response.";
-        const inputTokens = Math.ceil(prompt.length / 4);
-        const outputTokens = Math.ceil(text.length / 4);
-        const cost = ((inputTokens * costPerMillionInput) + (outputTokens * costPerMillionOutput)) / 1000000;
-
-        setResult({
-          model: modelLabel,
-          latency: Date.now() - start,
-          cost: Number(cost.toFixed(6)),
-          inputTokens,
-          outputTokens,
-          text
-        });
-      } catch (err: any) {
-        console.error(err);
-        setError(err.message || "Failed to contact Gemini API directly from browser.");
-      } finally {
-        setLoading(false);
+      const data = await res.json();
+      if (!res.ok || data.error) {
+        throw new Error(data.error || "Routing execution failed.");
       }
-    } else {
-      // Simulate local heuristic routing response
-      setTimeout(() => {
-        const mockResponse = `[Local Simulation Mode - Enter Gemini API Key on Tools page for real answers]
-Heuristics evaluated:
-- Prompt length: ${prompt.length} characters
-- Complexity flag: ${isComplex ? "COMPLEX" : "SIMPLE"}
-- Strategy selected: ${mode.toUpperCase()}
 
-Simulated Response content resolving query: "${prompt.substring(0, 40)}..."
-This is a client-side mockup generated instantly.`;
-
-        const inputTokens = Math.ceil(prompt.length / 4);
-        const outputTokens = Math.ceil(mockResponse.length / 4);
-        const cost = ((inputTokens * costPerMillionInput) + (outputTokens * costPerMillionOutput)) / 1000000;
-
-        setResult({
-          model: modelLabel + " (Mocked)",
-          latency: Date.now() - start,
-          cost: Number(cost.toFixed(6)),
-          inputTokens,
-          outputTokens,
-          text: mockResponse
-        });
-        setLoading(false);
-      }, 800);
+      setResult(data);
+    } catch (err: any) {
+      console.error(err);
+      setError(err.message || "Model router is currently offline.");
+    } finally {
+      setLoading(false);
     }
   };
 

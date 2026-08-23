@@ -268,6 +268,58 @@ ${scrapedText}`;
       return NextResponse.json({ results: parsedResults });
     }
 
+    // Serverless Fallback for EchoDesk Chat
+    if (endpoint === "/api/tools/echodesk/chat") {
+      const { prompt } = body;
+      let text = "Welcome to Ali CNC™ support. Let me log your interest.";
+      if (geminiApiKey) {
+        try {
+          const apiRes = await fetch(
+            `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${geminiApiKey}`,
+            {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({ contents: [{ parts: [{ text: prompt }] }] })
+            }
+          );
+          if (apiRes.ok) {
+            const json = await apiRes.json();
+            text = json.candidates?.[0]?.content?.parts?.[0]?.text || text;
+          }
+        } catch {}
+      }
+      return NextResponse.json({ text });
+    }
+
+    // Serverless Fallback for EchoDesk Summary
+    if (endpoint === "/api/tools/echodesk/summary") {
+      const { transcript } = body;
+      let summary = "Customer requested booking details. Verified address and logged to CRM.";
+      if (geminiApiKey) {
+        try {
+          const apiRes = await fetch(
+            `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${geminiApiKey}`,
+            {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({
+                contents: [{
+                  parts: [{
+                    text: `Evaluate the following phone call transcript:\n${transcript.join("\n")}\nCompile a 2-sentence summary of the customer's issue, the outcome, and indicate if an appointment was booked.`
+                  }]
+                }]
+              })
+            }
+          );
+          if (apiRes.ok) {
+            const json = await apiRes.json();
+            summary = json.candidates?.[0]?.content?.parts?.[0]?.text || summary;
+          }
+        } catch {}
+      }
+      return NextResponse.json({ summary });
+    }
+
     // Default Webhook Simulator fallback
     if (endpoint === "/api/tools/webhook/ingest") {
       const { eventId } = body;

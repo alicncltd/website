@@ -26,62 +26,19 @@ export default function GeopoliticalNewsPage() {
   const fetchBriefingData = async () => {
     setLoading(true);
     setError("");
-    
-    const localApiKey = typeof window !== "undefined" ? localStorage.getItem("alicnc_gemini_api_key") || "" : "";
-    const syncedNews = typeof window !== "undefined" ? localStorage.getItem("alicnc_synced_news") : null;
-    
-    if (syncedNews) {
-      try {
-        const parsed = JSON.parse(syncedNews);
-        setArticles(parsed);
-        
-        // Load summary if stored
-        const storedSummary = localStorage.getItem("alicnc_news_summary");
-        if (storedSummary) {
-          setSummary(storedSummary);
-          setLoading(false);
-          return;
-        }
-      } catch (e) {
-        console.error("Failed to parse cached local news:", e);
-      }
-    }
+    try {
+      const res = await fetch("/api/proxy?endpoint=/api/admin/news-briefing");
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error || "Failed to fetch briefing.");
 
-    // Default mock dataset if no sync has run yet
-    const defaultMock: NewsItem[] = [
-      { id: 1, source: "google_news", author: "Global Press", title: "Global industrial automation index sees positive growth in Q3", url: "https://news.google.com", published_at: new Date(Date.now() - 2 * 60 * 60 * 1000).toISOString() },
-      { id: 2, source: "reuters", author: "Reuters Editor", title: "Automated logistics networks expand across central logistics hubs", url: "https://reuters.com", published_at: new Date(Date.now() - 4 * 60 * 60 * 1000).toISOString() },
-      { id: 3, source: "truth_social", author: "Donald Trump", title: "We are bringing back production plants and CNC automation like never before! Big news soon!", url: "https://truthsocial.com", published_at: new Date(Date.now() - 5 * 60 * 60 * 1000).toISOString() }
-    ];
-
-    setArticles(defaultMock);
-    
-    if (localApiKey) {
-      try {
-        const headlines = defaultMock.map(a => `[${a.source.toUpperCase()}] ${a.title}`).join("\n");
-        const prompt = `Evaluate the following global geopolitical and policy headlines:
-${headlines}
-Provide a concise intelligence summary. Focus on trade policy, manufacturing, and macro trends.`;
-        
-        const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${localApiKey}`, {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ contents: [{ parts: [{ text: prompt }] }] })
-        });
-        
-        if (res.ok) {
-          const data = await res.json();
-          const txt = data.candidates?.[0]?.content?.parts?.[0]?.text || "No summary resolved.";
-          setSummary(txt);
-          localStorage.setItem("alicnc_news_summary", txt);
-        }
-      } catch (err) {
-        console.error("Local Gemini summary failed:", err);
-      }
-    } else {
-      setSummary("[Local Simulation Mode - Enter Gemini API Key in Settings for live briefings]\n\nGlobal manufacturing indicators show steady expansion. CNC machinery interest spikes as B2B trade tariffs enter review discussions. Intraday whale spot trade balances continue consolidation.");
+      setArticles(data.newsItems || []);
+      setSummary(data.summary || "");
+    } catch (e: any) {
+      console.error(e);
+      setError(e.message || "Failed to load geopolitical briefing.");
+    } finally {
+      setLoading(false);
     }
-    setLoading(false);
   };
 
   useEffect(() => {
@@ -92,95 +49,41 @@ Provide a concise intelligence summary. Focus on trade policy, manufacturing, an
     setSyncing(true);
     setError("");
     setSuccessMsg("");
-    
-    const localApiKey = typeof window !== "undefined" ? localStorage.getItem("alicnc_gemini_api_key") || "" : "";
-    const scrapedList: NewsItem[] = [];
-    
     try {
-      // Crawl Google News via public CORS proxy
-      const feedUrl = "https://news.google.com/rss/search?q=world+news+when:6h&hl=en-US&gl=US&ceid=US:en";
-      const corsProxy = `https://api.allorigins.win/get?url=${encodeURIComponent(feedUrl)}`;
-      const res = await fetch(corsProxy);
-      
-      if (res.ok) {
-        const json = await res.json();
-        const xmlText = json.contents || "";
-        
-        const parser = new DOMParser();
-        const xmlDoc = parser.parseFromString(xmlText, "text/xml");
-        const items = xmlDoc.getElementsByTagName("item");
-        
-        for (let i = 0; i < Math.min(items.length, 10); i++) {
-          const item = items[i];
-          const title = item.getElementsByTagName("title")[0]?.textContent || "Global News Update";
-          const link = item.getElementsByTagName("link")[0]?.textContent || "https://news.google.com";
-          const pubDate = item.getElementsByTagName("pubDate")[0]?.textContent || new Date().toISOString();
-          
-          scrapedList.push({
-            id: Math.floor(Math.random() * 100000),
-            source: "google_news",
-            author: "RSS Feed",
-            title,
-            url: link,
-            published_at: new Date(pubDate).toISOString()
-          });
-        }
-      }
-    } catch (e) {
-      console.warn("Client RSS crawl failed, using localized mock news pipeline.");
-    }
+      const res = await fetch("/api/proxy?endpoint=/api/admin/sync-news", {
+        method: "POST"
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error || "Sync failed.");
 
-    // Add Truth Social simulated posts
-    scrapedList.push({
-      id: Math.floor(Math.random() * 100000),
-      source: "truth_social",
-      author: "Donald Trump",
-      title: "Strong tariff policies will push localized industrial plant development! MAKE AMERICA AUTOMATED!",
-      url: "https://truthsocial.com",
-      published_at: new Date(Date.now() - 30 * 60 * 1000).toISOString()
-    });
-
-    if (scrapedList.length > 0) {
-      localStorage.setItem("alicnc_synced_news", JSON.stringify(scrapedList));
-      setArticles(scrapedList);
-      setSuccessMsg(`Successfully aggregated ${scrapedList.length} recent local articles!`);
-      
-      if (localApiKey) {
-        try {
-          const headlines = scrapedList.map(a => `[${a.source.toUpperCase()}] ${a.title}`).join("\n");
-          const prompt = `Evaluate the following list of global headlines:
-${headlines}
-Provide a concise geopolitical intelligence digest. Summarize the macro trend and key headlines.`;
-          
-          const gRes = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${localApiKey}`, {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ contents: [{ parts: [{ text: prompt }] }] })
-          });
-          
-          if (gRes.ok) {
-            const data = await gRes.json();
-            const txt = data.candidates?.[0]?.content?.parts?.[0]?.text || "";
-            setSummary(txt);
-            localStorage.setItem("alicnc_news_summary", txt);
-          }
-        } catch (sumErr) {
-          console.error("Local Gemini summary failed:", sumErr);
-        }
-      }
+      setSuccessMsg(`Successfully aggregated ${data.count} recent feed articles!`);
+      await fetchBriefingData();
+    } catch (e: any) {
+      console.error(e);
+      setError(e.message || "Failed to trigger RSS live sync.");
+    } finally {
+      setSyncing(false);
     }
-    setSyncing(false);
   };
 
   const handleSendEmailReport = async () => {
     setEmailing(true);
     setError("");
     setSuccessMsg("");
-    
-    // Simulate compilation delay
-    await new Promise((r) => setTimeout(r, 1200));
-    setSuccessMsg("Local audit report PDF compiled on browser. Automated emailing requires backend proxy credentials (safeguarded on local server).");
-    setEmailing(false);
+    try {
+      const res = await fetch("/api/proxy?endpoint=/api/admin/audit", {
+        method: "POST"
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error || "Email audit trigger failed.");
+
+      setSuccessMsg("Automated health & geopolitical news PDF audit emailed successfully to ali@alicnc.pk!");
+    } catch (e: any) {
+      console.error(e);
+      setError(e.message || "Failed to email PDF report.");
+    } finally {
+      setEmailing(false);
+    }
   };
 
   const formatSourceLabel = (src: string) => {

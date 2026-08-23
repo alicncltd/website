@@ -162,42 +162,26 @@ export default function EchoDeskPage() {
     setChatLog(newChat);
     setInputText("");
 
-    if (localApiKey) {
-      try {
-        const fullPrompt = `${persona}\n\nCall History:\n${newChat.map(c => `${c.sender.toUpperCase()}: ${c.text}`).join("\n")}\nAI:`;
-        
-        const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${localApiKey}`, {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ contents: [{ parts: [{ text: fullPrompt }] }] })
-        });
+    try {
+      const fullPrompt = `${persona}\n\nCall History:\n${newChat.map(c => `${c.sender.toUpperCase()}: ${c.text}`).join("\n")}\nAI:`;
+      
+      const res = await fetch("/api/proxy?endpoint=/api/tools/echodesk/chat", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ prompt: fullPrompt })
+      });
 
-        if (res.ok) {
-          const data = await res.json();
-          const responseText = data.candidates?.[0]?.content?.parts?.[0]?.text || "I understand. Let me check that.";
-          setChatLog([...newChat, { sender: "ai", text: responseText }]);
-          speakAloud(responseText);
-        } else {
-          throw new Error();
-        }
-      } catch {
-        const fallback = "Got it. Let me note that down for our main coordinator.";
-        setChatLog([...newChat, { sender: "ai", text: fallback }]);
-        speakAloud(fallback);
-      }
-    } else {
-      // Offline heuristic reply
-      setTimeout(() => {
-        let reply = "I've noted that down. Let me coordinate an appointment slots lookup.";
-        const low = text.toLowerCase();
-        if (low.includes("price") || low.includes("cost")) {
-          reply = "Standard service visits are $89, plus parts. Would you like to secure a time slot?";
-        } else if (low.includes("leak") || low.includes("burst") || low.includes("urgent")) {
-          reply = "I've flagged this as high priority. Let me dispatch a technician immediately.";
-        }
-        setChatLog([...newChat, { sender: "ai", text: reply }]);
-        speakAloud(reply);
-      }, 700);
+      if (!res.ok) throw new Error("Voice chatbot server error.");
+
+      const data = await res.json();
+      const responseText = data.text || "I understand. Let me check that.";
+      setChatLog([...newChat, { sender: "ai", text: responseText }]);
+      speakAloud(responseText);
+    } catch (err) {
+      console.error(err);
+      const fallback = "I've noted that down. Let me coordinate our main dispatcher.";
+      setChatLog([...newChat, { sender: "ai", text: fallback }]);
+      speakAloud(fallback);
     }
   };
 
@@ -208,26 +192,24 @@ export default function EchoDeskPage() {
     const callTranscript = chatLog.map(c => `${c.sender === "user" ? "Customer" : "AI"}: ${c.text}`);
     const timeStr = `${Math.floor(callDuration / 60)}m ${callDuration % 60}s`;
 
-    let generatedBrief = `Local summary: Customer requested booking details. Verified address and logged to ${crmType}.`;
+    let generatedBrief = "Customer requested booking details. Verified address and logged to CRM.";
     const crmId = `TKT-${Math.floor(100000 + Math.random() * 900000)}`;
 
-    if (localApiKey && callTranscript.length > 0) {
+    if (callTranscript.length > 0) {
       try {
-        const summaryPrompt = `Evaluate the following phone call transcript:
-${callTranscript.join("\n")}
-Compile a 2-sentence summary of the customer's issue, the outcome, and indicate if an appointment was booked.`;
-
-        const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${localApiKey}`, {
+        const res = await fetch("/api/proxy?endpoint=/api/tools/echodesk/summary", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ contents: [{ parts: [{ text: summaryPrompt }] }] })
+          body: JSON.stringify({ transcript: callTranscript })
         });
 
         if (res.ok) {
           const data = await res.json();
-          generatedBrief = data.candidates?.[0]?.content?.parts?.[0]?.text || generatedBrief;
+          generatedBrief = data.summary || generatedBrief;
         }
-      } catch {}
+      } catch (err) {
+        console.error("Failed to generate voice dispatcher call brief:", err);
+      }
     }
 
     const newCall: CallSummary = {
