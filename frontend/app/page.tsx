@@ -42,7 +42,7 @@ export default function Home() {
           <Image src="/hero_bg.png" alt="High-Precision CNC Workshop Background" fill priority className="hero-bg-image" style={{ objectFit: 'cover', opacity: 0.1 }} />
           <div className="hero-content">
             <div style={{ marginBottom: '2rem' }}>
-              <Image src="/logo_final.svg" alt="Ali CNC Logo" width={220} height={120} priority style={{ margin: '0 auto', objectFit: 'contain', height: 'auto' }} />
+              <Image src="/logo_final.svg" alt="Ali CNC™ Logo" width={220} height={120} priority style={{ margin: '0 auto', objectFit: 'contain', height: 'auto' }} />
             </div>
             <span className="hero-greeting" style={{ display: 'block', marginBottom: '1rem', fontWeight: 600, color: 'var(--accent-color)', letterSpacing: '0.05em', textTransform: 'uppercase' }}>
               {t("hero.welcome")}
@@ -79,6 +79,39 @@ export default function Home() {
               <h3>{t("services.dfm_title")}</h3>
               <p>{t("services.dfm_desc")}</p>
             </AnimatedCard>
+          </div>
+        </AnimatedSection>
+
+        {/* Digital Tools Workspace Mention Section */}
+        <AnimatedSection className="section" id="workspace-tools">
+          <div style={{ background: "rgba(9, 13, 22, 0.3)", borderTop: "1px solid rgba(255,255,255,0.02)", borderBottom: "1px solid rgba(255,255,255,0.02)", padding: "4rem 1.5rem", borderRadius: "16px" }}>
+            <h2 className="section-title">
+              Advanced <span className="gradient-text">CAD/CAM & AI Utilities</span>
+            </h2>
+            <p className="hero-description" style={{ textAlign: "center", marginBottom: "4rem" }}>
+              In addition to expert digital blueprints, we provide workshop operators with interactive browser-native utilities to simulate, audit, and automate CNC jobs locally.
+            </p>
+
+            <div className="grid-3">
+              <AnimatedCard className="glass-panel service-card" delay={0.1}>
+                <h3>EchoDesk AI Voice Dispatcher</h3>
+                <p>Simulate 24/7 inbound shop phone calls using local browser speech-to-text, text-to-speech, and automatic CRM ticket booking.</p>
+              </AnimatedCard>
+              <AnimatedCard className="glass-panel service-card" delay={0.2}>
+                <h3>SVGV Frame Vectorizer</h3>
+                <p>Compress raw video frames into lightweight vector path streams using local Sobel edge and RDP contour path calculations.</p>
+              </AnimatedCard>
+              <AnimatedCard className="glass-panel service-card" delay={0.3}>
+                <h3>Multi-Model AI Router</h3>
+                <p>Instantly evaluate design prompts and token costs to route calculations to optimal LLM execution paths locally.</p>
+              </AnimatedCard>
+            </div>
+
+            <div style={{ textAlign: "center", marginTop: "3rem" }}>
+              <a href="/tools" className="btn-primary" style={{ display: "inline-flex", alignItems: "center", gap: "8px" }}>
+                Access Digital Tools Suite <ExternalLink size={16} />
+              </a>
+            </div>
           </div>
         </AnimatedSection>
 
@@ -130,6 +163,15 @@ export default function Home() {
           <h2 className="section-title">{t("experience.title_part1")} <span className="gradient-text">{t("experience.title_part2")}</span></h2>
           <div className="experience-container">
             <div className="timeline">
+              <AnimatedCard className="timeline-item glass-panel" delay={0.05}>
+                <Award className="timeline-icon" size={24} />
+                <div className="timeline-content">
+                  <h4>{t("experience.role0_title")}</h4>
+                  <h5>{t("experience.role0_subtitle")}</h5>
+                  <p className="timeline-date">{t("experience.role0_date")}</p>
+                  <p style={{ fontSize: '0.9rem', opacity: 0.8, marginTop: '0.5rem' }}>{t("experience.role0_desc")}</p>
+                </div>
+              </AnimatedCard>
               <AnimatedCard className="timeline-item glass-panel" delay={0.1}>
                 <Award className="timeline-icon" size={24} />
                 <div className="timeline-content">

@@ -11,14 +11,14 @@
     "title_part1": "High-Precision CAD/CAM",
     "title_part2": "Files & G-Code",
     "title_part3": "On Demand",
-    "description": "Stop wasting expensive lumber and composite sheets on imperfect vectors and unoptimized toolpaths. Led by veteran operator Raja Muhammad Ali Asghar, Ali CNC delivers production-ready 3D CAD files, watertight 2.5D vectors, and ultra-efficient G-code toolpaths straight to your inbox. We spent years on physical shop floors operating spindles and inhaling sawdust—so we design files that actually work on your machines. No lag, no crashed spindles, just clean, optimized cuts.",
+    "description": "Stop wasting expensive lumber and composite sheets on imperfect vectors and unoptimized toolpaths. Led by veteran operator Raja Muhammad Ali Asghar, Ali CNC™ delivers production-ready 3D CAD files, watertight 2.5D vectors, and ultra-efficient G-code toolpaths straight to your inbox. We spent years on physical shop floors operating spindles and inhaling sawdust—so we design files that actually work on your machines. No lag, no crashed spindles, just clean, optimized cuts.",
     "action": "REQUEST A B2B RAPID QUOTE"
   },
   "services": {
     "title_part1": "CAD/CAM",
     "title_part2": "Services",
     "cad_title": "3D CAD Modeling & Digital Drafting",
-    "cad_desc": "Send us your coffee-stained napkin sketches, dimensioned PDFs, or legacy blueprints. We translate them into watertight, high-precision 3D CAD files (.STEP, .IGES, .STL, .DWG) in AutoCAD and Onshape. Every draft is engineered with proper mechanical tolerances, ready for immediate nesting and fabrication on your shop floor.",
+    "cad_desc": "Send us your sketches, dimensioned PDFs, or legacy blueprints. We translate them into watertight, high-precision 3D CAD files (.STEP, .IGES, .STL, .DWG) in AutoCAD and Onshape. Every draft is engineered with proper mechanical tolerances, ready for immediate nesting and fabrication on your shop floor.",
     "cnc_title": "High-Efficiency G-Code Programming",
     "cnc_desc": "Get ultra-optimized toolpath files (.NC, .TAP, .GCODE) in Vectric Aspire tailored to your specific router spindle, feed rates, and material type. Our programming shaves hardwood and acrylic like butter—drastically reducing machine cycle times, protecting your expensive router bits from heat buildup, and keeping your spindle running smoothly.",
     "dfm_title": "DFM Checking & Toolpath Auditing",
@@ -40,7 +40,7 @@
     "q1_title": "Do you manufacture or ship physical wooden components?",
     "q1_desc": "No. We operate a 100% digital, virtual CAD/CAM file factory. We design the digital blueprints and write the G-code; you run the spindle. By remaining entirely virtual, we save you from high shipping costs, customs delays, and logistics headaches, delivering perfect digital vectors directly to your inbox.",
     "q2_title": "How do we start a project and verify the files?",
-    "q2_desc": "Simply click the WhatsApp or Email button to send us your sketches or files. We will review your requirements and provide a firm, competitive estimate. Once approved, we draft the vectors, run a full 3D simulation of the toolpaths, send you rendering validations, and deliver the final, watertight files.",
+    "q2_desc": "Simply click the WhatsApp or Email button to send us your sketches or files. We will review your requirements and provide a firm, competitive estimate. Once approved, we draft the vectors, run a full 3D simulation of the toolpaths, send you rendering validations, and deliver the final, watertight files. Report everything directly to ali@alicnc.pk.",
     "q3_title": "What CAD/CAM software and file formats do you support?",
     "q3_desc": "We support and export files compatible with all major commercial CNC machines and design suites. We deliver vector files in .DXF and .SVG; 3D relief files in .STEP, .IGES, and .STL; and raw G-code in .NC and .TAP. Our design stack includes Vectric Aspire, AutoCAD, and Onshape.",
     "q4_title": "How fast is your B2B turnaround time?",
@@ -49,8 +49,12 @@
   "experience": {
     "title_part1": "Ali's Flexes &",
     "title_part2": "Workshop Escape Log",
+    "role0_title": "Lead Designer and Operator",
+    "role0_subtitle": "Welcome Edge Cutting (F-11 Main Road, Street 3, Islamabad)",
+    "role0_date": "Jun 2026 – Aug 2026",
+    "role0_desc": "Headed digital vector design workflows, high-yield nesting protocols, and 3-axis CNC router operations on premium hardwood/acrylic materials.",
     "role1_title": "Supreme Commander of Virtual Vectors",
-    "role1_subtitle": "Ali CNC (Digital Freelance Empire)",
+    "role1_subtitle": "Ali CNC™ (Digital Freelance Empire)",
     "role1_date": "May 2026 – Eternity",
     "role1_desc": "Left the physical workshop behind to run an elite, 100% online CAD/CAM freelance business. Specializes in turning complex math and drawings into watertight mechanical files and beautiful vector carvings.",
     "role2_title": "CNC Machinist & Spindle Operator (The Shop-Floor Era)",
@@ -68,11 +72,11 @@
   },
   "footer": {
     "title": "Stop Wasting Spindle Time. Let's Get Your Machine Cutting.",
-    "description": "Your CNC machine only makes money when the spindle is spinning and the cutter is moving. Eliminate file drafting bottlenecks, G-code geometry errors, and toolpath headaches. Partner with an expert who understands your shop floor.",
+    "description": "Your CNC machine only makes money when the spindle is spinning and the cutter is moving. Eliminate file drafting bottlenecks, G-code geometry errors, and toolpath headaches. Partner with an expert who understands your shop floor. Report all files to ali@alicnc.pk.",
     "contact_btn": "REQUEST A B2B RAPID QUOTE",
     "cadcrowd_btn": "CadCrowd",
     "crunchbase_btn": "Crunchbase",
-    "copyright": "Ali CNC. Made in Rawalpindi with love, coffee, and 100% digital, physical-dust-free virtual sawdust in Pakistan. No routers were harmed in the hosting of this website."
+    "copyright": "Ali CNC™. Made in Rawalpindi with love, coffee, and 100% digital, physical-dust-free virtual sawdust in Pakistan. No routers were harmed in the hosting of this website."
   },
   "contact": {
     "title_part1": "REQUEST A B2B",

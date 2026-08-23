@@ -22,7 +22,7 @@ export default function ToolsDashboard() {
           {/* Header */}
           <div style={{ textAlign: "center", marginBottom: "4rem" }}>
             <h1 className="section-title" style={{ marginBottom: "1rem" }}>
-              Ali CNC <span className="gradient-text">Tools Suite</span>
+              Ali CNC™ <span className="gradient-text">Tools Suite</span>
             </h1>
             <p className="hero-description" style={{ margin: "0 auto 1.5rem", maxWidth: "600px" }}>
               Advanced CAD/CAM, vector processing, and CNC optimization utilities designed to streamline your workshop workflow.
@@ -569,7 +569,7 @@ export default function ToolsDashboard() {
         <footer id="footer" className="footer">
           <div className="footer-content">
             <div style={{ marginBottom: '1.5rem' }}>
-              <Image src="/logo_final.svg" alt="Ali CNC Logo" width={146} height={80} loading="lazy" style={{ margin: '0 auto', opacity: 0.8, objectFit: 'contain', height: 'auto' }} />
+              <Image src="/logo_final.svg" alt="Ali CNC™ Logo" width={146} height={80} loading="lazy" style={{ margin: '0 auto', opacity: 0.8, objectFit: 'contain', height: 'auto' }} />
             </div>
             <h2 className="footer-title">{t("footer.title")}</h2>
             <p>{t("footer.description")}</p>

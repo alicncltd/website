@@ -146,7 +146,7 @@ export default function EchoDeskPage() {
   const handleAcceptCall = () => {
     setCallState("active");
     // Initial welcome message
-    const welcome = "Hello! Thanks for calling Ali CNC. How can I help you today?";
+    const welcome = "Hello! Thanks for calling Ali CNC™. How can I help you today?";
     setChatLog([{ sender: "ai", text: welcome }]);
     speakAloud(welcome);
   };
