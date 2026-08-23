@@ -423,46 +423,57 @@ export default function ToolsDashboard() {
               </Link>
             </div>
 
-            {/* Placeholder Card (Coming Soon) */}
+            {/* EchoDesk Card */}
             <div className="glass-panel" style={{ 
               padding: "2.5rem", 
               borderRadius: "16px", 
               display: "flex", 
               flexDirection: "column",
               height: "100%",
-              opacity: 0.6,
-              border: "1px solid rgba(255, 255, 255, 0.05)",
-              background: "rgba(255, 255, 255, 0.01)"
-            }}>
+              transition: "transform 0.3s ease, border-color 0.3s ease",
+              cursor: "pointer",
+              border: "1px solid rgba(255, 255, 255, 0.08)"
+            }}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.transform = "translateY(-5px)";
+              e.currentTarget.style.borderColor = "var(--accent-color)";
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.transform = "translateY(0)";
+              e.currentTarget.style.borderColor = "rgba(255, 255, 255, 0.08)";
+            }}
+            >
               <div style={{ 
                 width: "50px", 
                 height: "50px", 
                 borderRadius: "10px", 
-                background: "rgba(255, 255, 255, 0.05)", 
+                background: "rgba(16, 185, 129, 0.15)", 
                 display: "flex", 
                 alignItems: "center", 
                 justifyContent: "center", 
                 marginBottom: "1.5rem",
-                color: "var(--text-secondary)"
+                color: "#10b981"
               }}>
-                <Settings size={26} />
+                <Phone size={26} />
               </div>
               
-              <h2 style={{ fontSize: "1.5rem", fontWeight: "700", marginBottom: "1rem", color: "var(--text-secondary)" }}>
-                G-Code Toolpath Visualizer
+              <h2 style={{ fontSize: "1.5rem", fontWeight: "700", marginBottom: "1rem", color: "var(--text-primary)" }}>
+                EchoDesk AI Dispatcher
               </h2>
               
               <p style={{ fontSize: "0.95rem", lineHeight: "1.6", color: "var(--text-secondary)", marginBottom: "2rem", flexGrow: 1 }}>
-                Analyze, simulate, and check 3D CNC toolpaths directly in your browser. Calculate execution run times and detect mechanical interferences.
+                Automate inbound client phone calls 24/7. Run interactive speech-to-text, text-to-speech conversations, and sync tickets to CRM.
               </p>
               
-              <button disabled className="btn-outline" style={{ 
-                width: "100%", 
-                cursor: "not-allowed",
-                borderColor: "rgba(255,255,255,0.1)"
+              <Link href="/tools/echodesk" className="btn-primary" style={{ 
+                display: "inline-flex", 
+                alignItems: "center", 
+                justifyContent: "center",
+                gap: "8px",
+                width: "100%"
               }}>
-                Coming Soon
-              </button>
+                Open Tool <ArrowRight size={16} />
+              </Link>
             </div>
 
           </div>
