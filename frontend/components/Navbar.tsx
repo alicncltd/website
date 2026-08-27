@@ -13,7 +13,7 @@ export default function Navbar() {
   const [menuOpen, setMenuOpen] = useState(false);
   const { theme, setTheme } = useTheme();
   const [mounted, setMounted] = useState(false);
-  const { t } = useTranslation();
+  const { t, language, changeLanguage, supportedLanguages } = useTranslation();
 
   useEffect(() => {
     setMounted(true);
@@ -63,11 +63,30 @@ export default function Navbar() {
               </button>
             )}
 
-            {/* Globe Switcher Link to Dedicated Korean Page */}
-            <a href="/ko" className="lang-link" style={{ display: 'flex', gap: '5px', alignItems: 'center', fontSize: '0.85rem', color: 'var(--text-secondary)' }}>
-              <Globe size={16} />
-              <span>한국어 (KO)</span>
-            </a>
+            {/* Globe Switcher Dropdown */}
+            <div className="lang-switcher" style={{ display: 'flex', alignItems: 'center', gap: '5px', background: 'rgba(255,255,255,0.05)', padding: '4px 8px', borderRadius: '8px', border: '1px solid rgba(255,255,255,0.1)' }}>
+              <Globe size={14} style={{ color: 'var(--text-secondary)' }} />
+              <select
+                value={language}
+                onChange={(e) => changeLanguage(e.target.value)}
+                style={{
+                  background: 'transparent',
+                  border: 'none',
+                  color: 'var(--text-secondary)',
+                  fontSize: '0.85rem',
+                  cursor: 'pointer',
+                  outline: 'none',
+                  paddingRight: '5px',
+                  fontFamily: 'inherit'
+                }}
+              >
+                {supportedLanguages.map((lang) => (
+                  <option key={lang.code} value={lang.code} style={{ background: 'var(--bg-primary)', color: 'var(--text-primary)' }}>
+                    {lang.flag} {lang.nativeName}
+                  </option>
+                ))}
+              </select>
+            </div>
           </div>
 
           <a href="/#contact" className="btn-primary nav-btn" onClick={() => setMenuOpen(false)}>
