@@ -39,7 +39,7 @@ export default function Navbar() {
       <nav className={`navbar ${scrolled ? "scrolled" : ""}`}>
       <div className="nav-content">
         <Link href="/" className="logo">
-          {/* Using the vectorized logo */}
+          {/* Using the SVG logo */}
           <div className="logo-img-wrapper">
             <Image src="/logo_final.svg" alt="Ali CNC™ Logo" width={80} height={44} priority className="logo-img" style={{ width: 'auto', height: '100%' }} />
           </div>
