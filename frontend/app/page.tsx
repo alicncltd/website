@@ -98,8 +98,8 @@ export default function Home() {
                 <p>Simulate 24/7 inbound shop phone calls using local browser speech-to-text, text-to-speech, and automatic CRM ticket booking.</p>
               </AnimatedCard>
               <AnimatedCard className="glass-panel service-card" delay={0.2}>
-                <h3>SVGV Frame Vectorizer</h3>
-                <p>Compress raw video frames into lightweight vector path streams using local Sobel edge and RDP contour path calculations.</p>
+                <h3>Oracle AI Quant Engine</h3>
+                <p>Monitor cryptocurrency spot price action and compute key indicators (RSI, EMA, VWAP) via backend AI quantitative audits.</p>
               </AnimatedCard>
               <AnimatedCard className="glass-panel service-card" delay={0.3}>
                 <h3>Multi-Model AI Router</h3>

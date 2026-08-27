@@ -3,7 +3,7 @@
 import React from "react";
 import Navbar from "../../components/Navbar";
 import Link from "next/link";
-import { Video, ArrowRight, Settings, Phone, Mail, ExternalLink, Send, TrendingUp, Cpu, Globe, Users, Terminal, Radio } from "lucide-react";
+import { ArrowRight, Settings, Phone, Mail, ExternalLink, Send, TrendingUp, Cpu, Globe, Users, Terminal, Radio } from "lucide-react";
 import { useTranslation } from "../../components/TranslationContext";
 import { AnimatedSection, AnimatedCard } from "../../components/AnimatedSection";
 import Image from "next/image";
@@ -52,58 +52,6 @@ export default function ToolsDashboard() {
             gap: "2rem",
             justifyContent: "center"
           }}>
-            {/* SVGV Tool Card */}
-            <div className="glass-panel" style={{ 
-              padding: "2.5rem", 
-              borderRadius: "16px", 
-              display: "flex", 
-              flexDirection: "column",
-              height: "100%",
-              transition: "transform 0.3s ease, border-color 0.3s ease",
-              cursor: "pointer",
-              border: "1px solid rgba(255, 255, 255, 0.08)"
-            }}
-            onMouseEnter={(e) => {
-              e.currentTarget.style.transform = "translateY(-5px)";
-              e.currentTarget.style.borderColor = "var(--accent-color)";
-            }}
-            onMouseLeave={(e) => {
-              e.currentTarget.style.transform = "translateY(0)";
-              e.currentTarget.style.borderColor = "rgba(255, 255, 255, 0.08)";
-            }}
-            >
-              <div style={{ 
-                width: "50px", 
-                height: "50px", 
-                borderRadius: "10px", 
-                background: "rgba(235, 94, 40, 0.15)", 
-                display: "flex", 
-                alignItems: "center", 
-                justifyContent: "center", 
-                marginBottom: "1.5rem",
-                color: "var(--accent-color)"
-              }}>
-                <Video size={26} />
-              </div>
-              
-              <h2 style={{ fontSize: "1.5rem", fontWeight: "700", marginBottom: "1rem", color: "var(--text-primary)" }}>
-                SVGV Player & Compressor
-              </h2>
-              
-              <p style={{ fontSize: "0.95rem", lineHeight: "1.6", color: "var(--text-secondary)", marginBottom: "2rem", flexGrow: 1 }}>
-                Vectorize standard MP4 videos into high-precision CNC G-code paths. Play back, customize simulation density, and manage vectorized previews.
-              </p>
-              
-              <Link href="/tools/svgv" className="btn-primary" style={{ 
-                display: "inline-flex", 
-                alignItems: "center", 
-                justifyContent: "center",
-                gap: "8px",
-                width: "100%"
-              }}>
-                Open Tool <ArrowRight size={16} />
-              </Link>
-            </div>
 
             {/* Oracle AI Trading Analyst Tool Card */}
             <div className="glass-panel" style={{ 

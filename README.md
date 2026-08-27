@@ -28,26 +28,21 @@ This project is configured as a monorepo containing three core components:
 
 ## 🛠️ Advanced Tools Suite
 
-### 3. SVGV Player & Compressor (`/tools/svgv`)
-- **Video Vectorization**: Compiles MP4 videos into high-precision CNC G-code paths. Runs a custom CPU-based Sobel edge filter, Ramer-Douglas-Peucker (RDP) contour simplification, and low-poly background triangulation.
-- **Custom Binary Decoder**: Compresses vectors into custom `.svgv` binary streams with integrated audio tracks.
-- **Client Canvas Player**: Renders binary vector paths frame-by-frame on HTML canvas, supporting custom playback speed adjustments, seek bars, and IndexedDB local gallery caching.
-
-### 4. Oracle AI Trading Analyst (`/tools/oracle`)
+### 3. Oracle AI Trading Analyst (`/tools/oracle`)
 - **Multi-Committee Scoring**: Scores assets based on Technical indicators (RSI, EMA, Bollinger, MACD), derivatives flows (open interest, funding rates, long/short ratio), and spot whale buy/sell volumes.
 - **Gemini AI Judge Arbitration**: Feeds raw committee metrics and parsed macro geopolitical headings to `models/gemini-3.6-flash` to challenge the prediction, outputting entry ranges, exits, and risk reward ratings.
 
-### 5. Multi-Model AI Router (`/tools/router`)
+### 4. Multi-Model AI Router (`/tools/router`)
 - **Difficulty Classifier**: Evaluates prompt complexity and token lengths, dynamically routing queries to the cost-optimal model (`gemini-2.5-flash` for simple requests, `gemini-2.5-pro` for programming or reasoning).
 - **Analytics Tracker**: Visualizes LLM decision nodes and logs costs, latency durations, and token usages.
 
-### 6. ETL Scraper & Crawler (`/tools/scraper`)
+### 5. ETL Scraper & Crawler (`/tools/scraper`)
 - **Parallel HTML Crawler**: Crawls queue lists of URLs, extracts main page details, and utilizes Gemini as an ETL block to map pages to clean JSON schemas. Supports CSV spreadsheets downloading.
 
-### 7. Collaborative Sketchboard (`/tools/workspace`)
+### 6. Collaborative Sketchboard (`/tools/workspace`)
 - **Multiplayer WS Board**: Vector canvas synchronizing drawing brush strokes and pointer positions across active clients in real-time via WebSockets.
 
-### 8. Webhook Ingestion Simulator (`/tools/webhook`)
+### 7. Webhook Ingestion Simulator (`/tools/webhook`)
 - **Developer Sandbox**: Dispatches simulated Stripe events, processes idempotency guard checks to block duplicates, logs transactions, and manages manual sync retries in the Dead-Letter Queue (DLQ).
 
 ---
