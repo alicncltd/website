@@ -1,7 +1,0 @@
-pandas
-numpy
-requests
-ta
-python-dotenv
-google-generativeai
-Pillow
