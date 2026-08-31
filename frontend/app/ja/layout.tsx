@@ -120,19 +120,15 @@ export default function JapaneseLayout({
           })(window,document,'script','dataLayer','GTM-5KPVVCZD');`}
         </Script>
 
-        <Script id="tawk-to-chat-ja" strategy="lazyOnload">
-          {`
-            var Tawk_API=Tawk_API||{}, Tawk_LoadStart=new Date();
-            (function(){
-            var s1=document.createElement("script"),s0=document.getElementsByTagName("script")[0];
-            s1.async=true;
-            s1.src='https://embed.tawk.to/6a01ab186a19e61c359850c8/1job88mk6';
-            s1.charset='UTF-8';
-            s1.setAttribute('crossorigin','*');
-            s0.parentNode.insertBefore(s1,s0);
-            })();
-          `}
+        {/* Zoho SalesIQ Live Chat Scripts */}
+        <Script id="zsiq-init-ja" strategy="afterInteractive">
+          {`window.$zoho=window.$zoho || {};$zoho.salesiq=$zoho.salesiq||{ready:function(){}};`}
         </Script>
+        <Script
+          id="zsiqscript-ja"
+          src="https://salesiq.zohopublic.com/widget?wc=siq78d7576cb38f83628196f5eddb4a99f92a5522a2bd37a77dfbe530b23395e2c9"
+          strategy="afterInteractive"
+        />
 
         {/* DMCA Protection Badge Helper Script */}
         <Script src="https://images.dmca.com/Badges/DMCABadgeHelper.min.js" strategy="lazyOnload" />
