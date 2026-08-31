@@ -138,6 +138,9 @@ export default function KoreanLayout({
           `}
         </Script>
 
+        {/* DMCA Protection Badge Helper Script */}
+        <Script src="https://images.dmca.com/Badges/DMCABadgeHelper.min.js" strategy="lazyOnload" />
+
         <Providers>
           <div className="app-container">
             {children}

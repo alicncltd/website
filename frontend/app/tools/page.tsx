@@ -527,8 +527,22 @@ export default function ToolsDashboard() {
               <a href="https://www.crunchbase.com/organization/ali-cnc-pakistan" target="_blank" rel="noreferrer" className="btn-outline" style={{ padding: '0.8rem 1.5rem' }}>{t("footer.crunchbase_btn")}</a>
             </div>
           </div>
-          <div className="footer-bottom">
+          <div className="footer-bottom" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '0.8rem' }}>
             <p>&copy; {new Date().getFullYear()} {t("footer.copyright")}</p>
+            <div style={{ marginTop: '0.2rem' }}>
+              <a href="https://www.dmca.com/Protection/Status.aspx?ID=ca2521e1-cff3-4a80-b54a-044a66682fdd" 
+                 title="DMCA.com Protection Status" 
+                 className="dmca-badge" 
+                 target="_blank" 
+                 rel="noopener noreferrer"
+                 style={{ display: 'inline-block' }}>
+                <img src="https://images.dmca.com/Badges/dmca_protected_sml_120n.png?ID=ca2521e1-cff3-4a80-b54a-044a66682fdd" 
+                     alt="DMCA.com Protection Status" 
+                     width={120}
+                     height={24}
+                     style={{ objectFit: 'contain' }} />
+              </a>
+            </div>
           </div>
         </footer>
       </main>
