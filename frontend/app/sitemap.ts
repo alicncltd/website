@@ -9,8 +9,19 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   // Static pages
   const routes = [
     { url: baseUrl, lastModified: new Date() },
-    { url: `${baseUrl}/contact`, lastModified: new Date() },
+    { url: `${baseUrl}/en`, lastModified: new Date() },
+    { url: `${baseUrl}/ko`, lastModified: new Date() },
+    { url: `${baseUrl}/tr`, lastModified: new Date() },
+    { url: `${baseUrl}/ja`, lastModified: new Date() },
+    { url: `${baseUrl}/tools`, lastModified: new Date() },
     { url: `${baseUrl}/gallery`, lastModified: new Date() },
+    { url: `${baseUrl}/legal`, lastModified: new Date() },
+    { url: `${baseUrl}/legal/privacy`, lastModified: new Date() },
+    { url: `${baseUrl}/legal/terms`, lastModified: new Date() },
+    { url: `${baseUrl}/legal/copyright`, lastModified: new Date() },
+    { url: `${baseUrl}/legal/license`, lastModified: new Date() },
+    { url: `${baseUrl}/legal/disclaimer`, lastModified: new Date() },
+    { url: `${baseUrl}/legal/refunds`, lastModified: new Date() },
     { url: `${baseUrl}/login`, lastModified: new Date() },
   ];
 

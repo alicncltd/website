@@ -371,8 +371,32 @@ export default function Home() {
               <a href="https://www.cadcrowd.com/profile/212733-thealidev" target="_blank" rel="noreferrer" className="btn-outline" style={{ padding: '0.8rem 1.5rem' }}>{t("footer.cadcrowd_btn")}</a>
               <a href="https://www.crunchbase.com/organization/ali-cnc-pakistan" target="_blank" rel="noreferrer" className="btn-outline" style={{ padding: '0.8rem 1.5rem' }}>{t("footer.crunchbase_btn")}</a>
             </div>
+
+            {/* Comprehensive Pakistani Law Legal Hub Links */}
+            <div style={{
+              display: 'flex',
+              flexWrap: 'wrap',
+              justifyContent: 'center',
+              gap: '1.25rem',
+              marginTop: '2.5rem',
+              paddingTop: '1.5rem',
+              borderTop: '1px solid rgba(255, 255, 255, 0.08)',
+              fontSize: '0.82rem'
+            }}>
+              <a href="/legal/privacy" style={{ color: 'var(--text-secondary)', textDecoration: 'none', transition: 'color 0.2s' }}>Privacy Policy (PECA 2016)</a>
+              <span style={{ opacity: 0.3 }}>•</span>
+              <a href="/legal/terms" style={{ color: 'var(--text-secondary)', textDecoration: 'none', transition: 'color 0.2s' }}>Terms of Service</a>
+              <span style={{ opacity: 0.3 }}>•</span>
+              <a href="/legal/copyright" style={{ color: 'var(--text-secondary)', textDecoration: 'none', transition: 'color 0.2s' }}>Copyright & IP (IPO-Pak)</a>
+              <span style={{ opacity: 0.3 }}>•</span>
+              <a href="/legal/license" style={{ color: 'var(--text-secondary)', textDecoration: 'none', transition: 'color 0.2s' }}>Commercial EULA</a>
+              <span style={{ opacity: 0.3 }}>•</span>
+              <a href="/legal/disclaimer" style={{ color: 'var(--text-secondary)', textDecoration: 'none', transition: 'color 0.2s' }}>Machine Safety Disclaimer</a>
+              <span style={{ opacity: 0.3 }}>•</span>
+              <a href="/legal/refunds" style={{ color: 'var(--text-secondary)', textDecoration: 'none', transition: 'color 0.2s' }}>Revisions & SLA</a>
+            </div>
           </div>
-          <div className="footer-bottom" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '0.8rem' }}>
+          <div className="footer-bottom" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '0.8rem', marginTop: '1.5rem' }}>
             <p>&copy; {new Date().getFullYear()} {t("footer.copyright")}</p>
             <div style={{ marginTop: '0.2rem' }}>
               <a href="https://www.dmca.com/Protection/Status.aspx?ID=ca2521e1-cff3-4a80-b54a-044a66682fdd" 
