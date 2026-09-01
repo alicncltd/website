@@ -53,42 +53,83 @@ export const metadata: Metadata = {
 // JSON-LD Structured Data
 const jsonLd = {
   "@context": "https://schema.org",
-  "@type": "ProfessionalService",
-  "name": "Ali CNC™ Private Limited",
-  "image": "https://www.alicnc.pk/logo_final.png",
-  "url": "https://www.alicnc.pk",
-  "telephone": "+923440708494",
-  "address": {
-    "@type": "PostalAddress",
-    "addressLocality": "Rawalpindi",
-    "addressRegion": "Punjab",
-    "addressCountry": "PK"
-  },
-  "geo": {
-    "@type": "GeoCoordinates",
-    "latitude": 33.6007,
-    "longitude": 73.0679
-  },
-  "founder": {
-    "@type": "Person",
-    "name": "Raja Muhammad Ali Asghar"
-  },
-  "openingHoursSpecification": {
-    "@type": "OpeningHoursSpecification",
-    "dayOfWeek": [
-      "Monday",
-      "Tuesday",
-      "Wednesday",
-      "Thursday",
-      "Friday",
-      "Saturday"
-    ],
-    "opens": "09:00",
-    "closes": "18:00"
-  },
-  "sameAs": [
-    "https://www.cadcrowd.com/profile/212733-thealidev",
-    "https://www.crunchbase.com/organization/ali-cnc-pakistan"
+  "@graph": [
+    {
+      "@type": "WebSite",
+      "@id": "https://www.alicnc.pk/#website",
+      "url": "https://www.alicnc.pk",
+      "name": "Ali CNC™",
+      "description": "High-Precision 3D CAD/CAM Blueprints & G-Code Programming On Demand",
+      "publisher": {
+        "@id": "https://www.alicnc.pk/#organization"
+      }
+    },
+    {
+      "@type": "ProfessionalService",
+      "@id": "https://www.alicnc.pk/#organization",
+      "name": "Ali CNC™ Private Limited",
+      "image": "https://www.alicnc.pk/logo_final.png",
+      "url": "https://www.alicnc.pk",
+      "telephone": "+923440708494",
+      "email": "ali@alicnc.pk",
+      "address": {
+        "@type": "PostalAddress",
+        "addressLocality": "Rawalpindi",
+        "addressRegion": "Punjab",
+        "addressCountry": "PK"
+      },
+      "geo": {
+        "@type": "GeoCoordinates",
+        "latitude": 33.6007,
+        "longitude": 73.0679
+      },
+      "founder": {
+        "@type": "Person",
+        "name": "Raja Muhammad Ali Asghar",
+        "jobTitle": "CEO & Lead CAD/CAM Operator"
+      },
+      "openingHoursSpecification": {
+        "@type": "OpeningHoursSpecification",
+        "dayOfWeek": ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"],
+        "opens": "09:00",
+        "closes": "18:00"
+      },
+      "sameAs": [
+        "https://www.cadcrowd.com/profile/212733-thealidev",
+        "https://www.crunchbase.com/organization/ali-cnc-pakistan",
+        "https://github.com/alicncpk/alicncpk"
+      ],
+      "hasOfferCatalog": {
+        "@type": "OfferCatalog",
+        "name": "CAD/CAM & CNC Services",
+        "itemListElement": [
+          {
+            "@type": "Offer",
+            "itemOffered": {
+              "@type": "Service",
+              "name": "3D CAD Modeling & Digital Drafting",
+              "description": "High-precision 3D CAD drafting in AutoCAD and Onshape for immediate nesting and fabrication."
+            }
+          },
+          {
+            "@type": "Offer",
+            "itemOffered": {
+              "@type": "Service",
+              "name": "High-Efficiency G-Code Programming",
+              "description": "Ultra-optimized CNC toolpath programming (.NC, .TAP, .GCODE) in Vectric Aspire for wood, acrylic, and non-ferrous metals."
+            }
+          },
+          {
+            "@type": "Offer",
+            "itemOffered": {
+              "@type": "Service",
+              "name": "DFM Checking & Toolpath Auditing",
+              "description": "Virtual collision audits, safe stepover validation, and nesting optimization."
+            }
+          }
+        ]
+      }
+    }
   ]
 };
 

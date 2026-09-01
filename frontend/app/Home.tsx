@@ -3,9 +3,10 @@
 import React, { useEffect } from "react";
 import Navbar from "../components/Navbar";
 import { AnimatedSection, AnimatedCard } from "../components/AnimatedSection";
-import { PenTool, Cpu, Layers, HardHat, Award, ExternalLink, Mail, Phone, Send } from "lucide-react";
+import { PenTool, Cpu, Layers, HardHat, Award, ExternalLink, Mail, Phone, Send, ShieldCheck, Zap, Sparkles, CheckCircle2, Compass, Check } from "lucide-react";
 import Image from "next/image";
 import { useTranslation } from "../components/TranslationContext";
+import CncYieldCalculator from "../components/CncYieldCalculator";
 
 export default function Home() {
   const { t } = useTranslation();
@@ -27,23 +28,94 @@ export default function Home() {
 
         {/* Hero Section */}
         <AnimatedSection className="hero-section" id="home">
-          <Image src="/hero_bg.png" alt="High-Precision CNC Workshop Background" fill priority className="hero-bg-image" style={{ objectFit: 'cover', opacity: 0.1 }} />
+          <Image src="/hero_bg.png" alt="High-Precision CNC Workshop Background" fill priority className="hero-bg-image" style={{ objectFit: 'cover', opacity: 0.08 }} />
           <div className="hero-content">
-            <div style={{ marginBottom: '2rem' }}>
+            <div style={{ marginBottom: '1.5rem' }}>
               <Image src="/logo_final.svg" alt="Ali CNC™ Logo" width={220} height={120} priority style={{ margin: '0 auto', objectFit: 'contain', height: 'auto' }} />
             </div>
-            <span className="hero-greeting" style={{ display: 'block', marginBottom: '1rem', fontWeight: 600, color: 'var(--accent-color)', letterSpacing: '0.05em', textTransform: 'uppercase' }}>
-              {t("hero.welcome")}
-            </span>
+
+            {/* Live Status Pill */}
+            <div style={{ display: 'flex', justifyContent: 'center', marginBottom: '1.25rem' }}>
+              <div style={{
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: '8px',
+                padding: '6px 16px',
+                borderRadius: '999px',
+                background: 'rgba(235, 94, 40, 0.12)',
+                border: '1px solid rgba(235, 94, 40, 0.35)',
+                color: 'var(--accent-color)',
+                fontSize: '0.82rem',
+                fontWeight: 700,
+                letterSpacing: '0.04em',
+                textTransform: 'uppercase'
+              }}>
+                <span style={{ width: '8px', height: '8px', borderRadius: '50%', background: 'var(--accent-color)', boxShadow: '0 0 8px var(--accent-color)' }}></span>
+                {t("hero.welcome")}
+              </div>
+            </div>
+
             <h1 className="hero-title">
               {t("hero.title_part1")} <span className="gradient-text">{t("hero.title_part2")}</span> <br />
               {t("hero.title_part3")}
             </h1>
+
             <p className="hero-description">
               {t("hero.description")}
             </p>
-            <div className="hero-actions">
+
+            {/* Hero Quick Proof Metric Badges */}
+            <div style={{
+              display: 'flex',
+              flexWrap: 'wrap',
+              justifyContent: 'center',
+              gap: '0.75rem',
+              margin: '1.75rem auto',
+              maxWidth: '850px'
+            }}>
+              {[
+                { icon: <Zap size={14} />, label: "24-48h Rapid Delivery" },
+                { icon: <ShieldCheck size={14} />, label: "±0.001mm Tolerance Guarantee" },
+                { icon: <Compass size={14} />, label: "100% Spindle-Crash Tested" },
+                { icon: <Check size={14} />, label: "Zero-Waste Nesting" }
+              ].map((pill, idx) => (
+                <div key={idx} style={{
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  gap: '6px',
+                  padding: '5px 12px',
+                  borderRadius: '8px',
+                  background: 'rgba(255, 255, 255, 0.04)',
+                  border: '1px solid rgba(255, 255, 255, 0.08)',
+                  fontSize: '0.8rem',
+                  fontWeight: 600,
+                  color: 'var(--text-secondary)'
+                }}>
+                  <span style={{ color: 'var(--accent-color)' }}>{pill.icon}</span>
+                  <span>{pill.label}</span>
+                </div>
+              ))}
+            </div>
+
+            <div className="hero-actions" style={{ display: 'flex', gap: '1rem', justifyContent: 'center', flexWrap: 'wrap' }}>
               <a href="/#contact" className="btn-primary">{t("hero.action")}</a>
+              <a href="/tools" className="btn-outline" style={{ border: '1px solid rgba(255,255,255,0.15)', background: 'rgba(255,255,255,0.03)', color: 'var(--text-primary)' }}>
+                Explore Digital Tools <ExternalLink size={16} style={{ marginLeft: '6px' }} />
+              </a>
+            </div>
+
+            {/* Compatibility Strip */}
+            <div style={{ marginTop: '2.5rem', borderTop: '1px solid rgba(255,255,255,0.06)', paddingTop: '1.25rem' }}>
+              <div style={{ fontSize: '0.75rem', textTransform: 'uppercase', letterSpacing: '0.08em', color: 'var(--text-secondary)', marginBottom: '0.75rem', fontWeight: 600 }}>
+                Directly Programmed For Leading CAD/CAM & Controller Ecosystems
+              </div>
+              <div style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'center', gap: '0.6rem', fontSize: '0.8rem', color: 'var(--text-primary)', fontWeight: 600 }}>
+                {["Vectric Aspire", "AutoCAD", "Onshape", "Fusion 360", "Mach3 / Mach4", "GRBL", "Syntec", "Fanuc", "RichAuto DSP", "LinuxCNC"].map((eco, i) => (
+                  <span key={i} style={{ padding: '3px 10px', borderRadius: '6px', background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.05)' }}>
+                    {eco}
+                  </span>
+                ))}
+              </div>
             </div>
           </div>
         </AnimatedSection>
@@ -68,6 +140,9 @@ export default function Home() {
               <p>{t("services.dfm_desc")}</p>
             </AnimatedCard>
           </div>
+
+          {/* Interactive G-Code Yield & Material Calculator */}
+          <CncYieldCalculator />
         </AnimatedSection>
 
         {/* Digital Tools Workspace Mention Section */}

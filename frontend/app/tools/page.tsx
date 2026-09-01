@@ -77,12 +77,12 @@ export default function ToolsDashboard() {
                 width: "50px", 
                 height: "50px", 
                 borderRadius: "10px", 
-                background: "rgba(14, 165, 233, 0.15)", 
+                background: "rgba(235, 94, 40, 0.15)", 
                 display: "flex", 
                 alignItems: "center", 
                 justifyContent: "center", 
                 marginBottom: "1.5rem",
-                color: "#0ea5e9"
+                color: "var(--accent-color)"
               }}>
                 <TrendingUp size={26} />
               </div>
@@ -130,12 +130,12 @@ export default function ToolsDashboard() {
                 width: "50px", 
                 height: "50px", 
                 borderRadius: "10px", 
-                background: "rgba(14, 165, 233, 0.15)", 
+                background: "rgba(235, 94, 40, 0.15)", 
                 display: "flex", 
                 alignItems: "center", 
                 justifyContent: "center", 
                 marginBottom: "1.5rem",
-                color: "#0ea5e9"
+                color: "var(--accent-color)"
               }}>
                 <Cpu size={26} />
               </div>
@@ -342,12 +342,12 @@ export default function ToolsDashboard() {
                 width: "50px", 
                 height: "50px", 
                 borderRadius: "10px", 
-                background: "rgba(14, 165, 233, 0.15)", 
+                background: "rgba(235, 94, 40, 0.15)", 
                 display: "flex", 
                 alignItems: "center", 
                 justifyContent: "center", 
                 marginBottom: "1.5rem",
-                color: "#0ea5e9"
+                color: "var(--accent-color)"
               }}>
                 <Radio size={26} />
               </div>
