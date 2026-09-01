@@ -1,0 +1,9 @@
+risk_reward: 0.5
+entry_price: 78550.4
+stop_loss: 76979.39
+take_profit_1: 79335.9
+take_profit_2: 80121.41
+ai_prediction: LONG
+
+Test: risk_reward > 0? True
+[PASS] TEST PASSES: risk_reward is positive

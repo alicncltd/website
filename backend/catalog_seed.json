@@ -1,0 +1,26 @@
+[
+  {
+    "id": "alicnc_prod_001",
+    "name": "Industrial High-Precision Woodworking CNC Router",
+    "price": "1450000",
+    "imageUrl": "c:\\Users\\Muhammad Ali\\Desktop\\alicnc\\backend\\cnc_router.png"
+  },
+  {
+    "id": "alicnc_prod_002",
+    "name": "Custom 3D CAD/CAM Relief Model Template Package",
+    "price": "25000",
+    "imageUrl": "c:\\Users\\Muhammad Ali\\Desktop\\alicnc\\backend\\cad_cam_relief.png"
+  },
+  {
+    "id": "alicnc_prod_003",
+    "name": "Precision G-Code Optimized Router Bit Set (Thermal Protection)",
+    "price": "18500",
+    "imageUrl": "c:\\Users\\Muhammad Ali\\Desktop\\alicnc\\backend\\optimized_tooling.png"
+  },
+  {
+    "id": "alicnc_prod_004",
+    "name": "Custom Solid Oak Carved B2B Door Panel",
+    "price": "85000",
+    "imageUrl": "c:\\Users\\Muhammad Ali\\Desktop\\alicnc\\backend\\carved_door_panel.png"
+  }
+]

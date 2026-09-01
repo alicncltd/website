@@ -1,0 +1,51 @@
+[
+    {
+        "open_interest": 104587.84,
+        "funding": 5.4e-05,
+        "timestamp": "2026-07-21T07:56:24.509277"
+    },
+    {
+        "open_interest": 104595.35,
+        "funding": 5.4e-05,
+        "timestamp": "2026-07-21T07:56:35.441693"
+    },
+    {
+        "open_interest": 105023.36,
+        "funding": 8.926e-05,
+        "timestamp": "2026-07-21T08:11:03.945165"
+    },
+    {
+        "open_interest": 105023.97,
+        "funding": 8.926e-05,
+        "timestamp": "2026-07-21T08:11:15.156275"
+    },
+    {
+        "open_interest": 105258.13,
+        "funding": 8.926e-05,
+        "timestamp": "2026-07-21T09:02:36.811440"
+    },
+    {
+        "open_interest": 105254.44,
+        "funding": 8.926e-05,
+        "timestamp": "2026-07-21T09:02:48.433350"
+    },
+    {
+        "symbol": "BTCUSDT",
+        "price": 66323.56,
+        "open_interest": 105481.685,
+        "funding_rate": 8.926e-05,
+        "timestamp": "2026-07-21T09:39:24.471025"
+    },
+    {
+        "symbol": "BTCUSDT",
+        "price": 66400.0,
+        "open_interest": 105662.876,
+        "funding_rate": 8.926e-05,
+        "timestamp": "2026-07-21T10:28:04.943309"
+    },
+    {
+        "open_interest": 105662.88,
+        "funding": 8.926e-05,
+        "timestamp": "2026-07-21T10:28:05.351154"
+    }
+]

@@ -1,0 +1,445 @@
+/* Oracle AI Trading Analyst Tool Styling */
+
+.oracle-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 8rem 1.5rem 4rem;
+  width: 100%;
+}
+
+.oracle-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1.5rem 2rem;
+  background: var(--glass-bg);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid var(--glass-border);
+  border-radius: 20px;
+  box-shadow: var(--glass-shadow);
+  margin-bottom: 2rem;
+}
+
+.oracle-title-area h1 {
+  font-size: 1.75rem;
+  font-weight: 800;
+  background: linear-gradient(135deg, #ffffff 0%, #0ea5e9 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  margin: 0;
+}
+
+.oracle-title-area p {
+  color: var(--text-secondary);
+  font-size: 0.9rem;
+  margin: 0.25rem 0 0;
+}
+
+.oracle-badge {
+  background: rgba(14, 165, 233, 0.15);
+  border: 1px solid var(--accent-color);
+  color: var(--accent-color);
+  font-size: 0.8rem;
+  font-weight: 700;
+  padding: 0.35rem 0.75rem;
+  border-radius: 9999px;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  box-shadow: 0 0 10px rgba(14, 165, 233, 0.2);
+}
+
+.oracle-grid {
+  display: grid;
+  grid-template-columns: 320px 1fr;
+  gap: 2rem;
+}
+
+@media (max-width: 900px) {
+  .oracle-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.oracle-card {
+  background: var(--glass-bg);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid var(--glass-border);
+  border-radius: 20px;
+  padding: 1.5rem;
+  box-shadow: var(--glass-shadow);
+  transition: all 0.3s ease;
+}
+
+.oracle-card-title {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin-bottom: 1.25rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  padding-bottom: 0.75rem;
+}
+
+/* Control Panel styles */
+.oracle-symbol-selector {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  margin-bottom: 1.5rem;
+}
+
+.oracle-symbol-selector label {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--text-secondary);
+}
+
+.oracle-select {
+  background: rgba(0, 0, 0, 0.3);
+  border: 1px solid var(--glass-border);
+  color: var(--text-primary);
+  padding: 0.75rem 1rem;
+  border-radius: 12px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  outline: none;
+  transition: border-color 0.3s ease;
+}
+
+.oracle-select:focus {
+  border-color: var(--accent-color);
+}
+
+.oracle-btn {
+  width: 100%;
+  background: linear-gradient(135deg, #0284c7 0%, #0369a1 100%);
+  color: white;
+  border: none;
+  padding: 0.9rem;
+  border-radius: 12px;
+  font-size: 1rem;
+  font-weight: 700;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  box-shadow: 0 4px 12px rgba(14, 165, 233, 0.3);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.oracle-btn:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(14, 165, 233, 0.4);
+  background: linear-gradient(135deg, #0ea5e9 0%, #0284c7 100%);
+}
+
+.oracle-btn:active:not(:disabled) {
+  transform: translateY(0);
+}
+
+.oracle-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  box-shadow: none;
+}
+
+/* Loading state styles */
+.oracle-loading-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 4rem 2rem;
+  text-align: center;
+}
+
+.oracle-spinner {
+  width: 48px;
+  height: 48px;
+  border: 4px solid rgba(14, 165, 233, 0.1);
+  border-left-color: var(--accent-color);
+  border-radius: 50%;
+  animation: oracleSpin 1s linear infinite;
+  margin-bottom: 1.5rem;
+}
+
+@keyframes oracleSpin {
+  to { transform: rotate(360deg); }
+}
+
+.oracle-loading-steps {
+  max-width: 400px;
+  width: 100%;
+  margin-top: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  text-align: left;
+  background: rgba(0, 0, 0, 0.2);
+  padding: 1.25rem;
+  border-radius: 12px;
+  border: 1px solid var(--glass-border);
+}
+
+.oracle-loading-step {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+  transition: color 0.3s ease;
+}
+
+.oracle-loading-step.active {
+  color: var(--text-primary);
+  font-weight: 600;
+}
+
+.oracle-loading-step.completed {
+  color: #10b981;
+}
+
+/* Output Layout styles */
+.oracle-result-layout {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.oracle-verdict-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 1.5rem;
+}
+
+@media (max-width: 768px) {
+  .oracle-verdict-row {
+    grid-template-columns: 1fr;
+  }
+}
+
+.oracle-stat-box {
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid var(--glass-border);
+  border-radius: 16px;
+  padding: 1.25rem;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.oracle-stat-label {
+  font-size: 0.8rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  color: var(--text-secondary);
+  letter-spacing: 0.05em;
+  margin-bottom: 0.5rem;
+}
+
+.oracle-stat-value {
+  font-size: 2rem;
+  font-weight: 800;
+  color: var(--text-primary);
+}
+
+.oracle-stat-value.long {
+  color: #10b981;
+  text-shadow: 0 0 15px rgba(16, 185, 129, 0.25);
+}
+
+.oracle-stat-value.short {
+  color: #ef4444;
+  text-shadow: 0 0 15px rgba(239, 68, 68, 0.25);
+}
+
+.oracle-stat-value.neutral {
+  color: #f59e0b;
+  text-shadow: 0 0 15px rgba(245, 158, 11, 0.25);
+}
+
+/* Trade Setup Card */
+.oracle-trade-setup {
+  display: grid;
+  grid-template-columns: 1fr 1.2fr;
+  gap: 2rem;
+}
+
+@media (max-width: 768px) {
+  .oracle-trade-setup {
+    grid-template-columns: 1fr;
+  }
+}
+
+.oracle-trade-levels {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.oracle-level-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: rgba(0, 0, 0, 0.2);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  border-radius: 10px;
+  padding: 0.75rem 1rem;
+}
+
+.oracle-level-item span:first-child {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--text-secondary);
+}
+
+.oracle-level-item span:last-child {
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--text-primary);
+}
+
+.oracle-level-item.entry {
+  border-left: 4px solid var(--accent-color);
+}
+
+.oracle-level-item.stop {
+  border-left: 4px solid #ef4444;
+}
+
+.oracle-level-item.profit {
+  border-left: 4px solid #10b981;
+}
+
+.oracle-ratio-gauge {
+  background: rgba(255, 255, 255, 0.01);
+  border: 1px solid var(--glass-border);
+  border-radius: 16px;
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.oracle-ratio-val {
+  font-size: 3rem;
+  font-weight: 900;
+  color: var(--text-primary);
+  margin-top: 0.5rem;
+}
+
+/* Tabbed details styles */
+.oracle-tabs {
+  display: flex;
+  gap: 0.5rem;
+  background: rgba(0, 0, 0, 0.2);
+  padding: 0.25rem;
+  border-radius: 12px;
+  border: 1px solid var(--glass-border);
+  margin-bottom: 1.5rem;
+}
+
+.oracle-tab-btn {
+  flex: 1;
+  background: transparent;
+  border: none;
+  color: var(--text-secondary);
+  font-size: 0.9rem;
+  font-weight: 600;
+  padding: 0.6rem;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.oracle-tab-btn:hover {
+  color: var(--text-primary);
+}
+
+.oracle-tab-btn.active {
+  color: white;
+  background: var(--accent-color);
+  box-shadow: 0 0 10px rgba(14, 165, 233, 0.3);
+}
+
+.oracle-table-wrapper {
+  overflow-x: auto;
+}
+
+.oracle-table {
+  width: 100%;
+  border-collapse: collapse;
+  text-align: left;
+}
+
+.oracle-table th {
+  padding: 0.75rem 1rem;
+  font-size: 0.8rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  color: var(--text-secondary);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.oracle-table td {
+  padding: 0.75rem 1rem;
+  font-size: 0.9rem;
+  color: var(--text-primary);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.02);
+}
+
+.oracle-table tr:hover td {
+  background: rgba(255, 255, 255, 0.01);
+}
+
+.oracle-table .direction {
+  font-weight: 700;
+}
+
+.oracle-table .direction.long {
+  color: #10b981;
+}
+
+.oracle-table .direction.short {
+  color: #ef4444;
+}
+
+.oracle-table .direction.neutral {
+  color: #f59e0b;
+}
+
+.oracle-alert {
+  background: rgba(239, 68, 68, 0.05);
+  border: 1px solid rgba(239, 68, 68, 0.15);
+  border-radius: 12px;
+  padding: 1rem;
+  margin-top: 1.5rem;
+}
+
+.oracle-alert-title {
+  color: #ef4444;
+  font-weight: 700;
+  font-size: 0.95rem;
+  margin-bottom: 0.5rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.oracle-alert ul {
+  margin: 0;
+  padding-left: 1.25rem;
+  color: var(--text-secondary);
+  font-size: 0.85rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
